@@ -19,7 +19,8 @@ Coffee.Menu = {
     Active     = NULL,
     Last       = NULL,
     
-    Tabs   = { },
+    Tabs    = { },
+    Toggles = { },
 
     Held = false
 }
@@ -31,6 +32,7 @@ Coffee:LoadFile( 'lua/coffee/modules/menu/elements/dropdown.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/slider.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/label.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/button.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/binder.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/minicheckbox.lua' )
 
 function Coffee.Menu:Scale( Size )

@@ -51,8 +51,9 @@ function Coffee.Menu:GenerateMiniCheckboxTooltip( Tooltip )
         surface.SetTextPos( 2, 2 ) 
         surface.DrawText( Tooltip )
 
-        -- There is a natural 1,1 offset of drawn text. Therefore three here is correct.
-        self:SetWide( Coffee.Menu:Scale( surface.GetTextSize( Tooltip ) ) + Coffee.Menu:Scale( 3 ) )
+        -- There is a natural 1,1 offset of drawn text. Therefore three here is correct. We'll use five
+        -- for some extra padding.
+        self:SetWide( Coffee.Menu:Scale( surface.GetTextSize( Tooltip ) ) + Coffee.Menu:Scale( 5 ) )
     end
 
     return Frame

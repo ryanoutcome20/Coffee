@@ -19,7 +19,12 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width 
 
     -- This is terrible but I didn't make the library. You can tell this wasn't made for 
     -- dynamic guis.
+    self:GenerateFixedDropdown( Dropdown )
 
+    return Dropdown
+end
+
+function Coffee.Menu:GenerateFixedDropdown( Dropdown )
     -- Fix the default box color.
     Dropdown.Paint = function( self, W, H )
         surface.SetDrawColor( 20, 20, 20, 200 )
@@ -55,14 +60,14 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width 
             surface.DrawOutlinedRect( 0, 0, W, H, 1 )
         end
     
-        for i = 1, #Options do 
+        for i = 1, #Dropdown.Choices do 
             childMenu:GetChild( i ):SetColor( Coffee.Menu.Colors.White ) 
         end
 
         childMenu.OpenSubMenu = function( Sub )
             local subSub = Sub:GetChildren( )[ 1 ]
             
-            for i = 1, #Options do 
+            for i = 1, #Dropdown.Choices do 
                 local subSubSub = subSub:GetChildren( )[ i ]
 
                 subSubSub.Paint = function( self, W, H )
@@ -76,6 +81,4 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width 
             end
         end
     end
-
-    return Dropdown
 end

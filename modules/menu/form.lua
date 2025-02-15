@@ -1,6 +1,7 @@
 Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Enabled', 'esp_enabled' )
-    
+    self:GenerateKeybind( nil, 'esp_enabled_keybind', true )
+
     self:GenerateCheckbox( Panel, 'Visualize Dormancy', 'esp_dormant' )
     
     self:GenerateCheckbox( Panel, 'Box', 'esp_box' )
@@ -47,6 +48,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     
     self:GenerateCheckbox( Panel, 'Override Healthbar Lines', 'esp_healthbar_lines'  )
     self:GenerateSlider( nil, 'esp_healthbar_lines_amount', 1, 8, 4, 0 )
+
+    self:GenerateCheckbox( Panel, 'Healthbar Number', 'esp_healthbar_number'  )
+    self:GenerateColorpicker( nil, 'esp_healthbar_number_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Always Show', 'esp_healthbar_number_always'  )
 
     -- self:GenerateCheckbox( Panel, 'Enabled', 'esp_enabled' )
     -- self:GenerateCheckbox( Panel, 'Enabled', 'esp_enabled' )

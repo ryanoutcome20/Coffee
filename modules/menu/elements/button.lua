@@ -1,5 +1,6 @@
 function Coffee.Menu:GenerateButton( Panel, Text, Callback, marginCallback )
     -- Have to generate the buttons used in the menu.
+    
     local Button = vgui.Create( 'DButton', Panel or self.Last )
     Button:SetFont( 'Default' )
     Button:SetText( Text )
@@ -27,8 +28,7 @@ function Coffee.Menu:GenerateButton( Panel, Text, Callback, marginCallback )
         return Coffee.Menu.Color
     end
 
-    Button.DoClick = Callback or function( self )
+    Button.DoClick = Callback or function( self ) end
 
-    end
-
+    return Button
 end
