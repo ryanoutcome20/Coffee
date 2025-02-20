@@ -9,6 +9,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     Binder:DockMargin( self:Scale( 5 ), 0, self:Scale( 4 ), 0 )
 
     Coffee.Config[ Assignment ] = 0
+    Coffee.Config[ Assignment .. ' Mode' ] = alwaysOn and 'Always On' or 'Hold'
 
     Binder.Paint = function( self, W, H )
         surface.SetDrawColor( 20, 20, 20, 200 )
@@ -35,7 +36,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     end
 
     Binder.DoRightClick = function( self )
-        Coffee.Menu:GenerateKeybindSubpanel( Assignment, alwaysOn )
+        Coffee.Menu:GenerateKeybindSubpanel( Assignment )
     end
 
     Binder.GetTextStyleColor = function( )
@@ -53,7 +54,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     return Button
 end
 
-function Coffee.Menu:GenerateKeybindSubpanel( Assignment, alwaysOn )
+function Coffee.Menu:GenerateKeybindSubpanel( Assignment )
     -- Have to generate the keybind style menu.
 
     -- Get main frame that everything will parent too.
@@ -88,8 +89,6 @@ function Coffee.Menu:GenerateKeybindSubpanel( Assignment, alwaysOn )
     Dropdown:AddChoice( 'Hold Off' )
     Dropdown:AddChoice( 'Toggle' )
     Dropdown:AddChoice( 'Always On' )
-
-    Coffee.Config[ Assignment .. ' Mode' ] = alwaysOn and 'Always On' or 'Hold'
 
     Dropdown:SetValue( Coffee.Config[ Assignment .. ' Mode' ] )
 

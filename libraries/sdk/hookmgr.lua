@@ -9,16 +9,16 @@ function Coffee.Hooks:New( Event, Callback, Meta )
         local Cache = self.Cache
 
         Cache[ Event ] = { }
-    
+
         hook.Add( Event, 'Coffee', function( ... )
             for i = 1, #Cache[ Event ] do 
                 local Index = Cache[ Event ][ i ]
 
                 if ( Index.Meta ) then 
-                    return Index.Callback( Index.Meta, ... )
+                    Index.Callback( Index.Meta, ... )
+                else
+                    Index.Callback( ... )
                 end
-
-                Index.Callback( ... )
             end
         end )
     end

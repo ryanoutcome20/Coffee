@@ -26,13 +26,13 @@ Coffee.Menu = {
 }
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/tabs.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/menu/elements/checkbox.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/menu/elements/colorpicker.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/menu/elements/dropdown.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/menu/elements/slider.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/label.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/slider.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/button.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/binder.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/checkbox.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/dropdown.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/colorpicker.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/minicheckbox.lua' )
 
 function Coffee.Menu:Scale( Size )
@@ -49,6 +49,7 @@ function Coffee.Menu:Init( Tabs )
     -- Generate the background.
     local Background = vgui.Create( 'DPanel' )
     Background:SetSize( self.Resolution.Width, self.Resolution.Height )
+    Background:SetKeyboardInputEnabled( true )
     Background.Paint = function( self, W, H )
         surface.SetDrawColor( 0, 0, 0, 200 )
         surface.DrawRect( 0, 0, W, H )

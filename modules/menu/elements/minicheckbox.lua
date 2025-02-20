@@ -21,7 +21,7 @@ function Coffee.Menu:GenerateMiniCheckbox( Panel, Tooltip, Assignment )
         surface.DrawRect( 0, 0, W, H )
 
         if ( self:IsHovered( ) or self:IsChildHovered( ) ) then 
-            if ( self.Timer + 3 < CurTime( ) and not self.Hover:IsVisible( ) ) then 
+            if ( self.Timer + 0.5 < CurTime( ) and not self.Hover:IsVisible( ) ) then 
                 self.Hover:SetVisible( true )
                 
                 self.Hover:SetPos( gui.MouseX( ), gui.MouseY( ) - Coffee.Menu:Scale( 25 ) )

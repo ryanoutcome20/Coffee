@@ -16,6 +16,10 @@ function Coffee.Menu:GenerateTab( Name, Width, Height )
         surface.SetDrawColor( 24, 24, 24 )
         surface.DrawTexturedRect( 0, 0, W, H )
 
+        surface.SetMaterial( Coffee.Menu.Gradients.Right )
+        surface.SetDrawColor( Coffee.Menu.Color )
+        surface.DrawTexturedRect( 0, 0, W, 20 )
+
         surface.SetMaterial( Coffee.Menu.Gradients.Left )
         surface.SetDrawColor( 40, 40, 40 )
         surface.DrawTexturedRect( 0, 0, W, 20 )

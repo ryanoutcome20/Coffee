@@ -9,7 +9,7 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
     Slider:SetSize( self:Scale( 100 ), 15 )
     Slider:Dock( RIGHT )
     Slider:DockMargin( self:Scale( 5 ), 0, self:Scale( 4 ), 0 )
-    Slider:SetSlideX( Default / Maximum )
+    Slider:SetSlideX((Default - Minimum) / (Maximum - Minimum))
 
     -- Add some paint to this empty slider.
     Slider.Paint = function( self, W, H )
@@ -19,23 +19,23 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
         Color.a = 120
 
         -- Get value.
-        local Value = Coffee.Config[ Assignment ]
+        local Value = ( ( Coffee.Config[ Assignment ] - Minimum ) / ( Maximum - Minimum ) )
 
         -- Render overlay.
         surface.SetDrawColor( Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
             
         surface.SetMaterial( Coffee.Menu.Gradients.Right )
-        surface.DrawTexturedRect( 0, 0, W * ( Value / Maximum ), H )
+        surface.DrawTexturedRect( 0, 0, W * Value, H )
     
         -- Render label.
-        if ( not noLabel and ( self:IsHovered( ) or self:GetDragging( ) ) ) then 
+        if ( not noLabel and ( self:IsHovered( ) or self:IsChildHovered( ) or self:GetDragging( ) ) ) then 
             Color.a = 35
 
             surface.SetFont( 'DefaultFixedDropShadow' )
             surface.SetTextColor( Color )
-            surface.SetTextPos( W * ( Value / Maximum ) + Coffee.Menu:Scale( 5 ), 2 ) 
-            surface.DrawText( Value .. ( Prefix or '' ) )
+            surface.SetTextPos( W * Value + Coffee.Menu:Scale( 5 ), 2 ) 
+            surface.DrawText( Coffee.Config[ Assignment ] .. ( Prefix or '' ) )
         end
     end
 
@@ -43,7 +43,7 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
 
     -- Add the actual value feature.
     Slider.OnValueChanged = function( self, X, Y )
-        Coffee.Config[ Assignment ] = math.Round( Maximum * X, Decimals )
+        Coffee.Config[ Assignment ] = math.Clamp( math.Round( Minimum + ( Maximum - Minimum ) * X, Decimals ), Minimum, Maximum )
     end
 
     return Slider

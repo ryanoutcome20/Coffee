@@ -13,6 +13,7 @@ Coffee.Colors = {
     [ 'Gray' ]  = Color( 30, 30, 30 ),
     
     [ 'Dark Gray' ] = Color( 18, 18, 18 ),
+    [ 'Cyan' ]      = Color( 60, 180, 225 ),
 
     [ 'Red' ]   = Color( 255, 0, 0 ),
     [ 'Green' ] = Color( 0, 255, 0 ),
@@ -67,9 +68,7 @@ function Coffee:Load( Code, Environment, ... )
         Function = setfenv( Function, Environment )
     end
 
-    Function( ... )
-
-    return true
+    return true, Function( ... )
 end
 
 function Coffee:LoadFile( Directory )
@@ -79,13 +78,17 @@ function Coffee:LoadFile( Directory )
         return self:Print( true, 'Failed to open handle to file %s!', string.GetFileFromFilename( Directory ) )
     end
 
-    if ( self:Load( Handle:Read( Handle:Size( ) ), self.Environment ) ) then 
+    local Valid, Data = self:Load( Handle:Read( Handle:Size( ) ), self.Environment )
+
+    if ( Valid ) then 
         Coffee:Print( false, 'Successfully loaded file %s!', Directory )
     else 
         Coffee:Print( false, 'Failed loaded file %s!', Directory )
     end
 
     Handle:Close( )
+
+    return Data
 end
 
 -- =============================================================================
@@ -94,7 +97,14 @@ end
 
 Coffee:Print( false, 'Loading libraries...' )
 
+if ( not Coffee:LoadFile( 'lua/coffee/libraries/cpp/modmgr.lua' ) ) then 
+    return 
+end
+
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/client.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/records.lua' )
 
 -- =============================================================================
 -- Load modules.
@@ -104,6 +114,8 @@ Coffee:Print( false, 'Loading modules...' )
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/menu.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/form.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/visuals/main.lua' )
 
 -- =============================================================================
 -- Gather dynamic files.

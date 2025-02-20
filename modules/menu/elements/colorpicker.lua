@@ -1,7 +1,10 @@
-function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Color, Callback )
+function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Default, Callback )
     -- Have to generate the colorpicker buttons used in the menu.
   
-    Coffee.Config[ Assignment ] = Color
+    -- Disassociate the default color object with the current color array.
+    Default = Color( Default.r, Default.g, Default.b )
+
+    Coffee.Config[ Assignment ] = Default
 
     local Button = vgui.Create( 'DButton', Panel or self.Last )
     Button:SetSize( 15, 15 )
@@ -66,6 +69,8 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
     Cube:SetColor( Color )
 
     Cube.OnUserChanged = function( self, Color )
+        Color.a = Coffee.Config[ Assignment ].a
+
         Coffee.Config[ Assignment ] = Color
 
         if ( Callback ) then 
@@ -80,8 +85,8 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
     Picker:SetRGB( Color )
 
     Picker.Think = function( self )
-        self.LastX = math.Clamp( self.LastX, 1, self:GetWide( ) - 1 )
-        self.LastY = math.Clamp( self.LastY, 1, self:GetTall( ) - 1 )
+        self.LastX = math.Clamp( self.LastX, 0, self:GetWide( ) - 1 )
+        self.LastY = math.Clamp( self.LastY, 0, self:GetTall( ) - 1 )
     end
 
     Picker.OnChange = function( self, Color )
@@ -90,6 +95,8 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
 
         Color = HSVToColor( H, S, V )
         Cube:SetBaseRGB( HSVToColor( H, 1, 1 ) )
+
+        Color.a = Coffee.Config[ Assignment ].a
 
         Coffee.Config[ Assignment ] = Color
         
@@ -104,8 +111,8 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
     Alpha:SetSize( self:Scale( 135 ), self:Scale( 10 ) )
 
     Alpha.Think = function( self )
-        self.LastX = math.Clamp( self.LastX, 1, self:GetWide( ) - 1 )
-        self.LastY = math.Clamp( self.LastY, 1, self:GetTall( ) - 1 )
+        self.LastX = math.Clamp( self.LastX, 0, self:GetWide( ) - 1 )
+        self.LastY = math.Clamp( self.LastY, 0, self:GetTall( ) - 1 )
     end
 
     -- We're just going to edit the default RGB picker to get it to work.
@@ -167,7 +174,9 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
 
     -- Get the save button.
     self:GenerateButton( Frame, 'Save', function( self )
-        Coffee.Menu.Copied = Coffee.Config[ Assignment ]
+        local Current = Coffee.Config[ Assignment ]
+        
+        Coffee.Menu.Copied = Color( Current.r, Current.g, Current.b, Current.a )
         
         Frame:Remove( )
     end, function( self )
@@ -176,7 +185,9 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
 
     -- Get the load button.
     self:GenerateButton( Frame, 'Load', function( self )
-        Coffee.Config[ Assignment ] = Coffee.Menu.Copied
+        local New = Coffee.Menu.Copied
+
+        Coffee.Config[ Assignment ] = Color( New.r, New.g, New.b, New.a )
 
         Frame:Remove( )
     end, function( self )
