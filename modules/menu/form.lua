@@ -38,6 +38,7 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Resolver', 'aimbot_resolver' )
     self:GenerateMiniCheckbox( nil, 'Only When Detected', 'aimbot_resolver_only_detect' )
+    self:GenerateMiniCheckbox( nil, 'Use Serverside', 'aimbot_resolver_serverside' )
 end )
 
 Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
@@ -224,5 +225,143 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 end )
 
 Coffee.Menu:Handle( 'Players', function( self, Panel )
-    
+    self:GenerateCheckbox( Panel, 'Enemy Visible', 'esp_chams_enemy_visible'  )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_enemy_visible_original' )
+    self:GenerateDropdown( nil, 1, 'esp_chams_enemy_visible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Enemy Visible Overlay', 'esp_chams_enemy_visible_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_enemy_visible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Enemy Invisible', 'esp_chams_enemy_invisible'  )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_color', self.Colors.Black )
+    self:GenerateDropdown( nil, 2, 'esp_chams_enemy_invisible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Enemy Invisible Overlay', 'esp_chams_enemy_invisible_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_enemy_invisible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
+
+
+    self:GenerateCheckbox( Panel, 'Friendly Visible', 'esp_chams_friendly_visible'  )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_friendly_visible_original' )
+    self:GenerateDropdown( nil, 1, 'esp_chams_friendly_visible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Friendly Visible Overlay', 'esp_chams_friendly_visible_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_friendly_visible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Friendly Invisible', 'esp_chams_friendly_invisible'  )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_color', self.Colors.Black )
+    self:GenerateDropdown( nil, 2, 'esp_chams_friendly_invisible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Friendly Invisible Overlay', 'esp_chams_friendly_invisible_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_friendly_invisible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
+
+
+    self:GenerateCheckbox( Panel, 'Local Real', 'esp_chams_local'  )
+    self:GenerateColorpicker( nil, 'esp_chams_local_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_local_original' )
+    self:GenerateDropdown( nil, 1, 'esp_chams_local_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Local Real Overlay', 'esp_chams_local_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_local_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_local_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Local Fake', 'esp_chams_local_fake'  )
+    self:GenerateColorpicker( nil, 'esp_chams_local_fake_color', self.Colors.White )
+    self:GenerateDropdown( nil, 2, 'esp_chams_local_fake_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Local Fake Overlay', 'esp_chams_local_fake_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_local_fake_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_local_fake_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
+
+
+    self:GenerateCheckbox( Panel, 'Viewmodel', 'esp_chams_viewmodel'  )
+    self:GenerateColorpicker( nil, 'esp_chams_viewmodel_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_viewmodel_original' )
+    self:GenerateDropdown( nil, 1, 'esp_chams_viewmodel_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Viewmodel Overlay', 'esp_chams_viewmodel_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_viewmodel_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_viewmodel_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars'
+    } )
 end, true )

@@ -101,6 +101,8 @@ if ( not Coffee:LoadFile( 'lua/coffee/libraries/cpp/modmgr.lua' ) ) then
     return 
 end
 
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/hitboxes.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/materials.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/client.lua' )
@@ -116,6 +118,8 @@ Coffee:LoadFile( 'lua/coffee/modules/menu/menu.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/form.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/main.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/ragebot/main.lua' )
 
 -- =============================================================================
 -- Gather dynamic files.

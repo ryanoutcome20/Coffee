@@ -85,8 +85,8 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
     Picker:SetRGB( Color )
 
     Picker.Think = function( self )
-        self.LastX = math.Clamp( self.LastX, 0, self:GetWide( ) - 1 )
-        self.LastY = math.Clamp( self.LastY, 0, self:GetTall( ) - 1 )
+        self.LastX = math.Clamp( self.LastX, 0, self:GetWide( ) )
+        self.LastY = math.Clamp( self.LastY, 0, self:GetTall( ) )
     end
 
     Picker.OnChange = function( self, Color )
@@ -111,8 +111,8 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
     Alpha:SetSize( self:Scale( 135 ), self:Scale( 10 ) )
 
     Alpha.Think = function( self )
-        self.LastX = math.Clamp( self.LastX, 0, self:GetWide( ) - 1 )
-        self.LastY = math.Clamp( self.LastY, 0, self:GetTall( ) - 1 )
+        self.LastX = math.Clamp( self.LastX, 0, self:GetWide( ) )
+        self.LastY = math.Clamp( self.LastY, 0, self:GetTall( ) )
     end
 
     -- We're just going to edit the default RGB picker to get it to work.

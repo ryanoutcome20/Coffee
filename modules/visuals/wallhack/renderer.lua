@@ -26,7 +26,7 @@ function Coffee.Visuals:RenderBar( Fillament, Color, Assignment )
         return
     end
 
-    local X, Y = Coffee.Visuals:HandleDock( self.Config[ Assignment .. '_dock' ], '', 4 )
+    local X, Y = self:HandleDock( self.Config[ Assignment .. '_dock' ], '', 4 )
 
     -- Adjust to match the size of the 2D boxes.
     Y = Y + 2

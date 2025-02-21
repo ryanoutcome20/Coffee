@@ -1,6 +1,7 @@
 Coffee.Records = { 
     Client = Coffee.Client,
     Require = Coffee.Require,
+    Hitboxes = Coffee.Hitboxes,
 
     Entities = { },
     Players  = { },
@@ -60,30 +61,34 @@ function Coffee.Records:Construct( Target )
         
         Dormant = Target:IsDormant( ),
 
-        Name     = Target:Name( ),
         Weapon   = Target:GetActiveWeapon( ),
-        Ping     = Target:Ping( ),
         Index    = Target:EntIndex( ),
 
         Health   = Target:Health( ),
-        Armor    = Target:Armor( ),
         Position = Target:GetPos( ),
         Angles   = Target:EyeAngles( ),
         Origin   = Target:GetNetworkOrigin( ),
 
         maxHealth = Target:GetMaxHealth( ),
-        maxArmor  = Target:GetMaxArmor( ),
 
         Mins = Target:OBBMins( ),
         Maxs = Target:OBBMaxs( ),
+
+        Bones = self.Hitboxes:GetMatrixInformation( Target ),
 
         Shift = false,
         LC = false,
         Fake = false
     }
 
+    Data.Name = Data.Player and Target:Name( ) or Target:GetClass( )
+
     if ( Data.Player and self.Require ) then 
         Data.Simtime = self.Require:Simulation( Target )
+        
+        Data.Ping     = Target:Ping( )
+        Data.Armor    = Target:Armor( )
+        Data.maxArmor = Target:GetMaxArmor( )
 
         Data.Fake = Data.Angles.z != 0 or math.abs( Data.Angles.x ) > 90 
     end
@@ -119,7 +124,9 @@ function Coffee.Records:Update( Stage )
         end
 
         -- Update all records in the context with the compensation information.
-        self:MatchCompensation( Target, newRecord )
+        if ( newRecord.Player ) then 
+            self:MatchCompensation( Target, newRecord )
+        end
 
         -- No need to keep this many records.
         while ( #self.Cache[ Target ] > 64 ) do 

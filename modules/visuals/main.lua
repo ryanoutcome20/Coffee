@@ -3,6 +3,7 @@ Coffee.Visuals = {
     Menu    = Coffee.Menu,
     Config  = Coffee.Config,
     Client  = Coffee.Client,
+    Materials = Coffee.Materials,
 
     Fade = { },
     Offsets = { }
@@ -28,6 +29,8 @@ surface.CreateFont( 'coffee-small', {
     outline = false
 } )
 
+Coffee:LoadFile( 'lua/coffee/modules/visuals/chams/handler.lua' )
+
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/glow.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/dock.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/renderer.lua' )
@@ -38,8 +41,19 @@ function Coffee.Visuals:Update( )
     if ( not self.Client.Local ) then 
         return
     end
-
+    
     self:Wallhack( )
 end
 
+function Coffee.Visuals:Update3D( ) 
+    if ( not self.Client.Local ) then 
+        return
+    end
+
+    cam.Start3D( )
+        self:PlayerChams( )
+    cam.End3D( )
+end
+
+Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Visuals.Update3D, Coffee.Visuals )
 Coffee.Hooks:New( 'DrawOverlay', Coffee.Visuals.Update, Coffee.Visuals )
