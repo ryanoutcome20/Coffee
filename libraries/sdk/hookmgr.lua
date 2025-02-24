@@ -15,13 +15,13 @@ function Coffee.Hooks:New( Event, Callback, Meta )
                 local Index, Value = Cache[ Event ][ i ], nil
 
                 if ( Index.Meta ) then 
-                    Value = Index.Callback( Index.Meta, ... )
+                    Value = { Index.Callback( Index.Meta, ... ) }
                 else
-                    Value = Index.Callback( ... )
+                    Value = { Index.Callback( ... ) }
                 end
 
-                if ( Value != nil ) then 
-                    return Value
+                if ( Value and #Value != 0 ) then 
+                    return unpack( Value )
                 end
             end
         end )

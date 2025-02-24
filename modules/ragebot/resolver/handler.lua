@@ -1,8 +1,8 @@
-function Coffee.Aimbot:Resolve( Record )
+function Coffee.Ragebot:Resolve( Record )
     return angle_zero
 end
 
-function Coffee.Aimbot:UpdateResolver( ENT, Velocity )
+function Coffee.Ragebot:UpdateResolver( ENT, Velocity )
     if ( not self.Config[ 'aimbot_resolver' ] ) then 
         return
     end
@@ -35,4 +35,4 @@ function Coffee.Aimbot:UpdateResolver( ENT, Velocity )
     ENT:InvalidateBoneCache( )
 end
 
-Coffee.Hooks:New( 'UpdateAnimation', Coffee.Aimbot.UpdateResolver, Coffee.Aimbot )
+Coffee.Hooks:New( 'UpdateAnimation', Coffee.Ragebot.UpdateResolver, Coffee.Ragebot )

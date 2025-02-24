@@ -1,6 +1,51 @@
 Coffee.Hitboxes = { 
+    Config = Coffee.Config,
+
     Cache = { }
 }
+
+function Coffee.Hitboxes:HandleMultipoint( ENT, Matrix, Offset, Info )
+    if not self.Config[ 'aimbot_multipoint' ] then 
+        return
+    end
+
+    local Final = { }
+
+    -- Get the scale.
+    local Scale = Info.Group == HITGROUP_HEAD and self.Config[ 'aimbot_multipoint_head_scale' ] or self.Config[ 'aimbot_multipoint_other_scale' ]
+
+    Scale = Scale / 200
+
+    -- Calculate Mins/Maxs.
+    local Mins, Maxs = ENT:GetHitBoxBounds( Info.Hitbox, Info.Set )
+
+    -- Calculate points.
+    local Points = {
+        ( ( Mins + Maxs ) * 0.5 ),
+        Vector( Mins.x, Mins.y, Mins.z ),
+        Vector( Mins.x, Maxs.y, Mins.z ),
+        Vector( Maxs.x, Maxs.y, Mins.z ),
+        Vector( Maxs.x, Mins.y, Mins.z )
+    }
+
+    -- Rotate points.
+    -- https://developer.valvesoftware.com/wiki/Rotation_Tutorial
+    for i = 1, #Points do
+        Points[ i ]:Rotate( Offset )
+        Points[ i ] = Points[ i ] + Matrix
+        
+        if ( i == 1 ) then 
+            table.insert( Final, Points[ i ] )
+            continue
+        end
+
+        Points[ i ] = ( ( Points[ i ] - Points[ 1 ] ) * Scale ) + Points[ 1 ]
+        
+        table.insert( Final, Points[ i ] )
+    end
+
+    return Final
+end
 
 function Coffee.Hitboxes:ParseInformation( ENT )
     -- Get our model and start our cache.
@@ -64,13 +109,23 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
                 return self:ParseInformation( ENT )
             end
 
-            local Matrix, Ang = ENT:GetBonePosition( Bone )
+            local Matrix, Offset = ENT:GetBonePosition( Bone )
 
-            if not Matrix or not Ang then 
+            if not Matrix or not Offset then 
                 continue
             end 
             
             table.insert( Internal, Matrix )
+        
+            local Points = self:HandleMultipoint( ENT, Matrix, Offset, Info )
+
+            if ( Points ) then 
+                table.Add( Internal, Points )
+            end
+            
+            if ( Info.Group == HITGROUP_HEAD ) then 
+                Internal = table.Reverse( Internal )
+            end
         end
 
         Temp[ k ] = Internal
@@ -80,5 +135,5 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
 end
 
 concommand.Add( 'test_hit', function( )
-    PrintTable( Coffee.Hitboxes )
+    MsgN( Coffee.Hitboxes:GetMatrixInformation( Entity( 2 ), true ) )
 end )

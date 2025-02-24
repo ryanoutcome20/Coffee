@@ -101,6 +101,7 @@ if ( not Coffee:LoadFile( 'lua/coffee/libraries/cpp/modmgr.lua' ) ) then
     return 
 end
 
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/engine.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hitboxes.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/materials.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )

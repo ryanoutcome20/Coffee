@@ -15,48 +15,37 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Silent', 'aimbot_silent' )
     self:GenerateDropdown( nil, 1, 'aimbot_silent_mode', {
         'Clientside',
-        'Serverside',
-        'Paneled'
+        'Serverside'    
     } )
     self:GenerateMiniCheckbox( nil, 'Hide Shots', 'aimbot_silent_hide' )
 
     self:GenerateCheckbox( Panel, 'Delay Shots', 'aimbot_delay' )
     self:GenerateSlider( nil, 'aimbot_delay_time', 1, 1000, 500, 0, false, 'ms' )
 
-    self:GenerateCheckbox( Panel, 'Hitchance', 'aimbot_hitchance' )
-    self:GenerateSlider( nil, 'aimbot_hitchance_value', 1, 100, 50, 0, false, '%' )
-
     self:GenerateCheckbox( Panel, 'Compensate Recoil', 'aimbot_norecoil' )
 
     self:GenerateCheckbox( Panel, 'Compensate Spread', 'aimbot_nospread' )
 
     self:GenerateCheckbox( Panel, 'Autostop', 'aimbot_autostop' )
-    self:GenerateDropdown( nil, 1, 'aimbot_autostop_mode', {
-        'Partial',
-        'Fullstop'
-    } )
 
     self:GenerateCheckbox( Panel, 'Resolver', 'aimbot_resolver' )
     self:GenerateMiniCheckbox( nil, 'Only When Detected', 'aimbot_resolver_only_detect' )
     self:GenerateMiniCheckbox( nil, 'Use Serverside', 'aimbot_resolver_serverside' )
+
+    self:GenerateCheckbox( Panel, 'Backtracking', 'aimbot_backtrack' )
+    self:GenerateMiniCheckbox( nil, 'Inverse Records', 'aimbot_inverse' )
 end )
 
 Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateLabel( Panel, 'Hitboxes' )
-    self:GenerateMiniCheckbox( nil, 'Head', 'aimbot_hitboxes_head' )
-    self:GenerateMiniCheckbox( nil, 'Chest', 'aimbot_hitboxes_chest' )
-    self:GenerateMiniCheckbox( nil, 'Stomach', 'aimbot_hitboxes_stomach' )
-    self:GenerateMiniCheckbox( nil, 'Arms', 'aimbot_hitboxes_arms' )
     self:GenerateMiniCheckbox( nil, 'Feet', 'aimbot_hitboxes_feet' )
+    self:GenerateMiniCheckbox( nil, 'Arms', 'aimbot_hitboxes_arms' )
+    self:GenerateMiniCheckbox( nil, 'Stomach', 'aimbot_hitboxes_stomach' )
+    self:GenerateMiniCheckbox( nil, 'Chest', 'aimbot_hitboxes_chest' )
+    self:GenerateMiniCheckbox( nil, 'Head', 'aimbot_hitboxes_head' )
     self:GenerateMiniCheckbox( nil, 'Generic', 'aimbot_hitboxes_generic' )
 
     self:GenerateCheckbox( Panel, 'Multipoints', 'aimbot_multipoint' )
-    self:GenerateMiniCheckbox( nil, 'Head', 'aimbot_multipoint_head' )
-    self:GenerateMiniCheckbox( nil, 'Chest', 'aimbot_multipoint_chest' )
-    self:GenerateMiniCheckbox( nil, 'Stomach', 'aimbot_multipoint_stomach' )
-    self:GenerateMiniCheckbox( nil, 'Arms', 'aimbot_multipoint_arms' )
-    self:GenerateMiniCheckbox( nil, 'Feet', 'aimbot_multipoint_feet' )
-    self:GenerateMiniCheckbox( nil, 'Generic', 'aimbot_multipoint_generic' )
 
     self:GenerateLabel( Panel, 'Head Scale' )
     self:GenerateSlider( nil, 'aimbot_multipoint_head_scale', 1, 100, 75, 0, false, '%' )
@@ -66,7 +55,11 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Ignore Moving Limbs', 'aimbot_ignore_moving_limbs' )
 
+    self:GenerateCheckbox( Panel, 'Ignore Head Airbourne', 'aimbot_ignore_airbourne_head' )
+
     self:GenerateCheckbox( Panel, 'Ignore Sticky', 'aimbot_ignore_sticky' )
+
+    self:GenerateCheckbox( Panel, 'Invert Hitbox Selection', 'aimbot_invert_hitboxes' )
 
     self:GenerateLabel( Panel, 'Avoid' )
     self:GenerateMiniCheckbox( nil, 'Teammates', 'aimbot_avoid_teammates' )
@@ -76,8 +69,6 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Vehicles', 'aimbot_avoid_vehicles' )
     self:GenerateMiniCheckbox( nil, 'Invisible', 'aimbot_avoid_invisible' )
     self:GenerateMiniCheckbox( nil, 'Bots', 'aimbot_avoid_bots' )
-    self:GenerateMiniCheckbox( nil, 'NPCs', 'aimbot_avoid_npcs' )
-    self:GenerateMiniCheckbox( nil, 'Players', 'aimbot_avoid_players' )
 end, true )
 
 -- Players Tab

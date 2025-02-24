@@ -9,10 +9,56 @@ Coffee.Records = {
     Cache = { }
 }
 
+RunConsoleCommand( 'cl_interp', 0 )
+
 function Coffee.Records:GetFront( Target )
     local Records = self.Cache[ Target ] or { }
 
     return Records[ 1 ]
+end
+
+function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse )
+    local Records = table.Copy( self.Cache[ Target ] ) or { }
+    local Best;
+
+    table.remove( Records, 1 )
+
+    if ( Inverse ) then 
+        Records = table.Reverse( Records )
+    end
+
+    for k, Record in pairs( Records ) do 
+        if ( not self:Valid( CUserCMD, Record ) or k == 1 ) then 
+            continue
+        end
+
+        if ( Record.Shift ) then
+            continue
+        end
+
+        if ( not Best ) then 
+            Best = Record
+            continue
+        end
+
+        if ( Record.Speed > 0 and Record.Ground ) then 
+            Best = Record
+        end
+    end
+
+    return Best
+end
+
+function Coffee.Records:GetTickDelta( CUserCMD, Time )
+    return ( ded.GetServerTime( CUserCMD ) + ded.GetLatency( 0 ) + ded.GetLatency( 1 ) ) - Time
+end
+
+function Coffee.Records:Valid( CUserCMD, Record )
+    if ( Record.LC ) then 
+        return false
+    end
+
+    return self:GetTickDelta( CUserCMD, Record.Simtime ) < 1
 end
 
 function Coffee.Records:MatchCompensation( Target, Current )
@@ -33,7 +79,7 @@ function Coffee.Records:MatchCompensation( Target, Current )
     -- Loop all of our records to match this stuff.
     local Highest = 0
 
-    for k,v in pairs( Records ) do 
+    for k,v in pairs( table.Reverse( Records ) ) do 
         if ( v.Simtime > Highest ) then 
             Highest = v.Simtime
         else 
@@ -57,6 +103,8 @@ end
 
 function Coffee.Records:Construct( Target )
     local Data = {
+        Target = Target,
+
         Player = Target:IsPlayer( ),
         
         Dormant = Target:IsDormant( ),
@@ -67,7 +115,11 @@ function Coffee.Records:Construct( Target )
         Health   = Target:Health( ),
         Position = Target:GetPos( ),
         Angles   = Target:EyeAngles( ),
+        Velocity = Target:GetVelocity( ),
         Origin   = Target:GetNetworkOrigin( ),
+
+        Ground   = Target:IsFlagSet( FL_ONGROUND ),
+        Duck     = Target:IsFlagSet( FL_DUCKING ),
 
         maxHealth = Target:GetMaxHealth( ),
 
@@ -82,6 +134,7 @@ function Coffee.Records:Construct( Target )
     }
 
     Data.Name = Data.Player and Target:Name( ) or Target:GetClass( )
+    Data.Speed = Data.Velocity:LengthSqr( )
 
     if ( Data.Player and self.Require ) then 
         Data.Simtime = self.Require:Simulation( Target )
@@ -111,7 +164,7 @@ function Coffee.Records:Update( Stage )
         self.Cache[ Target ] = self.Cache[ Target ] or { }
 
         -- If the entity isn't currently valid or we're dead then we can just delete records.
-        if ( not self.Client.Alive or Target:IsDormant( ) or not Target:Alive( ) ) then 
+        if ( not self.Client.Alive or Target:IsDormant( ) or not Target:Alive( ) or Target:IsFlagSet( FL_FROZEN	) ) then 
             self.Cache[ Target ] = { }
             continue
         end
