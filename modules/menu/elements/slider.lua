@@ -16,8 +16,6 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
         -- Get color.
         local Color = Color( Coffee.Menu.Color.r, Coffee.Menu.Color.g, Coffee.Menu.Color.b )
 
-        Color.a = 120
-
         -- Get value.
         local Value = ( ( Coffee.Config[ Assignment ] - Minimum ) / ( Maximum - Minimum ) )
 
@@ -30,12 +28,28 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
     
         -- Render label.
         if ( not noLabel and ( self:IsHovered( ) or self:IsChildHovered( ) or self:GetDragging( ) ) ) then 
-            Color.a = 35
+            local Text = Coffee.Config[ Assignment ] .. ( Prefix or '' )
+            local Width = W * Value + Coffee.Menu:Scale( 5 )
 
             surface.SetFont( 'DefaultFixedDropShadow' )
-            surface.SetTextColor( Color )
-            surface.SetTextPos( W * Value + Coffee.Menu:Scale( 5 ), 2 ) 
-            surface.DrawText( Coffee.Config[ Assignment ] .. ( Prefix or '' ) )
+            surface.SetTextColor( Coffee.Menu.Colors.White )
+
+            local TW, TH = surface.GetTextSize( Text )
+
+            surface.SetTextPos( math.Clamp( Width, 0, W - Coffee.Menu:Scale( TW ) - Coffee.Menu:Scale( 3 ) ), 2 ) 
+            surface.DrawText( Text )
+        end
+    end
+
+    Slider.Think = function( self )
+        if ( not self:GetDragging( ) and ( self:IsHovered( ) or self:IsChildHovered( ) ) ) then 
+            if ( input.IsKeyDown( KEY_LEFT ) ) then 
+                self.m_fSlideX = self.m_fSlideX - 0.003
+            elseif ( input.IsKeyDown( KEY_RIGHT ) ) then
+                self.m_fSlideX = self.m_fSlideX + 0.003
+            end
+
+            self:OnValueChanged( self.m_fSlideX, self.m_fSlideY )
         end
     end
 

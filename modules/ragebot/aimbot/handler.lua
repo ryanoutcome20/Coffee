@@ -9,7 +9,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Don't aim if our local player is invalid.
-    if ( not self.Client.Alive ) then 
+    if ( not self.Client.Local:Alive( ) ) then 
         return 
     end
 
@@ -23,7 +23,11 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Get active SWEP.
-    local SWEP = self.Client.Weapon
+    local SWEP = self.Client.Local:GetActiveWeapon( )
+
+    if ( not SWEP ) then 
+        return
+    end
 
     -- Get primary fire time and check if we need to add delay.
     local Time = SWEP:GetNextPrimaryFire( )
@@ -56,7 +60,6 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
                 if ( Info ) then 
                     Best = {
                         Record = Ideal,
-                        Backtrack = true,
                         Info = Info
                     }
                 end 
@@ -71,7 +74,6 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             if ( Info ) then 
                 Best = {
                     Record = First,
-                    Backtrack = false,
                     Info = Info
                 }
             end 
@@ -81,24 +83,40 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     if ( not Best ) then 
         return
     end
+    
+    -- Stop moving if needed.
+    if ( self.Client.Local:OnGround( ) ) then
+        if ( self.Config[ 'aimbot_autostop' ] and self.Menu:Keydown( 'aimbot_autostop_keybind' ) ) then
+            CUserCMD:SetForwardMove( 0 )
+            CUserCMD:SetSideMove( 0 )
+            
+            if ( self.Client.Speed > self.Config[ 'aimbot_autostop_speed' ] ) then 
+                return
+            end
+        end
+            
+        if ( self.Config[ 'aimbot_strip_run' ] ) then 
+            CUserCMD:RemoveKey( IN_SPEED )
+        end
+    end
 
     -- If we need to manipulate interpolation we can do it here.
-    ded.NetSetConVar( 'cl_interpolate', '1' )
+    self.Require:SetConVar( 'cl_interpolate', '1' )
 
     local Delta = self.Records:GetTickDelta( CUserCMD, Best.Record.Simtime )
 
     if ( Delta > 0.2 ) then 
-        local Time = ded.GetServerTime( CUserCMD )
+        local Time = self.Require:Servertime( CUserCMD )
 
-        ded.NetSetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
-        ded.SetInterpolationAmount( Time - Best.Record.Simtime )
+        self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
+        self.Require:SetInterpolation( Time - Best.Record.Simtime )
 
-        ded.SetCommandTick( CUserCMD, TIME_TO_TICKS( Time ) - 1 )
+        self.Require:SetTickCount( CUserCMD, TIME_TO_TICKS( Time ) - 1 )
     else
-        ded.NetSetConVar( 'cl_interp', '0' )
-        ded.SetInterpolationAmount( 0 )
+        self.Require:SetConVar( 'cl_interp', '0' )
+        self.Require:SetInterpolation( 0 )
 
-        ded.SetCommandTick( CUserCMD, TIME_TO_TICKS( Best.Record.Simtime ) )
+        self.Require:SetTickCount( CUserCMD, TIME_TO_TICKS( Best.Record.Simtime ) )
     end
 
     -- Get our ideal hitbox.
@@ -106,12 +124,6 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
 
     -- Set angles.
     self:SetAngles( CUserCMD, ( Spot - self.Client.EyePos ):Angle( ) )
-
-    -- Stop moving if needed.
-    if ( self.Config[ 'aimbot_autostop' ] ) then 
-        CUserCMD:SetForwardMove( 0 )
-        CUserCMD:SetSideMove( 0 )
-    end
 
     -- Shoot if needed.
     if ( self.Config[ 'aimbot_autofire' ] ) then 
@@ -125,5 +137,10 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             CUserCMD:AddKey( IN_ATTACK )
             CUserCMD:AddKey( IN_ATTACK2 )
         end
+    end
+
+    -- Check if we can push a shot.
+    if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
+        self.Shots:PushShot( Best.Record )
     end
 end

@@ -2,7 +2,7 @@ function Coffee.Menu:GenerateButton( Panel, Text, Callback, marginCallback )
     -- Have to generate the buttons used in the menu.
     
     local Button = vgui.Create( 'DButton', Panel or self.Last )
-    Button:SetFont( 'Default' )
+    Button:SetFont( 'DefaultSmall' )
     Button:SetText( Text )
     Button:Dock( TOP )
 

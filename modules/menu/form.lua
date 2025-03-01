@@ -26,14 +26,28 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Compensate Spread', 'aimbot_nospread' )
 
+    self:GenerateCheckbox( Panel, 'Engine Prediction', 'aimbot_engine' )
+
     self:GenerateCheckbox( Panel, 'Autostop', 'aimbot_autostop' )
+    self:GenerateKeybind( nil, 'aimbot_autostop_keybind' )
+    self:GenerateSlider( nil, 'aimbot_autostop_speed', 1, 250, 125, 0, false, '' )
+
+    self:GenerateCheckbox( Panel, 'Strip Run', 'aimbot_strip_run' )
 
     self:GenerateCheckbox( Panel, 'Resolver', 'aimbot_resolver' )
+    self:GenerateDropdown( nil, 1, 'aimbot_resolver_mode', {
+        'Normal',
+        'Extended'    
+    } )
     self:GenerateMiniCheckbox( nil, 'Only When Detected', 'aimbot_resolver_only_detect' )
     self:GenerateMiniCheckbox( nil, 'Use Serverside', 'aimbot_resolver_serverside' )
 
     self:GenerateCheckbox( Panel, 'Backtracking', 'aimbot_backtrack' )
     self:GenerateMiniCheckbox( nil, 'Inverse Records', 'aimbot_inverse' )
+
+    self:GenerateCheckbox( Panel, 'Log Spread Misses', 'aimbot_log_spread' )
+    
+    self:GenerateCheckbox( Panel, 'Log Desync Misses', 'aimbot_log_desync' )
 end )
 
 Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
@@ -69,6 +83,99 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Vehicles', 'aimbot_avoid_vehicles' )
     self:GenerateMiniCheckbox( nil, 'Invisible', 'aimbot_avoid_invisible' )
     self:GenerateMiniCheckbox( nil, 'Bots', 'aimbot_avoid_bots' )
+end, true )
+
+-- Anti-Aim Tab
+
+Coffee.Menu:Handle( 'Anti-Aim', function( self, Panel )
+    self:GenerateCheckbox( Panel, 'Enabled', 'hvh_enabled' )
+
+    self:GenerateCheckbox( Panel, 'Adjust Pitch', 'hvh_pitch' )
+    self:GenerateDropdown( nil, 1, 'hvh_pitch_mode', {
+        'Emotion',
+        'Down',
+        'Up',
+        'Zero',
+        'Fake Down',
+        'Fake Up',
+        'Fake Jitter'
+    }, 70 )
+
+    self:GenerateCheckbox( Panel, 'Adjust Yaw', 'hvh_yaw' )
+    self:GenerateKeybind( nil, 'hvh_yaw_invert' )
+    self:GenerateDropdown( nil, 1, 'hvh_yaw_base', {
+        'Crosshair',
+        'Distance',
+        'Static'
+    }, 70 )
+
+    self:GenerateLabel( Panel, 'Yaw Add' )
+    self:GenerateSlider( nil, 'hvh_yaw_add', -180, 180, 0, 0, false, '°' )
+
+    self:GenerateCheckbox( Panel, 'Jitter', 'hvh_jitter' )
+    self:GenerateSlider( nil, 'hvh_jitter_angle', -180, 180, 0, 0, false, '°' )
+    self:GenerateMiniCheckbox( nil, 'Center Jitter', 'hvh_jitter_center' )
+
+    self:GenerateCheckbox( Panel, 'Distortion', 'hvh_yaw_distortion' )
+    self:GenerateDropdown( nil, 1, 'hvh_yaw_distortion_timer', {
+        'Current Time',
+        'System Time'
+    }, 80 )
+    self:GenerateDropdown( nil, 1, 'hvh_yaw_distortion_trigonometric', {
+        'Sine',
+        'Cosine',
+        'Tangent'
+    }, 70 )
+    self:GenerateMiniCheckbox( nil, 'Force Turn', 'hvh_yaw_distortion_force' )
+
+    self:GenerateLabel( Panel, 'Speed' )
+    self:GenerateSlider( nil, 'hvh_yaw_distortion_speed', 0, 100, 50, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Divisor' )
+    self:GenerateSlider( nil, 'hvh_yaw_distortion_divisor', 1, 10, 5, 0, false, '' )
+
+    self:GenerateCheckbox( Panel, 'Fake Flick', 'hvh_yaw_flick' )
+    self:GenerateDropdown( nil, 1, 'hvh_yaw_flick_timer', {
+        'Current Time',
+        'System Time'
+    }, 80 )
+    self:GenerateDropdown( nil, 1, 'hvh_yaw_flick_trigonometric', {
+        'Sine',
+        'Cosine',
+        'Tangent'
+    }, 70 )
+
+    self:GenerateLabel( Panel, 'Speed' )
+    self:GenerateSlider( nil, 'hvh_yaw_flick_speed', 0, 100, 50, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Angle' )
+    self:GenerateSlider( nil, 'hvh_yaw_flick_angle', -90, 90, 0, 0, false, '°' )
+    self:GenerateMiniCheckbox( nil, 'Use Desynced Rotation', 'hvh_yaw_flick_desync' )
+end )
+
+Coffee.Menu:Handle( 'Anti-Aim', function( self, Panel )
+    self:GenerateCheckbox( Panel, 'Fakelag', 'hvh_fakelag' )
+    self:GenerateSlider( nil, 'hvh_fakelag_ticks', 1, 23, 1, 0, false, '' )
+    self:GenerateMiniCheckbox( nil, 'Choke Shots', 'hvh_fakelag_shots' )
+
+    self:GenerateCheckbox( Panel, 'Speedhack', 'hvh_speedhack' )
+    self:GenerateKeybind( nil, 'hvh_speedhack_keybind' )
+    self:GenerateSlider( nil, 'hvh_speedhack_ticks', 1, 23, 1, 0, false, '' )
+    
+    self:GenerateCheckbox( Panel, 'Lag Switch', 'hvh_lagswitch' )
+    self:GenerateKeybind( nil, 'hvh_lagswitch_keybind' )
+    self:GenerateMiniCheckbox( nil, 'Force Packets', 'hvh_lagswitch_force_packets' )
+
+    self:GenerateLabel( Panel, 'Ticks' )
+    self:GenerateSlider( nil, 'hvh_lagswitch_ticks', 1, 23, 1, 0, false, '' )
+    
+    self:GenerateLabel( Panel, 'Hold Time' )
+    self:GenerateSlider( nil, 'hvh_lagswitch_hold_time', 1, 23, 1, 0, false, '' )
+
+    self:GenerateCheckbox( Panel, 'Adjust Animations', 'hvh_animations' )
+    self:GenerateMiniCheckbox( nil, 'Force Slide', 'hvh_animations_force_slide' )
+    self:GenerateMiniCheckbox( nil, 'Break Arms', 'hvh_animations_break_arms' )
+    self:GenerateMiniCheckbox( nil, 'Spam Act', 'hvh_animations_spam_act' )
 end, true )
 
 -- Players Tab
@@ -210,8 +317,23 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Render Weapon', 'esp_glow_weapon' )
     self:GenerateSlider( nil, 'esp_glow_passes', 1, 5, 3, 0 )
 
+    self:GenerateCheckbox( Panel, 'Area Light', 'esp_light'  )
+    self:GenerateColorpicker( nil, 'esp_light_color', self.Colors.Main )
+    self:GenerateMiniCheckbox( nil, 'Use ELight', 'esp_light_elight'  )
+    self:GenerateMiniCheckbox( nil, 'Use Pulse', 'esp_light_flicker'  )
+    self:GenerateSlider( nil, 'esp_light_size', 1, 100, 1, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'Visualize Footsteps', 'esp_footstep_visualize'  )
+    self:GenerateColorpicker( nil, 'esp_footstep_visualize_left', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_footstep_visualize_right', self.Colors.Main )
+
     self:GenerateCheckbox( Panel, 'Force LOD', 'esp_lod'  )
     self:GenerateSlider( nil, 'esp_lod_number', 1, 8, 1, 0 )
+
+    self:GenerateCheckbox( Panel, 'Localplayer Indicators', 'esp_indicators'  )
+    self:GenerateMiniCheckbox( nil, 'Lag Compensation', 'esp_indicators_lc'  )
+    self:GenerateMiniCheckbox( nil, 'Choke', 'esp_indicators_choke'  )
+    self:GenerateMiniCheckbox( nil, 'Anti-Aim Inversion', 'esp_indicators_invert'  )
 
 end )
 
@@ -241,7 +363,6 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateDropdown( nil, 2, 'esp_chams_enemy_invisible_material', {
         'Normal',
         'Flat',
-        'Metal',
         'Glow'
     } )
 
@@ -281,7 +402,6 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateDropdown( nil, 2, 'esp_chams_friendly_invisible_material', {
         'Normal',
         'Flat',
-        'Metal',
         'Glow'
     } )
 
@@ -298,7 +418,6 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Local Real', 'esp_chams_local'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_color', self.Colors.White )
-    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_local_original' )
     self:GenerateDropdown( nil, 1, 'esp_chams_local_material', {
         'Normal',
         'Flat',
@@ -355,4 +474,18 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Plasma',
         'Stars'
     } )
+end, true )
+
+-- Miscellaneous Tab
+
+Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
+    self:GenerateLabel( Panel, 'Menu Color' )
+    self:GenerateColorpicker( nil, 'miscellaneous_menu', self.Color, function( Color )
+        self.Color = Color
+    end )
+
+end )
+
+Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
+    
 end, true )

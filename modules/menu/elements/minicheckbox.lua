@@ -46,7 +46,7 @@ function Coffee.Menu:GenerateMiniCheckboxTooltip( Tooltip )
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
 
-        surface.SetFont( 'Default' )
+        surface.SetFont( 'DefaultSmall' )
         surface.SetTextColor( Coffee.Menu.Color )
         surface.SetTextPos( 2, 2 ) 
         surface.DrawText( Tooltip )

@@ -5,7 +5,7 @@ Coffee.Hitboxes = {
 }
 
 function Coffee.Hitboxes:HandleMultipoint( ENT, Matrix, Offset, Info )
-    if not self.Config[ 'aimbot_multipoint' ] then 
+    if ( not self.Config[ 'aimbot_multipoint' ] ) then 
         return
     end
 
@@ -56,7 +56,9 @@ function Coffee.Hitboxes:ParseInformation( ENT )
     -- Get our sets.
     local Temp, Sets = { }, ENT:GetHitboxSetCount( )
 
-    if Sets == 0 then return Temp end 
+    if ( Sets == 0 ) then 
+        return Temp 
+    end 
     
     -- Loop through sets and count to get bone information.
     for i = 0, Sets - 1 do
@@ -65,13 +67,17 @@ function Coffee.Hitboxes:ParseInformation( ENT )
         for c = 0, Count do 
             local Group, Bone = ENT:GetHitBoxHitGroup( c, i ), ENT:GetHitBoxBone( c, i )
 
-            if not Group or not Bone then continue end 
+            if ( not Group or not Bone ) then 
+                continue 
+            end 
 
             local Name = ENT:GetBoneName( Bone )
 
-            if not Name then continue end 
+            if ( not Name ) then 
+                continue 
+            end 
 
-            if Name == '__INVALIDBONE__' then
+            if ( Name == '__INVALIDBONE__' ) then
                 self.Cache[ Model ] = '__INVALIDBONE__'
                 return { }
             end 
@@ -90,10 +96,10 @@ end
 function Coffee.Hitboxes:GetMatrixInformation( ENT )
     local Temp, Data = { }, self.Cache[ ENT:GetModel( ) ]
 
-    if Data == '__INVALIDBONE__' then 
+    if ( Data == '__INVALIDBONE__' ) then 
         self:ParseInformation( ENT )
         return
-    elseif not Data then 
+    elseif ( not Data ) then 
         Data = self:ParseInformation( ENT )
     end
 
@@ -105,13 +111,13 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
 
             local Bone = ENT:LookupBone( Info.Name )
 
-            if not Bone then 
+            if ( not Bone ) then 
                 return self:ParseInformation( ENT )
             end
 
             local Matrix, Offset = ENT:GetBonePosition( Bone )
 
-            if not Matrix or not Offset then 
+            if ( not Matrix or not Offset ) then 
                 continue
             end 
             
@@ -133,7 +139,3 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
 
     return Temp
 end
-
-concommand.Add( 'test_hit', function( )
-    MsgN( Coffee.Hitboxes:GetMatrixInformation( Entity( 2 ), true ) )
-end )

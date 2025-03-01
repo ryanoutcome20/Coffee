@@ -2,7 +2,9 @@ Coffee.Ragebot = {
     Records = Coffee.Records,
     Menu    = Coffee.Menu,
     Config  = Coffee.Config,
+    Require = Coffee.Require,
     Client  = Coffee.Client,
+    Shots   = Coffee.Shots,
 
     Hitboxes = {
         [ HITGROUP_GENERIC ] = 'aimbot_hitboxes_generic',
@@ -15,7 +17,9 @@ Coffee.Ragebot = {
         [ HITGROUP_RIGHTLEG ] = 'aimbot_hitboxes_feet'
     },
 
-    inPrediction = false,
+    Indexes = { },
+
+    isManipulating = false,
 
     Yaw = GetConVar( 'm_yaw' ),
     Pitch = GetConVar( 'm_pitch' ),
@@ -50,13 +54,31 @@ function Coffee.Ragebot:Update( CUserCMD )
         return
     end
 
-    ded.StartPrediction( CUserCMD )
+    self.Packet = true
+    self.isManipulating = false
+
+    self.Require:StartPrediction( CUserCMD )
+        self:Speedhack( CUserCMD )
+        self:Lagswitch( CUserCMD )
+
+        self:Fakelag( CUserCMD )    
+
         self:AntiAim( CUserCMD )
 
         self:Aimbot( CUserCMD )
 
         self:SetupMovement( CUserCMD )
-    ded.FinishPrediction( )
+        
+        self:BreakAnimations( CUserCMD )
+    self.Require:EndPrediction( )
+
+    if ( not self.Packet ) then 
+        self.Choked = self.Choked + 1
+    else
+        self.Choked = 0
+    end
+    
+    self.Require:BSendPacket( self.Packet )
 end
 
 Coffee.Hooks:New( 'CreateMove', Coffee.Ragebot.Update, Coffee.Ragebot )

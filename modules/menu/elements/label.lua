@@ -4,7 +4,7 @@ function Coffee.Menu:GenerateLabel( Panel, Text )
     -- Generate our label.
     local Label = vgui.Create( 'DLabel', Panel )
     Label:SetText( Text )
-    Label:SetFont( 'Default' )
+    Label:SetFont( 'DefaultSmall' )
 	Label:SizeToContents( )
     Label:SetMouseInputEnabled( true )    
     Label:Dock( TOP )

@@ -1,9 +1,12 @@
 Coffee.Visuals = { 
-    Records = Coffee.Records,
-    Menu    = Coffee.Menu,
-    Config  = Coffee.Config,
-    Client  = Coffee.Client,
-    Materials = Coffee.Materials,
+    Records    = Coffee.Records,
+    Menu       = Coffee.Menu,
+    Config     = Coffee.Config,
+    Client     = Coffee.Client,
+    Colors     = Coffee.Colors,
+    Resolution = Coffee.Resolution,
+    Materials  = Coffee.Materials,
+    Ragebot    = Coffee.Ragebot,
 
     Fade = { },
     Offsets = { }
@@ -29,8 +32,13 @@ surface.CreateFont( 'coffee-small', {
     outline = false
 } )
 
+Coffee:LoadFile( 'lua/coffee/modules/visuals/animations/handler.lua' )
+
 Coffee:LoadFile( 'lua/coffee/modules/visuals/chams/handler.lua' )
 
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/footsteps.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/indicators.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/glow.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/dock.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/renderer.lua' )
@@ -42,6 +50,7 @@ function Coffee.Visuals:Update( )
         return
     end
     
+    self:Indicators( )
     self:Wallhack( )
 end
 

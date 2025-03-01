@@ -50,7 +50,7 @@ function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse )
 end
 
 function Coffee.Records:GetTickDelta( CUserCMD, Time )
-    return ( ded.GetServerTime( CUserCMD ) + ded.GetLatency( 0 ) + ded.GetLatency( 1 ) ) - Time
+    return ( self.Require:Servertime( CUserCMD ) + self.Require:Latency( 0 ) + self.Require:Latency( 1 ) ) - Time
 end
 
 function Coffee.Records:Valid( CUserCMD, Record )
@@ -143,7 +143,7 @@ function Coffee.Records:Construct( Target )
         Data.Armor    = Target:Armor( )
         Data.maxArmor = Target:GetMaxArmor( )
 
-        Data.Fake = Data.Angles.z != 0 or math.abs( Data.Angles.x ) > 90 
+        Data.Fake = Data.Angles.z != 0 or math.abs( Data.Angles.x ) == 180 
     end
 
     return Data

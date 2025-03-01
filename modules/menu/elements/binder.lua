@@ -2,7 +2,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     -- Have to generate the keybinders used in the menu.
     
     local Binder = vgui.Create( 'DBinder', Panel or self.Last )
-    Binder:SetFont( 'Default' )
+    Binder:SetFont( 'DefaultSmall' )
     Binder:SetSize( 25, 15 )
     Binder:SetText( '' )
     Binder:Dock( RIGHT )
@@ -25,12 +25,15 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
         if ( not Name ) then 
             return
         end
+
+        Name = language.GetPhrase( Name )
         
-        self:SetText( language.GetPhrase( Name ) )
-        self:SetWide( math.max( #Name * Coffee.Menu:Scale( 8 ), 25 ) )
+        self:SetText( Name )
+        self:SetWide( math.max( math.Clamp( #Name, 1, 9 ) * Coffee.Menu:Scale( 9 ), 25 ) )
     end
 
     Binder.DoClick = function( self )
+        self:SetText( '...' )
         input.StartKeyTrapping()
         self.Trapping = true
     end
@@ -122,7 +125,7 @@ end
 function Coffee.Menu:HandleToggles( ENT, Key )   
     self.Toggles[ Key ] = self.Toggles[ Key ] or false 
 
-    if self.Toggles[ Key ] then 
+    if ( self.Toggles[ Key ] ) then 
         self.Toggles[ Key ] = false 
     else 
         self.Toggles[ Key ] = true 

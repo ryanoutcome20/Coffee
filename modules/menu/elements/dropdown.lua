@@ -17,6 +17,8 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width 
         Coffee.Config[ Assignment ] = Value
     end
 
+    Dropdown:SetFont( 'DefaultSmall' )
+    
     -- This is terrible but I didn't make the library. You can tell this wasn't made for 
     -- dynamic guis.
     self:GenerateFixedDropdown( Dropdown )

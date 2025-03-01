@@ -103,7 +103,7 @@ function Coffee.Materials:Get( Name, IgnoreZ )
 end
 
 function Coffee.Materials:CreateMaterial( Name, Shader, Data )
-    if not Data then 
+    if ( not Data ) then 
         self.Cache[ Name ] = Material( Shader )
         return
     end
@@ -113,7 +113,7 @@ end
 
 function Coffee.Materials:Init( )
     for k,v in pairs( self.Disired ) do
-        if isstring( v ) then
+        if ( isstring( v ) ) then
             self:CreateMaterial( k, v ) 
             continue
         end 

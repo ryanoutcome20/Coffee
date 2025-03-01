@@ -1,6 +1,7 @@
 Coffee.Require = { 
-    Active = '',
+    Config = Coffee.Config,
 
+    Active = '',
     Data = {
         [ 'zxcmodule' ] = {
             [ 'PreFrameStageNotify' ] = function( self )
@@ -13,6 +14,62 @@ Coffee.Require = {
 
             [ 'Simulation' ] = function( self, ENT )
                 return ded.GetSimulationTime( ENT:EntIndex( ) )
+            end,
+
+            [ 'Servertime' ] = function( self, CUserCMD )
+                return ded.GetServerTime( CUserCMD )
+            end,
+
+            [ 'Latency' ] = function( self, Mode )
+                return ded.GetLatency( Mode )
+            end,
+
+            [ 'StartPrediction' ] = function( self, CUserCMD )
+                if ( not self.Config[ 'aimbot_engine' ] ) then 
+                    return
+                end
+                
+                return ded.StartPrediction( CUserCMD )
+            end,
+
+            [ 'EndPrediction' ] = function( self, CUserCMD )
+                if ( not self.Config[ 'aimbot_engine' ] ) then 
+                    return
+                end
+                
+                return ded.FinishPrediction( CUserCMD )
+            end,
+
+            [ 'SetContextVector' ] = function( self, CUserCMD, Angle )
+                return ded.SetContextVector( CUserCMD, Angle:Forward( ), true )
+            end,
+
+            [ 'SetConVar' ] = function( self, ConVar, Value )
+                return ded.NetSetConVar( ConVar, Value )
+            end,
+
+            [ 'SetInterpolation' ] = function( self, Time )
+                return ded.SetInterpolationAmount( Time )
+            end,
+
+            [ 'SetTickCount' ] = function( self, CUserCMD, Tick )
+                return ded.SetCommandTick( CUserCMD, Tick )
+            end,
+
+            [ 'SetOutSequence' ] = function( self, Seq )
+                return ded.SetOutSequenceNr( Seq )
+            end,
+
+            [ 'GetOutSequence' ] = function( self )
+                return ded.GetOutSequenceNr( )
+            end,
+
+            [ 'Slowmotion' ] = function( self, Value )
+                return ded.EnableSlowmotion( Value )
+            end,
+
+            [ 'BSendPacket' ] = function( self, Value )
+                return ded.SetBSendPacket( Value )
             end
         },
     }

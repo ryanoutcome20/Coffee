@@ -108,6 +108,7 @@ Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/client.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/records.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/shots.lua' )
 
 -- =============================================================================
 -- Load modules.
@@ -118,9 +119,9 @@ Coffee:Print( false, 'Loading modules...' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/menu.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/form.lua' )
 
-Coffee:LoadFile( 'lua/coffee/modules/visuals/main.lua' )
-
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/main.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/visuals/main.lua' )
 
 -- =============================================================================
 -- Gather dynamic files.

@@ -30,10 +30,13 @@ function Coffee.Ragebot:UpdateView( ENT, Origin, Angles, FOV )
     if ( not self:ShouldSilent( ) ) then 
         return
     end
-    
+
     local View = { }
 
+    View.origin = Origin - ( Angles:Forward() * 100 )
+    View.fov = FOV
     View.angles = self.Silent
+    View.drawviewer = true
     
     return View
 end

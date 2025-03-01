@@ -22,7 +22,7 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment )
     end
 
     -- Fix font and layout on label.
-    Checkbox.Label:SetFont( 'Default' )
+    Checkbox.Label:SetFont( 'DefaultSmall' )
     Checkbox.Label:Dock( LEFT )
     Checkbox.Label:DockMargin( self:Scale( 5 ), 0, 0, 0 )
 

@@ -134,5 +134,28 @@ function Coffee.Visuals:Wallhack( )
         else
             Target:SetLOD( -1 )
         end
+
+        -- Render our light.
+        if ( self.Config[ 'esp_light' ] ) then         
+            local Light = DynamicLight( Target:EntIndex( ), self.Config[ 'esp_light_elight' ] )
+
+            if ( Light ) then 
+                Light.pos = Front.Position
+                Light.brightness = 2
+                Light.decay = 1000
+                Light.dietime = CurTime( ) + 1
+                Light.style = self.Config[ 'esp_light_flicker' ] and 11 or 0
+
+                local Color = self.Config[ 'esp_light_color' ]
+
+                Light.r = Color.r
+                Light.g = Color.g
+                Light.b = Color.b
+
+                local Size = ( self.Config[ 'esp_light_size' ] / 100 ) * 1024
+
+                Light.size = Size
+            end
+        end
     end
 end

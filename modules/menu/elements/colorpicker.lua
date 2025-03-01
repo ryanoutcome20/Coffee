@@ -152,7 +152,7 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
     -- Get main frame that everything will parent too.
     local Frame = vgui.Create( 'DPanel', self.Background )
     Frame:SetPos( gui.MouseX( ), gui.MouseY( ) )
-    Frame:SetSize( self:Scale( 35 ), self:Scale( 50 ) - 1 )
+    Frame:SetSize( self:Scale( 60 ), self:Scale( 50 ) - 1 )
 
     Frame.Paint = function( self, W, H ) 
         surface.SetDrawColor( 20, 20, 20, 200 )
