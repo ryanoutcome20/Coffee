@@ -15,10 +15,6 @@ function Coffee.Ragebot:OnMissedShot( wasResolver, Record )
 end
 
 function Coffee.Ragebot:Resolve( Record )
-    if ( not self.Config[ 'aimbot_resolver' ] ) then 
-        return
-    end
-
     -- Check if they're using a fake.
     if ( not Record.Fake and self.Config[ 'aimbot_resolver_only_detect' ] ) then 
         return
