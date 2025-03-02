@@ -170,7 +170,7 @@ function Coffee.Ragebot:Fakelag( CUserCMD )
         self.Packet = false
     end
 
-    if ( self.Client.Local:Alive( ) ) then 
+    if ( self.Client.Alive ) then 
         if ( not self.Config[ 'hvh_fakelag_shots' ] and CUserCMD:KeyDown( IN_ATTACK ) ) then 
             self.Packet = true
         end

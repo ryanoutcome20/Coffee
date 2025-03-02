@@ -12,6 +12,32 @@ function Coffee.Visuals:Footsteps( ENT, Position, Foot, Sound, Volume, Filter )
             material  = 'sprites/lgtning.vmt' 
         } )
     end
+
+    if ( not self.Config[ 'world_footstep' ] ) then 
+        return
+    end
+
+    local DSP    = self.Config[ 'world_footstep_dsp' ] and self.Config[ 'world_footstep_dsp_index' ] or 0
+    local Level  = self.Config[ 'world_footstep_range' ] and 180 or 75
+    local Volume = 1
+
+    if ( self.Client.Local == ENT ) then 
+        if ( self.Config[ 'world_footstep_local_suppress' ] ) then 
+            return true
+        end
+
+        Volume = self.Config[ 'world_footstep_local_volume' ] / 100
+    else
+        if ( self.Config[ 'world_footstep_other_suppress' ] ) then 
+            return true
+        end
+
+        Volume = self.Config[ 'world_footstep_other_volume' ] / 100
+    end
+
+    ENT:EmitSound( Sound, Level, 100, Volume, CHAN_AUTO, SND_NOFLAGS, DSP )
+
+    return true
 end
 
 Coffee.Hooks:New( 'PlayerFootstep', Coffee.Visuals.Footsteps, Coffee.Visuals )

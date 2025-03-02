@@ -74,6 +74,10 @@ function Coffee.Ragebot:UpdateResolver( ENT, Record )
         return
     end
 
+    if ( not self.Config[ 'aimbot_resolver' ] ) then 
+        return
+    end
+
     -- Check if we're getting called by the hook.
     if ( isvector( Record ) ) then 
         Record = nil

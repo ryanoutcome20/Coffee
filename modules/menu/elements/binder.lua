@@ -88,6 +88,8 @@ function Coffee.Menu:GenerateKeybindSubpanel( Assignment )
     Dropdown:Dock( FILL )
     Dropdown:DockMargin( 0, 0, 0, 0 )
 
+    Dropdown:SetFont( 'DefaultSmall' )
+
     Dropdown:AddChoice( 'Hold' )
     Dropdown:AddChoice( 'Hold Off' )
     Dropdown:AddChoice( 'Toggle' )

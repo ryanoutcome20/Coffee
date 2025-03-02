@@ -1,12 +1,32 @@
-Coffee.Client = { }
+Coffee.Client = { 
+    Overlay = Coffee.Overlay,
+    Config  = Coffee.Config
+}
 
 function Coffee.Client:Update( )
     self.Local      = self.Local or Coffee.Localplayer
     self.Prediction = self.Prediction or 0
     self.LC         = self.LC or false
 
+    local Origin = self.Local:GetNetworkOrigin( )
+
+    if ( self.Config[ 'world_update_dot' ] ) then 
+        local OBB = Vector( 2, 2, 2 )
+        local Z   = Vector( 0, 0, 3 )
+
+        self.Overlay:Box( Origin + Z, -OBB, OBB, false, self.Config[ 'world_update_dot_current' ] )
+
+        if ( not self.Config[ 'world_update_dot_choked' ] or ( Coffee.Ragebot and not Coffee.Ragebot.Packet ) ) then
+            self.Overlay:Box( self.Origin + Z, -OBB, OBB, false, self.Config[ 'world_update_dot_previous' ] )
+        end
+
+        if ( self.Config[ 'world_update_line' ] ) then 
+            self.Overlay:Line( Origin + Z, self.Origin + Z, false, self.Config[ 'world_update_line_color' ] )
+        end
+    end
+
     if ( self.Origin ) then 
-        self.LC = self.Origin:DistToSqr( self.Local:GetNetworkOrigin( ) ) > 4096
+        self.LC = self.Origin:DistToSqr( Origin ) > 4096
     end
 
     self.Health = self.Local:Health( )
@@ -15,7 +35,7 @@ function Coffee.Client:Update( )
     self.EyePos = self.Local:EyePos( )
     self.EyeAngles = self.Local:EyeAngles( )
     
-    self.Origin = self.Local:GetNetworkOrigin( )
+    self.Origin = Origin
     self.Velocity = self.Local:GetVelocity( )
     self.Speed = self.Velocity:Length2D( )
 

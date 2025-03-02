@@ -92,7 +92,8 @@ Coffee.Materials = {
         },
 
         [ 'Animated Plasma' ] = 'models/effects/comball_sphere',
-        [ 'Metal' ] = 'models/shiny'
+        [ 'Metal' ]           = 'models/shiny',
+        [ 'Physbeam' ]        = 'trails/physbeam',
     },
 
     Cache = { }

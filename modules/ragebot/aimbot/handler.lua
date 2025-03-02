@@ -25,7 +25,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     -- Get active SWEP.
     local SWEP = self.Client.Local:GetActiveWeapon( )
 
-    if ( not SWEP ) then 
+    if ( not IsValid( SWEP ) ) then 
         return
     end
 

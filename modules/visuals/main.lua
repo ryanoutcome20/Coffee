@@ -7,6 +7,7 @@ Coffee.Visuals = {
     Resolution = Coffee.Resolution,
     Materials  = Coffee.Materials,
     Ragebot    = Coffee.Ragebot,
+    Overlay    = Coffee.Overlay,
 
     Fade = { },
     Offsets = { }
@@ -37,6 +38,8 @@ Coffee:LoadFile( 'lua/coffee/modules/visuals/animations/handler.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/chams/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/footsteps.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/impacts.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/view.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/indicators.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/glow.lua' )
@@ -50,6 +53,7 @@ function Coffee.Visuals:Update( )
         return
     end
     
+    self:Watermark( )
     self:Indicators( )
     self:Wallhack( )
 end

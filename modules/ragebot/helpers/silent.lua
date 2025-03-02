@@ -41,4 +41,4 @@ function Coffee.Ragebot:UpdateView( ENT, Origin, Angles, FOV )
     return View
 end
 
-Coffee.Hooks:New( 'CalcView', Coffee.Ragebot.UpdateView, Coffee.Ragebot )
+-- Coffee.Hooks:New( 'CalcView', Coffee.Ragebot.UpdateView, Coffee.Ragebot )

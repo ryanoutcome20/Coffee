@@ -173,9 +173,13 @@ Coffee.Menu:Handle( 'Anti-Aim', function( self, Panel )
     self:GenerateSlider( nil, 'hvh_lagswitch_hold_time', 1, 23, 1, 0, false, '' )
 
     self:GenerateCheckbox( Panel, 'Adjust Animations', 'hvh_animations' )
+    self:GenerateMiniCheckbox( nil, 'Local Jelly', 'hvh_animations_jelly' )
     self:GenerateMiniCheckbox( nil, 'Force Slide', 'hvh_animations_force_slide' )
     self:GenerateMiniCheckbox( nil, 'Break Arms', 'hvh_animations_break_arms' )
     self:GenerateMiniCheckbox( nil, 'Spam Act', 'hvh_animations_spam_act' )
+
+    self:GenerateCheckbox( Panel, 'Adjust Body Scale', 'hvh_animations_scale' )
+    self:GenerateSlider( nil, 'hvh_animations_scale_amount', 1, 200, 100, 0, false, '%' )
 end, true )
 
 -- Players Tab
@@ -334,7 +338,6 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Lag Compensation', 'esp_indicators_lc'  )
     self:GenerateMiniCheckbox( nil, 'Choke', 'esp_indicators_choke'  )
     self:GenerateMiniCheckbox( nil, 'Anti-Aim Inversion', 'esp_indicators_invert'  )
-
 end )
 
 Coffee.Menu:Handle( 'Players', function( self, Panel )
@@ -476,6 +479,107 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     } )
 end, true )
 
+-- World Tab
+
+Coffee.Menu:Handle( 'World', function( self, Panel )
+
+end )
+
+Coffee.Menu:Handle( 'World', function( self, Panel )
+    self:GenerateCheckbox( Panel, 'Footstep Manipulation', 'world_footstep' )
+
+    self:GenerateLabel( Panel, 'Local Volume' )
+    self:GenerateSlider( nil, 'world_footstep_local_volume', 1, 100, 50, 0, false, '%' )
+    self:GenerateMiniCheckbox( nil, 'Suppress', 'world_footstep_local_suppress' )
+
+    self:GenerateLabel( Panel, 'Other Volume' )
+    self:GenerateSlider( nil, 'world_footstep_other_volume', 1, 100, 50, 0, false, '%' )
+    self:GenerateMiniCheckbox( nil, 'Suppress', 'world_footstep_other_suppress' )
+
+    self:GenerateCheckbox( Panel, 'Manipulation DSP', 'world_footstep_dsp' )
+    self:GenerateSlider( nil, 'world_footstep_dsp_index', 2, 60, 30, 0 )
+
+    self:GenerateCheckbox( Panel, 'Extend Range', 'world_footstep_range' )
+    
+    self:GenerateCheckbox( Panel, 'Impact Boxes', 'world_impacts' )
+    self:GenerateColorpicker( nil, 'world_impacts_server', self.Colors.Blue )
+    self:GenerateColorpicker( nil, 'world_impacts_client', self.Colors.Red )
+    self:GenerateSlider( nil, 'world_impacts_time', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'Render Spreadless Impacts', 'world_impacts_spreadless' )
+    self:GenerateColorpicker( nil, 'world_impacts_spreadless_color', self.Colors.Main )
+
+    self:GenerateCheckbox( Panel, 'Impact Beams', 'world_beams' )
+    self:GenerateColorpicker( nil, 'world_beams_normal_main', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'world_beams_normal_secondary', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'world_beams_hurt_main', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'world_beams_hurt_secondary', self.Colors.Main )
+    self:GenerateMiniCheckbox( nil, 'Use Traced', 'world_beams_traced' )
+
+    self:GenerateLabel( Panel, 'Beam Time' )
+    self:GenerateSlider( nil, 'world_beams_time', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Beam Width' )
+    self:GenerateSlider( nil, 'world_beams_width', 1, 6, 3, 0 )
+
+    self:GenerateLabel( Panel, 'Beam Segments' )
+    self:GenerateSlider( nil, 'world_beams_segments', 1, 50, 25, 0 )
+
+    self:GenerateLabel( Panel, 'Beam Speed' )
+    self:GenerateSlider( nil, 'world_beams_speed', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Beam Twist' )
+    self:GenerateSlider( nil, 'world_beams_twist', 1, 100, 50, 0, false, '%' )
+    
+    self:GenerateLabel( Panel, 'Beam Cone' )
+    self:GenerateSlider( nil, 'world_beams_cone', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Beam Amplitude' )
+    self:GenerateSlider( nil, 'world_beams_amplitude', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'Local Update Dot', 'world_update_dot' )
+    self:GenerateColorpicker( nil, 'world_update_dot_current', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'world_update_dot_previous', self.Colors.Main )
+    self:GenerateMiniCheckbox( nil, 'Only Choked', 'world_update_dot_choked' )
+
+    self:GenerateCheckbox( Panel, 'Local Update Line', 'world_update_line' )
+    self:GenerateColorpicker( nil, 'world_update_line_color', self.Colors.Main )
+
+    self:GenerateCheckbox( Panel, 'Thirdperson', 'world_thirdperson' )
+    self:GenerateKeybind( nil, 'world_thirdperson_keybind' )
+    self:GenerateSlider( nil, 'world_thirdperson_distance', 1, 250, 125, 0 )
+
+    self:GenerateCheckbox( Panel, 'Viewmodel Adjustments', 'world_viewmodel' )
+    self:GenerateMiniCheckbox( nil, 'No Sway', 'world_viewmodel_sway' )
+    self:GenerateMiniCheckbox( nil, 'No Bob', 'world_viewmodel_bob' )
+    self:GenerateMiniCheckbox( nil, 'No Recoil', 'world_viewmodel_recoil' )
+    self:GenerateMiniCheckbox( nil, 'Enforce Gamemode View', 'world_viewmodel_gamemode_view' )
+
+    self:GenerateCheckbox( Panel, 'Override FOV', 'world_fov' )
+    self:GenerateSlider( nil, 'world_fov_amount', 0, 150, 75, 0 )
+
+    self:GenerateCheckbox( Panel, 'Override Offsets', 'world_offsets' )
+    
+    self:GenerateLabel( Panel, 'X Coordinate' )
+    self:GenerateSlider( nil, 'world_offsets_x', -60, 60, 0, 0, false, '°' )
+
+    self:GenerateLabel( Panel, 'Y Coordinate' )
+    self:GenerateSlider( nil, 'world_offsets_y', -60, 60, 0, 0, false, '°' )
+
+    self:GenerateLabel( Panel, 'Z Coordinate' )
+    self:GenerateSlider( nil, 'world_offsets_z', -60, 60, 0, 0, false, '°' )
+
+    self:GenerateLabel( Panel, 'Pitch' )
+    self:GenerateSlider( nil, 'world_offsets_pitch', -180, 180, 0, 0, false, '°' )
+
+    self:GenerateLabel( Panel, 'Yaw' )
+    self:GenerateSlider( nil, 'world_offsets_yaw', -180, 180, 0, 0, false, '°' )
+
+    self:GenerateLabel( Panel, 'Roll' )
+    self:GenerateSlider( nil, 'world_offsets_roll', -180, 180, 0, 0, false, '°' )
+
+end, true )
+
 -- Miscellaneous Tab
 
 Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
@@ -483,6 +587,8 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateColorpicker( nil, 'miscellaneous_menu', self.Color, function( Color )
         self.Color = Color
     end )
+
+    self:GenerateCheckbox( Panel, 'Watermark', 'miscellaneous_watermark'  )
 
 end )
 
