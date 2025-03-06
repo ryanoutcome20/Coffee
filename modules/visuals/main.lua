@@ -4,6 +4,7 @@ Coffee.Visuals = {
     Config     = Coffee.Config,
     Client     = Coffee.Client,
     Colors     = Coffee.Colors,
+    Notify     = Coffee.Notify,
     Resolution = Coffee.Resolution,
     Materials  = Coffee.Materials,
     Ragebot    = Coffee.Ragebot,
@@ -54,6 +55,7 @@ function Coffee.Visuals:Update( )
     end
     
     self:Watermark( )
+    self:Notifications( )
     self:Indicators( )
     self:Wallhack( )
 end

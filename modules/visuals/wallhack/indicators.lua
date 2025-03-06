@@ -1,12 +1,59 @@
+function Coffee.Visuals:Notifications( )
+    local Time, Cache = CurTime( ), self.Notify.Cache
+
+    for k, Index in ipairs( Cache ) do 
+        Index.Delta = ( Index.Time + Index.Decay ) - Time
+
+        if ( Index.Delta < 0 ) then 
+            table.remove( Cache, k )
+            continue
+        end
+    end
+
+    if ( not self.Config[ 'miscellaneous_notifications' ] ) then 
+        return
+    end
+
+    -- Get coordinates.
+    local X, Y = self.Resolution.Width - 10, 5
+
+    if ( self.Config[ 'miscellaneous_watermark' ] ) then 
+        Y = Y + 20
+    end
+    
+    -- Set font.
+    surface.SetFont( 'DebugOverlay' )
+
+    -- Draw notifications.
+    local Offset = 0
+
+    for k, Index in ipairs( Cache ) do
+        if ( not Index.Delta ) then 
+            continue
+        end
+
+        local Alpha = math.Clamp( ( Index.Delta / 0.5 ) * 255, 0, 255 )
+
+        surface.SetTextColor( Color( self.Colors.White.r, self.Colors.White.g, self.Colors.White.b, Alpha ) )
+
+        local tW, tH = surface.GetTextSize( Index.Text )
+        surface.SetTextPos( X - tW, Y + Offset ) 
+        surface.DrawText( Index.Text )
+
+        Offset = Offset + tH + 2
+    end
+end
+
 function Coffee.Visuals:Watermark( )
-    if ( not self.Config[ 'miscellaneous_watermark' ] ) then 
+    if ( not self.Config[ 'miscellaneous_watermark' ] or not self.Client.Local ) then 
         return
     end
 
     -- Get text.
-    local KD   = math.Round( self.Client.Local:Frags( ) / self.Client.Local:Deaths( ), 1 )
-
-    local Text = string.format( 'Coffee - Ping %s - KD %s', self.Client.Ping, KD )
+    local Kills  = math.max( self.Client.Local:Frags( ), 1 )
+    local Deaths = math.max( self.Client.Local:Deaths( ), 1 )
+    
+    local Text = string.format( 'Coffee - Ping %s - KD %s', self.Client.Ping, math.Round( Kills / Deaths, 1 ) )
 
     -- Get coordinates.
     local X, Y = self.Resolution.Width - 10, 5
@@ -23,16 +70,22 @@ function Coffee.Visuals:Watermark( )
     -- Render glowing outline.
     local Outline = Color( self.Menu.Color.r, self.Menu.Color.g, self.Menu.Color.b )
 
+    local Intensity = ( 0.25 + math.abs( math.sin( CurTime( ) ) ) )
+
     for i = 1, 5 do
         local Inverted = ( 5 - i ) + 1
 
-        Outline.a = 5 * Inverted
+        Outline.a = ( 4 * Inverted ) * Intensity
 
         draw.RoundedBox( 8, ( X - tW - 5 ) - i, Y - i, W + i * 2, H + i * 2, Outline )
     end
 
     -- Render backdrop.
-    draw.RoundedBox( 4, X - tW - 5, Y, W, H, Color( 18, 18, 18, 200 ) )
+    local Background = Color( self.Colors[ 'Dark Gray' ].r, self.Colors[ 'Dark Gray' ].g, self.Colors[ 'Dark Gray' ].b )
+
+    Background.a = 200
+
+    draw.RoundedBox( 4, X - tW - 5, Y, W, H, Background )
 
     -- Render text.
     surface.SetTextColor( self.Menu.Color )

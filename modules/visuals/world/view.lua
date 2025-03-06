@@ -3,7 +3,7 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
 
     View.origin = Origin
     View.fov    = FOV
-    View.angles = self.Ragebot:ShouldSilent( ) and self.Ragebot.Silent or Angles
+    View.angles = Angles
     
     if ( self.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
         View.origin     = View.origin - ( Angles:Forward( ) * self.Config[ 'world_thirdperson_distance' ] )
@@ -14,7 +14,9 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
         View.fov = self.Config[ 'world_fov_amount' ]
     end
 
-    if ( self.Config[ 'world_viewmodel' ] and self.Config[ 'world_viewmodel_recoil' ] ) then 
+    if ( self.Ragebot:ShouldSilent( ) ) then 
+        View.angles = self.Ragebot.Silent
+    elseif ( self.Config[ 'world_viewmodel' ] and self.Config[ 'world_viewmodel_recoil' ] ) then 
         View.angles = View.angles - self.Client.Local:GetViewPunchAngles( )
     end
 

@@ -1,5 +1,6 @@
 Coffee.Shots = { 
     Client = Coffee.Client,
+    Notify = Coffee.Notify,
     Config = Coffee.Config,
     Hooks  = Coffee.Hooks,
 
@@ -10,13 +11,13 @@ function Coffee.Shots:OnMissedShot( wasResolver, Record )
     if ( wasResolver ) then
         if ( self.Config[ 'aimbot_log_desync' ] ) then
             if ( Record.Fake ) then 
-                Coffee:Print( false, 'Missed shot due to fake angles.' )
+                self.Notify:Add( 'Missed shot due to fake angles.' )
             else
-                Coffee:Print( false, 'Missed shot due to animation desync.' )
+                self.Notify:Add( 'Missed shot due to animation desync.' )
             end
         end
     elseif ( self.Config[ 'aimbot_log_spread' ] ) then
-        Coffee:Print( false, 'Missed shot due to spread.' ) 
+        self.Notify:Add( 'Missed shot due to spread.' ) 
     end
 
     self.Hooks:Call( 'Missed', wasResolver, Record )

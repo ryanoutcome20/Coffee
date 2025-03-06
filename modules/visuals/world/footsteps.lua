@@ -1,5 +1,5 @@
 function Coffee.Visuals:Footsteps( ENT, Position, Foot, Sound, Volume, Filter )
-    if ( self.Config[ 'esp_footstep_visualize' ] ) then
+    if ( self.Config[ 'esp_footstep_visualize' ] and self:Valid( ENT ) ) then
         -- Get color.
         local Color = Foot == 0 and self.Config[ 'esp_footstep_visualize_left' ] or self.Config[ 'esp_footstep_visualize_right' ]
         
@@ -7,10 +7,19 @@ function Coffee.Visuals:Footsteps( ENT, Position, Foot, Sound, Volume, Filter )
         Position.z = Position.z + 3
         
         -- Run our beampoint effect.
-        effects.BeamRingPoint( Position, 0.5, 0, 120, 2, 0, Color, { 
-            framerate = 2, 
-            material  = 'sprites/lgtning.vmt' 
-        } )
+        effects.BeamRingPoint( 
+            Position, 
+            0.5, 
+            0, 
+            120, 
+            2, 
+            0, 
+            Color, 
+            { 
+                framerate = 2, 
+                material  = 'sprites/lgtning.vmt' 
+            } 
+        )
     end
 
     if ( not self.Config[ 'world_footstep' ] ) then 

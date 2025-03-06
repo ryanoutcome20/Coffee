@@ -8,10 +8,11 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
         ENT:SetRenderMode( RENDERMODE_NONE )
     end
 
-    -- Setup rendering.
+    -- Set our IgnoreZ.
     cam.IgnoreZ( Occluded )
 
-    render.MaterialOverride( self.Materials:Get( Material, Occluded ) )
+    -- Setup materials and colors.
+    render.MaterialOverride( self.Materials:Get( Material, Occluded, Color ) )
     render.SetColorModulation( Color.r / 255, Color.g / 255, Color.b / 255 )
     render.SetBlend( Color.a / 255 )
 
@@ -87,6 +88,14 @@ function Coffee.Visuals:PostDrawViewModel( )
         return 
     end
 
+    -- This way of rendering viewmodel chams need to be rewritten simply because
+    -- they cause an unintentional render leakage into other hooks. Most evident
+    -- is glow if you don't fix the materialoverride but adjusting blend can also
+    -- effect rendering in other addons.
+
+    -- Anything after PostDrawViewModel is effected.
+    -- https://wiki.facepunch.com/gmod/Render_Order
+
     local Color, Material = nil, nil
 
     if ( self.Viewmodel ) then 
@@ -96,11 +105,13 @@ function Coffee.Visuals:PostDrawViewModel( )
         Color = self.Config[ 'esp_chams_viewmodel_overlay_color' ]
         Material = self.Config[ 'esp_chams_viewmodel_overlay_material' ]
     elseif ( not self.Config[ 'esp_chams_viewmodel_original' ] ) then 
-        render.SetBlend( 0 )
+        render.SetColorModulation( 1, 1, 1 )
+        render.MaterialOverride( nil ) 
+        render.SetBlend( 0 )   
     end
 
     if ( Color and Material ) then 
-        render.MaterialOverride( self.Materials:Get( Material, false ) )
+        render.MaterialOverride( self.Materials:Get( Material, false, Color ) )
         render.SetColorModulation( Color.r / 255, Color.g / 255, Color.b / 255 )
         render.SetBlend( Color.a / 255 )
     end

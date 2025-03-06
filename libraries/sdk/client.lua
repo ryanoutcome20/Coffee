@@ -11,13 +11,12 @@ function Coffee.Client:Update( )
     local Origin = self.Local:GetNetworkOrigin( )
 
     if ( self.Config[ 'world_update_dot' ] ) then 
-        local OBB = Vector( 2, 2, 2 )
         local Z   = Vector( 0, 0, 3 )
 
-        self.Overlay:Box( Origin + Z, -OBB, OBB, false, self.Config[ 'world_update_dot_current' ] )
+        self.Overlay:Box( Origin + Z, nil, nil, false, self.Config[ 'world_update_dot_current' ] )
 
         if ( not self.Config[ 'world_update_dot_choked' ] or ( Coffee.Ragebot and not Coffee.Ragebot.Packet ) ) then
-            self.Overlay:Box( self.Origin + Z, -OBB, OBB, false, self.Config[ 'world_update_dot_previous' ] )
+            self.Overlay:Box( self.Origin + Z, nil, nil, false, self.Config[ 'world_update_dot_previous' ] )
         end
 
         if ( self.Config[ 'world_update_line' ] ) then 
@@ -34,7 +33,11 @@ function Coffee.Client:Update( )
     
     self.EyePos = self.Local:EyePos( )
     self.EyeAngles = self.Local:EyeAngles( )
-    
+
+    self.Maxs = self.Local:OBBMaxs( )
+    self.Mins = self.Local:OBBMins( )
+    self.Step = self.Local:GetStepSize( )
+
     self.Origin = Origin
     self.Velocity = self.Local:GetVelocity( )
     self.Speed = self.Velocity:Length2D( )

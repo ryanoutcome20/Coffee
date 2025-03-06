@@ -5,6 +5,8 @@ Coffee.Ragebot = {
     Require = Coffee.Require,
     Client  = Coffee.Client,
     Shots   = Coffee.Shots,
+    
+    Bots    = Coffee.Bots,
 
     Hitboxes = {
         [ HITGROUP_GENERIC ] = 'aimbot_hitboxes_generic',
@@ -57,6 +59,9 @@ function Coffee.Ragebot:Update( CUserCMD )
     self.Packet = true
     self.isManipulating = false
 
+    -- Note that something needs to be done about this big prediction block.
+    -- I have functions from other modules that require the movement fixes assistance.
+
     self.Require:StartPrediction( CUserCMD )
         self:Speedhack( CUserCMD )
         self:Lagswitch( CUserCMD )
@@ -68,7 +73,9 @@ function Coffee.Ragebot:Update( CUserCMD )
         self:Aimbot( CUserCMD )
 
         self:SetupMovement( CUserCMD )
-        
+
+        self.Bots:Update( CUserCMD )
+
         self:BreakAnimations( CUserCMD )
     self.Require:EndPrediction( )
 

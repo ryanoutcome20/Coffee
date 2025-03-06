@@ -47,3 +47,8 @@ function Coffee.Visuals:UpdateAnimations( ENT, Velocity )
 end
 
 Coffee.Hooks:New( 'UpdateAnimation', Coffee.Visuals.UpdateAnimations, Coffee.Visuals )
+
+-- We'll keep this here for now until we have a detour module or security script for Coffee.
+FindMetaTable( 'Player' ).IsPlayingTaunt = function( ... )
+    return false
+end

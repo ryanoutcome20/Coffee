@@ -110,6 +110,7 @@ Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/overlay.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/client.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/records.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/notify.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/shots.lua' )
 
 -- =============================================================================
@@ -120,6 +121,8 @@ Coffee:Print( false, 'Loading modules...' )
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/menu.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/form.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/bots/main.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/main.lua' )
 

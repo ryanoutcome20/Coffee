@@ -1,4 +1,8 @@
 function Coffee.Visuals:Valid( Target )
+    if ( not self.Config[ 'esp_enabled' ]  ) then 
+        return false
+    end
+
     if ( not self.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
         return false
     end
@@ -156,6 +160,27 @@ function Coffee.Visuals:Wallhack( )
 
                 Light.size = Size
             end
+        end
+
+        -- Render our ring.
+        if ( self.Config[ 'esp_ring' ] ) then 
+            local Position = Front.Position
+            
+            -- Move the position upwards so that it doesn't clip into the floor.
+            Position.z = Position.z + 3
+            
+            effects.BeamRingPoint( 
+                Position,
+                3 * ( self.Config[ 'esp_ring_time' ] / 100 ),
+                self.Config[ 'esp_ring_start_radius' ],
+                self.Config[ 'esp_ring_end_radius' ],
+                self.Config[ 'esp_ring_width' ],
+                self.Config[ 'esp_ring_amplitude' ] / 100,        
+                self.Config[ 'esp_ring_color' ],
+                {
+                    material = 'sprites/lgtning.vmt'
+                }
+            )
         end
     end
 end

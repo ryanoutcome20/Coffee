@@ -1,5 +1,5 @@
 function Coffee.Ragebot:SetupMovement( CUserCMD )
-    local View = CUserCMD:GetViewAngles()
+    local View = CUserCMD:GetViewAngles( )
     local Invert = -1
 
     if ( math.abs( View.x ) > 89 ) then 

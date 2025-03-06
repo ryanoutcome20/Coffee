@@ -15,11 +15,12 @@ end
 
 function Coffee.Overlay:BoxAngles( Origin, Angles, Mins, Maxs, Decay, Color, IgnoreZ )
     self:Insert( 'Box', Decay, {
-        Origin = Origin,
-        Angles = Angles,
-        Mins   = Mins,
-        Maxs   = Maxs,
-        Color  = Color
+        Origin  = Origin,
+        Angles  = Angles,
+        Mins    = Mins,
+        Maxs    = Maxs,
+        Color   = Color,
+        IgnoreZ = IgnoreZ
     } )
 end
 
@@ -49,7 +50,19 @@ function Coffee.Overlay:Line( Start, End, Decay, Color, IgnoreZ )
     } )
 end
 
+function Coffee.Overlay:Text( Origin, Text, Decay, Font, Color )
+    self:Insert( 'Text', Decay, {
+        Origin = Origin,
+        Text   = Text,
+        Font   = Font,
+        Color  = Color
+    } )
+end
+
 function Coffee.Overlay:Box( Origin, Mins, Maxs, Decay, Color, IgnoreZ )
+    Maxs = Maxs or Vector( 2, 2, 2 )
+    Mins = Mins or -Maxs
+
     self:BoxAngles( Origin, angle_zero, Mins, Maxs, Decay, Color, IgnoreZ )
 end
 
@@ -85,19 +98,19 @@ function Coffee.Overlay:Render( )
             self.Beams:Render( Object.Start, Object.End, Object.Speed, Object.Amplitude, Object.Twist, Object.Cone, Object.Segments, Object.Width, Object.firstColor, Object.secondColor, Object.Material )
         elseif ( Name == 'Line' ) then 
             render.DrawLine( Object.Start, Object.End, Object.Color, Object.IgnoreZ )
+        elseif ( Name == 'Text' ) then 
+            cam.Start2D( )
+                local Origin = Object.Origin:ToScreen( )
+            
+                surface.SetFont( Object.Font )
+                surface.SetTextColor( Object.Color )
+                surface.SetTextPos( Origin.x, Origin.y ) 
+                surface.DrawText( Object.Text )
+            cam.End2D( )
         end
     end
 
     cam.End3D( )
 end
 
-Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Overlay.Render, Coffee.Overlay )
-
-concommand.Add( 'drawbox', function( )
-    local Eye = LocalPlayer():GetEyeTrace( )
-
-    Coffee.Overlay:Box( Eye.HitPos, Vector( 0, 0, 0 ), Vector( 2, 2, 2 ), 3, Color( 255, 0, 0, 180 ) )
-    -- Coffee.Overlay:Line( Eye.StartPos, Eye.HitPos, 3, Color( 0, 0, 255, 180 ), false )
-    -- Coffee.Overlay:Beam( Eye.StartPos, Eye.HitPos, 3, 25, Material( 'trails/laser' ), Color( 0, 0, 255, 180 ), false )
-    Coffee.Overlay:Beam( Eye.StartPos, Eye.HitPos, 3, 2, 0.5, 0.2, 1000, 2, 25, Material( 'trails/physbeam' ), Color(255,0,0), Color(0,255,0) )
-end )
+Coffee.Hooks:New( 'PostDrawEffects', Coffee.Overlay.Render, Coffee.Overlay )

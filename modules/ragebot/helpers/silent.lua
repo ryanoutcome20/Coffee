@@ -19,7 +19,7 @@ function Coffee.Ragebot:SetupSilent( CUserCMD )
     local Yaw = self.Yaw:GetFloat( )
     local Pitch = self.Pitch:GetFloat( )
 
-    self.Silent = self.Silent + Angle( CUserCMD:GetMouseY( ) * Pitch, CUserCMD:GetMouseX() * -Yaw, 0 )
+    self.Silent = self.Silent + Angle( CUserCMD:GetMouseY( ) * Pitch, CUserCMD:GetMouseX( ) * -Yaw, 0 )
     self.Silent.x = math.Clamp( self.Silent.x, -89, 89 )
     self.Silent.z = 0
 

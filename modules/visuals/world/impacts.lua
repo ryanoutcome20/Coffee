@@ -8,9 +8,8 @@ function Coffee.Visuals:PreImpacts( ENT, Data )
 
     if ( self.Config[ 'world_impacts' ] ) then 
         local Time = 3 * ( self.Config[ 'world_impacts_time' ] / 100 )
-        local OBB  = Vector( 2, 2, 2 )
 
-        self.Overlay:Box( Trace.HitPos, -OBB, OBB, Time, self.Config[ 'world_impacts_client' ] )
+        self.Overlay:Box( Trace.HitPos, nil, nil, Time, self.Config[ 'world_impacts_client' ] )
     end
 end
 
@@ -30,14 +29,13 @@ function Coffee.Visuals:PostImpacts( ENT, Data )
     -- Render our impact boxes.
     if ( self.Config[ 'world_impacts' ] ) then 
         local Time = 3 * ( self.Config[ 'world_impacts_time' ] / 100 )
-        local OBB  = Vector( 2, 2, 2 )
-
-        self.Overlay:Box( Data.Trace.HitPos, -OBB, OBB, Time, self.Config[ 'world_impacts_server' ] )
+    
+        self.Overlay:Box( Data.Trace.HitPos, nil, nil, Time, self.Config[ 'world_impacts_server' ] )
 
         if ( self.Config[ 'world_impacts_spreadless' ] ) then 
             local Trace = self.Client.Local:GetEyeTrace( )
 
-            self.Overlay:Box( Trace.HitPos, -OBB, OBB, Time, self.Config[ 'world_impacts_spreadless_color' ] )
+            self.Overlay:Box( Trace.HitPos, nil, nil, Time, self.Config[ 'world_impacts_spreadless_color' ] )
         end
     end
 

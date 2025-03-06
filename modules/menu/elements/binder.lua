@@ -34,7 +34,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
 
     Binder.DoClick = function( self )
         self:SetText( '...' )
-        input.StartKeyTrapping()
+        input.StartKeyTrapping( )
         self.Trapping = true
     end
 
