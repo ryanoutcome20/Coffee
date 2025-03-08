@@ -151,6 +151,8 @@ Coffee.Menu:Handle( 'Anti-Aim', function( self, Panel )
     self:GenerateLabel( Panel, 'Angle' )
     self:GenerateSlider( nil, 'hvh_yaw_flick_angle', -90, 90, 0, 0, false, '°' )
     self:GenerateMiniCheckbox( nil, 'Use Desynced Rotation', 'hvh_yaw_flick_desync' )
+
+    self:GenerateCheckbox( Panel, 'Flip Packets', 'hvh_yaw_flip_packets' )
 end )
 
 Coffee.Menu:Handle( 'Anti-Aim', function( self, Panel )
@@ -402,7 +404,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Enemy Visible Overlay', 'esp_chams_enemy_visible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_overlay_color', self.Colors.Main )
@@ -416,7 +418,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Enemy Invisible', 'esp_chams_enemy_invisible'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_color', self.Colors.Black )
@@ -432,7 +434,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Enemy Invisible Overlay', 'esp_chams_enemy_invisible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_overlay_color', self.Colors.Main )
@@ -446,7 +448,37 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
+
+    self:GenerateCheckbox( Panel, 'Enemy Backtrack', 'esp_chams_enemy_backtrack'  )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_backtrack_color', self.Colors.Black )
+    self:GenerateDropdown( nil, 2, 'esp_chams_enemy_backtrack_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow',
+        'Pearlescent',
+        'Hue',
+        'Cloud',
+        'Cracked',
+        'Refracted',
+        'Animated Portal',
+        'Animated Water'
+    }, 80 )
+
+    self:GenerateCheckbox( Panel, 'Enemy Backtrack Overlay', 'esp_chams_enemy_backtrack_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_backtrack_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_enemy_backtrack_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars',
+        'Animated Highlight Wireframe',
+        'Animated Portal',
+        'Animated Spawn Effect',
+        'Animated Teleport'
+    }, 80 )
 
 
     self:GenerateCheckbox( Panel, 'Friendly Visible', 'esp_chams_friendly_visible'  )
@@ -464,7 +496,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Friendly Visible Overlay', 'esp_chams_friendly_visible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_overlay_color', self.Colors.Main )
@@ -478,7 +510,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Friendly Invisible', 'esp_chams_friendly_invisible'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_color', self.Colors.Black )
@@ -494,7 +526,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Friendly Invisible Overlay', 'esp_chams_friendly_invisible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_overlay_color', self.Colors.Main )
@@ -508,7 +540,37 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
+
+    self:GenerateCheckbox( Panel, 'Friendly Backtrack', 'esp_chams_friendly_backtrack'  )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_backtrack_color', self.Colors.Black )
+    self:GenerateDropdown( nil, 2, 'esp_chams_friendly_backtrack_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow',
+        'Pearlescent',
+        'Hue',
+        'Cloud',
+        'Cracked',
+        'Refracted',
+        'Animated Portal',
+        'Animated Water'
+    }, 80 )
+
+    self:GenerateCheckbox( Panel, 'Friendly Backtrack Overlay', 'esp_chams_friendly_backtrack_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_backtrack_overlay_color', self.Colors.Main )
+    self:GenerateDropdown( nil, 1, 'esp_chams_friendly_backtrack_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars',
+        'Animated Highlight Wireframe',
+        'Animated Portal',
+        'Animated Spawn Effect',
+        'Animated Teleport'
+    }, 80 )
 
 
     self:GenerateCheckbox( Panel, 'Local Real', 'esp_chams_local'  )
@@ -525,7 +587,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Local Real Overlay', 'esp_chams_local_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_overlay_color', self.Colors.Main )
@@ -539,7 +601,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Local Fake', 'esp_chams_local_fake'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_fake_color', self.Colors.White )
@@ -555,7 +617,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Local Fake Overlay', 'esp_chams_local_fake_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_fake_overlay_color', self.Colors.Main )
@@ -569,7 +631,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
 
 
     self:GenerateCheckbox( Panel, 'Viewmodel', 'esp_chams_viewmodel'  )
@@ -587,7 +649,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Refracted',
         'Animated Portal',
         'Animated Water'
-    } )
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Viewmodel Overlay', 'esp_chams_viewmodel_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_viewmodel_overlay_color', self.Colors.Main )
@@ -601,7 +663,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Portal',
         'Animated Spawn Effect',
         'Animated Teleport'
-    } )
+    }, 80 )
 end, true )
 
 -- World Tab
@@ -662,12 +724,8 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateLabel( Panel, 'Beam Amplitude' )
     self:GenerateSlider( nil, 'world_beams_amplitude', 1, 100, 50, 0, false, '%' )
 
-    self:GenerateCheckbox( Panel, 'Local Update Dot', 'world_update_dot' )
-    self:GenerateColorpicker( nil, 'world_update_dot_current', self.Colors.Main )
-    self:GenerateColorpicker( nil, 'world_update_dot_previous', self.Colors.Main )
-    self:GenerateMiniCheckbox( nil, 'Only Choked', 'world_update_dot_choked' )
-
-    self:GenerateCheckbox( Panel, 'Local Update Line', 'world_update_line' )
+    self:GenerateCheckbox( Panel, 'Local Update Visualizer', 'world_update' )
+    self:GenerateColorpicker( nil, 'world_update_current_color', self.Colors.Main )
     self:GenerateColorpicker( nil, 'world_update_line_color', self.Colors.Main )
 
     self:GenerateCheckbox( Panel, 'Thirdperson', 'world_thirdperson' )
@@ -679,7 +737,9 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'No Bob', 'world_viewmodel_bob' )
     self:GenerateMiniCheckbox( nil, 'No Recoil', 'world_viewmodel_recoil' )
     self:GenerateMiniCheckbox( nil, 'Enforce Gamemode View', 'world_viewmodel_gamemode_view' )
-
+    
+    self:GenerateCheckbox( Panel, 'Visualize Aimbot', 'world_viewmodel_visualize_aimbot' )
+    
     self:GenerateCheckbox( Panel, 'Override FOV', 'world_fov' )
     self:GenerateSlider( nil, 'world_fov_amount', 0, 150, 75, 0 )
 
@@ -754,21 +814,22 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Pointbot', 'miscellaneous_point_bot'  )
     self:GenerateKeybind( nil, 'miscellaneous_point_bot_keybind' )
+    self:GenerateMiniCheckbox( nil, 'Invert On Final', 'miscellaneous_point_bot_invert' )
 
     self:GenerateButton( Panel, 'Add Point', function( )
-        Coffee.Bots:InsertPoint( )
+        Coffee.Bots.Point:InsertPoint( )
     end )
 
     self:GenerateButton( Panel, 'Remove First Point', function( )
-        Coffee.Bots:RemovePoint( true )
+        Coffee.Bots.Point:RemovePoint( true )
     end )
 
     self:GenerateButton( Panel, 'Remove Last Point', function( )
-        Coffee.Bots:RemovePoint( false )
+        Coffee.Bots.Point:RemovePoint( false )
     end )
 
     self:GenerateButton( Panel, 'Clear All Points', function( )
-        Coffee.Bots:ClearPoints( )
+        Coffee.Bots.Point:ClearPoints( )
     end )
 
     self:GenerateCheckbox( Panel, 'Render Points', 'miscellaneous_point_bot_render'  )

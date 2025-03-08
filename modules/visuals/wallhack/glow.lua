@@ -122,7 +122,7 @@ function Coffee.Visuals:Glow( )
             break
         end
 
-        if ( not self:Valid( Target ) ) then 
+        if ( not Target:Alive( ) or not self:Valid( Target ) ) then 
             continue
         end
 

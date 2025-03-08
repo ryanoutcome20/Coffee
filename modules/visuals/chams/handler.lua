@@ -56,6 +56,8 @@ function Coffee.Visuals:PlayerChams( )
             end
         end
 
+        self.CSEntity:Remove( Target:EntIndex( ) )
+
         local isLocal = ENT == self.Client.Local
         local isFriendly = ENT:Team( ) == self.Client.Team
 
@@ -71,6 +73,10 @@ function Coffee.Visuals:PlayerChams( )
     
                 self:RenderChams( Target, 'esp_chams_friendly_visible', false )
             end
+
+            if ( self.Config[ 'esp_chams_friendly_backtrack' ] ) then 
+                self:BacktrackChams( Target, 'esp_chams_friendly_backtrack' )
+            end
         else 
             if ( self.Config[ 'esp_chams_enemy_visible' ] ) then 
                 if ( self.Config[ 'esp_chams_enemy_invisible' ] ) then 
@@ -79,8 +85,70 @@ function Coffee.Visuals:PlayerChams( )
     
                 self:RenderChams( Target, 'esp_chams_enemy_visible', false )
             end
+            
+            if ( self.Config[ 'esp_chams_enemy_backtrack' ] ) then 
+                self:BacktrackChams( Target, 'esp_chams_enemy_backtrack' )
+            end
         end
     end
+end
+
+function Coffee.Visuals:BacktrackChams( Target, Index )
+    local Records = self.Records.Cache[ Target ]
+
+    if ( not Records ) then 
+        return
+    end
+    
+    local Record = Records[ #Records ]
+
+    if ( not Record ) then 
+        return
+    end
+
+    local ENT = self.CSEntity:New( Target:EntIndex( ) )
+
+    self.CSEntity:SetModel( ENT, Target:GetModel( ) )
+    self.CSEntity:SetPosition( ENT, Record.Position )
+    self.CSEntity:SetAngles( ENT, Record.Animations.Angles )
+
+    self.CSEntity:AssignAnimations( ENT, Record.Animations )
+
+    self:RenderChams( ENT, Index )
+end
+
+function Coffee.Visuals:FakeChams( )
+    local ENT = self.CSEntity:New( 'Fake' )
+
+    if ( not ENT ) then 
+        return
+    end
+
+    if ( not self.Config[ 'esp_chams_local_fake' ] or not self.Config[ 'hvh_enabled' ] ) then 
+        return self.CSEntity:Remove( 'Fake', ENT )
+    end
+
+    if ( not self.Config[ 'world_thirdperson' ] or not self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
+        return self.CSEntity:Remove( 'Fake', ENT )
+    end
+
+    local Record = table.Copy( self.Records:GetFront( self.Client.Local ) )
+
+    if ( not Record ) then 
+        return self.CSEntity:Remove( 'Fake', ENT )
+    end
+
+    if ( self.Ragebot.Fake ) then
+        Record.Animations.Angles = self.Ragebot.Fake
+    end
+
+    self.CSEntity:SetModel( ENT, self.Client.Model )
+    self.CSEntity:SetPosition( ENT, Record.Position )
+    self.CSEntity:SetAngles( ENT, Record.Animations.Angles )
+
+    self.CSEntity:AssignAnimations( ENT, Record.Animations )
+
+    self:RenderChams( ENT, 'esp_chams_local_fake' )
 end
 
 function Coffee.Visuals:PostDrawViewModel( )
@@ -123,7 +191,7 @@ function Coffee.Visuals:PreDrawViewModel( Viewmodel, Local )
         render.MaterialOverride( nil ) 
         render.SetBlend( 1 )
         
-        if ( not self.Viewmodel ) then 
+        if ( not self.Viewmodel ) then             
             self.Viewmodel = true 
                 Viewmodel:DrawModel( )
             self.Viewmodel = false 

@@ -58,7 +58,7 @@ Coffee.Environment = setmetatable( {
 } )
 
 function Coffee:Load( Code, Environment, ... )
-    local Function = CompileString( Code )   
+    local Function = CompileString( Code, 'Coffee' )   
 
     if ( not Function ) then 
         return self:Print( true, 'Failed to compile code! (%s, %s)', string.NiceSize( #Code ), util.CRC( Code ) )
@@ -101,17 +101,24 @@ if ( not Coffee:LoadFile( 'lua/coffee/libraries/cpp/modmgr.lua' ) ) then
     return 
 end
 
+
+Coffee:LoadFile( 'lua/coffee/libraries/render/materials.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/render/beams.lua' )
+
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/engine.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hitboxes.lua' )
-Coffee:LoadFile( 'lua/coffee/libraries/sdk/materials.lua' )
-Coffee:LoadFile( 'lua/coffee/libraries/sdk/beams.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
-Coffee:LoadFile( 'lua/coffee/libraries/sdk/overlay.lua' )
+
+Coffee:LoadFile( 'lua/coffee/libraries/render/overlay.lua' )
+
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/fullupdate.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/client.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/records.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/notify.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/shots.lua' )
+
+Coffee:LoadFile( 'lua/coffee/libraries/render/csent.lua' )
 
 -- =============================================================================
 -- Load modules.

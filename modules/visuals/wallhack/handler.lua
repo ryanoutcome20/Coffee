@@ -1,9 +1,9 @@
-function Coffee.Visuals:Valid( Target )
+function Coffee.Visuals:Valid( Target, ignoreStatus )
     if ( not self.Config[ 'esp_enabled' ]  ) then 
         return false
     end
 
-    if ( not self.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
+    if ( not ignoreStatus and not self.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
         return false
     end
 
@@ -80,7 +80,7 @@ function Coffee.Visuals:Wallhack( )
                 surface.DrawOutlinedRect( self.Position.X - self.Position.W / 2, self.Position.Y - self.Position.H + 2, self.Position.W, self.Position.H, 1 )
             else
                 cam.Start3D( )
-                    render.DrawWireframeBox( Front.Position, Front.Angles, Front.Mins, Front.Maxs, self.Config[ 'esp_box_color' ], true )
+                    render.DrawWireframeBox( Front.Position, angle_zero, Front.Mins, Front.Maxs, self.Config[ 'esp_box_color' ], true )
                 cam.End3D( )
             end
         end

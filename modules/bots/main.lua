@@ -1,12 +1,5 @@
-Coffee.Bots = {
-    Overlay = Coffee.Overlay,
-    Client = Coffee.Client,
-    Config = Coffee.Config,
-    Colors = Coffee.Colors,
-    Menu   = Coffee.Menu,
-
-    Active = 0,
-    Points = { }
+Coffee.Bots = { 
+    Client = Coffee.Client
 }
 
 Coffee:LoadFile( 'lua/coffee/modules/bots/point/handler.lua' )
@@ -21,6 +14,6 @@ function Coffee.Bots:Update( CUserCMD )
         return
     end
     
-    self:Simple( CUserCMD )
-    self:Point( CUserCMD )
+    self.Simple:Simple( CUserCMD )
+    self.Point:Point( CUserCMD )
 end

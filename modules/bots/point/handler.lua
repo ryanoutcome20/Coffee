@@ -1,16 +1,27 @@
-function Coffee.Bots:InsertPoint( )
+Coffee.Bots.Point = { 
+    Overlay = Coffee.Overlay,
+    Client = Coffee.Client,
+    Config = Coffee.Config,
+    Colors = Coffee.Colors,
+    Menu   = Coffee.Menu,
+    
+    Active = 0,
+    Points = { }
+}
+
+function Coffee.Bots.Point:InsertPoint( )
     table.insert( self.Points, self.Client.Position )
 end
 
-function Coffee.Bots:RemovePoint( First )
+function Coffee.Bots.Point:RemovePoint( First )
     table.remove( self.Points, First and 1 or #self.Points )
 end
 
-function Coffee.Bots:ClearPoints( )
+function Coffee.Bots.Point:ClearPoints( )
     table.Empty( self.Points )
 end
 
-function Coffee.Bots:FindPoint( )
+function Coffee.Bots.Point:FindPoint( )
     local Point = self.Points[ self.Active + 1 ]
 
     if ( not Point ) then 
@@ -19,14 +30,20 @@ function Coffee.Bots:FindPoint( )
 
     local Target = ( Point - self.Client.Position )
 
-    if ( Target:Length2D( ) < 1 ) then 
-        self.Active = ( self.Active + 1 ) % #self.Points
+    if ( Target:Length2D( ) < 5 ) then 
+        self.Active = ( self.Active + 1 )
+
+        if ( self.Config[ 'miscellaneous_point_bot_invert' ] and self.Active >= #self.Points ) then 
+            self.Points = table.Reverse( self.Points )
+        end
+
+        self.Active = self.Active % #self.Points
     end
 
     return Target
 end
 
-function Coffee.Bots:RenderPoints( )
+function Coffee.Bots.Point:RenderPoints( )
     if ( not self.Config[ 'miscellaneous_point_bot_render' ] ) then 
         return
     end
@@ -47,7 +64,7 @@ function Coffee.Bots:RenderPoints( )
     end
 end
 
-function Coffee.Bots:Point( CUserCMD )
+function Coffee.Bots.Point:Point( CUserCMD )
     if ( not self.Config[ 'miscellaneous_point_bot' ] or not self.Menu:Keydown( 'miscellaneous_point_bot_keybind' ) ) then 
         return
     end
@@ -64,4 +81,4 @@ function Coffee.Bots:Point( CUserCMD )
     CUserCMD:SetViewAngles( Best:Angle( ) )
 end
 
-Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Bots.RenderPoints, Coffee.Bots )
+Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Bots.Point.RenderPoints, Coffee.Bots.Point )

@@ -4,10 +4,11 @@ function Coffee.Visuals:UpdateAnimations( ENT, Velocity )
     end
 
     -- Get our angle.
-    local Angle = self.Config[ 'hvh_enabled' ] and self.Ragebot.Fake or ENT:GetRenderAngles( )
+    local Angle = self.Config[ 'hvh_enabled' ] and self.Ragebot.Real or ENT:EyeAngles( )
 
     -- Set our data.
     ENT:SetPoseParameter( 'aim_pitch', Angle.x )
+    ENT:SetPoseParameter( 'body_yaw', Angle.y )
 
     ENT:SetRenderAngles( Angle )
 

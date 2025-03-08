@@ -9,6 +9,7 @@ Coffee.Visuals = {
     Materials  = Coffee.Materials,
     Ragebot    = Coffee.Ragebot,
     Overlay    = Coffee.Overlay,
+    CSEntity   = Coffee.CSEntity,
 
     Fade = { },
     Offsets = { }
@@ -67,6 +68,7 @@ function Coffee.Visuals:Update3D( )
 
     cam.Start3D( )
         self:PlayerChams( )
+        self:FakeChams( )
     cam.End3D( )
 end
 

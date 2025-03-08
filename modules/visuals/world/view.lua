@@ -58,6 +58,12 @@ function Coffee.Visuals:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle,
         Update = true
     end
 
+    if ( self.Config[ 'world_viewmodel_visualize_aimbot' ] and self.Ragebot.currentAngle ) then 
+        Angle  = self.Ragebot.currentAngle
+        
+        Update = true
+    end
+
     if ( Update ) then 
         return Origin, Angle    
     end

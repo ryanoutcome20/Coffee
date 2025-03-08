@@ -131,8 +131,6 @@ function Coffee.Ragebot:GetPitch( )
 end
 
 function Coffee.Ragebot:AntiAim( CUserCMD )
-    self.Fake = CUserCMD:GetViewAngles( )
-
     if ( not self.Config[ 'hvh_enabled' ] ) then 
         return
     end
@@ -146,19 +144,45 @@ function Coffee.Ragebot:AntiAim( CUserCMD )
     end
     
     -- Get current angles.
-    local Angles = self.Fake
+    self.Fake = Angle( 0, self.Real.y, 0 )
+    self.Real = CUserCMD:GetViewAngles( )
 
     -- Get pitch.
-    local Pitch = self.Config[ 'hvh_pitch' ] and self:GetPitch( ) or Angles.x
+    local Pitch = self.Config[ 'hvh_pitch' ] and self:GetPitch( ) or self.Real.x
 
     -- Get yaw.
-    local Yaw = self.Config[ 'hvh_yaw' ] and self:GetYaw( ) or Angles.y
+    local Yaw = self.Config[ 'hvh_yaw' ] and self:GetYaw( ) or self.Real.y
 
-    -- Set our last fake.
-    self.Fake = Angle( Pitch, Yaw, 0 )
+    -- Set our angles.
+    self.Real = Angle( Pitch, Yaw, 0 )
+
+    -- if ( self.Packet ) then 
+    --     self.Real.x = 90
+    --     self.Real.y = 90
+    -- else
+    --     self.Real.x = -90
+    --     self.Real.y = -180
+    -- end
 
     -- Set angles.
-    CUserCMD:SetViewAngles( self.Fake )
+    CUserCMD:SetViewAngles( self.Real )
+
+    -- Check if we need to flip packets.
+    if ( self.Config[ 'hvh_yaw_flip_packets' ] and not self.isManipulating ) then
+        self.Packet = not self.Packet
+        
+        if ( self.Choked >= 23 ) then 
+            self.Packet = true
+        end
+    end
+
+    -- Generate our true fake angle.
+    -- Our fake angle won't show desync for some reason, fix later?
+    self.Fake.x = self.Real.x
+
+    if ( self.Real.x == -180 ) then
+        self.Fake.x = 180
+    end
 end
 
 function Coffee.Ragebot:Fakelag( CUserCMD )

@@ -26,6 +26,8 @@ Coffee.Ragebot = {
     Yaw = GetConVar( 'm_yaw' ),
     Pitch = GetConVar( 'm_pitch' ),
 
+    Fake   = angle_zero,
+    Real   = angle_zero,
     Silent = angle_zero
 }
 
@@ -51,6 +53,8 @@ function Coffee.Ragebot:Update( CUserCMD )
 
     self:SetPack( self.Client.Weapon )
     self:SetupSilent( CUserCMD )
+    
+    self.Records:Cleanup( )
 
     if ( CUserCMD:CommandNumber( ) == 0 ) then 
         return
@@ -58,6 +62,7 @@ function Coffee.Ragebot:Update( CUserCMD )
 
     self.Packet = true
     self.isManipulating = false
+    self.currentAngle = false
 
     -- Note that something needs to be done about this big prediction block.
     -- I have functions from other modules that require the movement fixes assistance.
@@ -66,9 +71,9 @@ function Coffee.Ragebot:Update( CUserCMD )
         self:Speedhack( CUserCMD )
         self:Lagswitch( CUserCMD )
 
-        self:Fakelag( CUserCMD )    
-
         self:AntiAim( CUserCMD )
+
+        self:Fakelag( CUserCMD )
 
         self:Aimbot( CUserCMD )
 

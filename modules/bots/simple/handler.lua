@@ -1,4 +1,12 @@
-function Coffee.Bots:IsSurfaceRamped( Predicted, Direction )
+Coffee.Bots.Simple = { 
+    Overlay = Coffee.Overlay,
+    Client = Coffee.Client,
+    Config = Coffee.Config,
+    Colors = Coffee.Colors,
+    Menu   = Coffee.Menu
+}
+
+function Coffee.Bots.Simple:IsSurfaceRamped( Predicted, Direction )
     if ( not self.Config[ 'miscellaneous_movement_bot_ramps' ] ) then 
         return false
     end
@@ -27,7 +35,7 @@ function Coffee.Bots:IsSurfaceRamped( Predicted, Direction )
     return false
 end
 
-function Coffee.Bots:IsCrossable( Predicted, Direction, Fraction )
+function Coffee.Bots.Simple:IsCrossable( Predicted, Direction, Fraction )
     if ( not self.Config[ 'miscellaneous_movement_bot_step' ] ) then 
         return false
     end
@@ -45,7 +53,7 @@ function Coffee.Bots:IsCrossable( Predicted, Direction, Fraction )
     return Fraction != 0 and Trace.Fraction > Fraction or Trace.Fraction == 1
 end
 
-function Coffee.Bots:FindWalkablePath( Current, Direction )
+function Coffee.Bots.Simple:FindWalkablePath( Current, Direction )
     local Used = 0
 
     for i = 1, self.Config[ 'miscellaneous_movement_bot_ticks' ] do
@@ -73,7 +81,7 @@ function Coffee.Bots:FindWalkablePath( Current, Direction )
     return Used, Current
 end
 
-function Coffee.Bots:GenerateWorkableDirections(Direction)
+function Coffee.Bots.Simple:GenerateWorkableDirections(Direction)
     local Distance = self.Config[ 'miscellaneous_movement_bot_distance' ]
     
     if ( Direction:Length2D( ) == 0 ) then
@@ -100,7 +108,7 @@ function Coffee.Bots:GenerateWorkableDirections(Direction)
     }
 end
 
-function Coffee.Bots:FindBestPath( Directions, Current )
+function Coffee.Bots.Simple:FindBestPath( Directions, Current )
     local Best;
 
     local Velocity = self.Config[ 'miscellaneous_movement_bot_velocity' ]
@@ -136,7 +144,7 @@ function Coffee.Bots:FindBestPath( Directions, Current )
     end
 end
 
-function Coffee.Bots:Simple( CUserCMD )
+function Coffee.Bots.Simple:Simple( CUserCMD )
     if ( not self.Config[ 'miscellaneous_movement_bot' ] or not self.Menu:Keydown( 'miscellaneous_movement_bot_keybind' ) ) then 
         return
     end

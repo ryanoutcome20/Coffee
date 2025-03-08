@@ -18,6 +18,8 @@ function Coffee.Menu:GenerateButton( Panel, Text, Callback, marginCallback )
 
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+
+        self:SetTextColor( Coffee.Menu.Color )
     end
 
     Button.GetTextStyleColor = function( )

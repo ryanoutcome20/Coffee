@@ -1,27 +1,27 @@
 Coffee.Client = { 
     Overlay = Coffee.Overlay,
-    Config  = Coffee.Config
+    Update  = Coffee.Update,
+    Config  = Coffee.Config,
+    Fullupdate = Coffee.Fullupdate
 }
 
 function Coffee.Client:Update( )
+    if ( self.Fullupdate:IsUpdating( ) ) then 
+        return
+    end
+
     self.Local      = self.Local or Coffee.Localplayer
     self.Prediction = self.Prediction or 0
     self.LC         = self.LC or false
 
     local Origin = self.Local:GetNetworkOrigin( )
 
-    if ( self.Config[ 'world_update_dot' ] ) then 
-        local Z   = Vector( 0, 0, 3 )
+    if ( self.Config[ 'world_update' ] ) then 
+        local Z    = Vector( 0, 0, 3 )
+        local Time = engine.TickInterval( )
 
-        self.Overlay:Box( Origin + Z, nil, nil, false, self.Config[ 'world_update_dot_current' ] )
-
-        if ( not self.Config[ 'world_update_dot_choked' ] or ( Coffee.Ragebot and not Coffee.Ragebot.Packet ) ) then
-            self.Overlay:Box( self.Origin + Z, nil, nil, false, self.Config[ 'world_update_dot_previous' ] )
-        end
-
-        if ( self.Config[ 'world_update_line' ] ) then 
-            self.Overlay:Line( Origin + Z, self.Origin + Z, false, self.Config[ 'world_update_line_color' ] )
-        end
+        self.Overlay:Box( self.Origin + Z, nil, nil, Time, self.Config[ 'world_update_current_color' ] )
+        self.Overlay:Line( Origin + Z, self.Origin + Z, Time, self.Config[ 'world_update_line_color' ] )
     end
 
     if ( self.Origin ) then 
@@ -34,6 +34,7 @@ function Coffee.Client:Update( )
     self.EyePos = self.Local:EyePos( )
     self.EyeAngles = self.Local:EyeAngles( )
 
+    self.Model = self.Local:GetModel( )
     self.Maxs = self.Local:OBBMaxs( )
     self.Mins = self.Local:OBBMins( )
     self.Step = self.Local:GetStepSize( )

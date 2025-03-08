@@ -106,6 +106,8 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     local Delta = self.Records:GetTickDelta( CUserCMD, Best.Record.Simtime )
 
     if ( Delta > 0.2 ) then 
+        -- Shouldn't doing this be based on our ping?
+        
         local Time = self.Require:Servertime( CUserCMD )
 
         self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
@@ -143,4 +145,6 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
         self.Shots:PushShot( Best.Record )
     end
+    
+    self.currentAngle = CUserCMD:GetViewAngles( )
 end

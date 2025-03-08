@@ -2,6 +2,7 @@ Coffee.Records = {
     Client = Coffee.Client,
     Require = Coffee.Require,
     Hitboxes = Coffee.Hitboxes,
+    Fullupdate = Coffee.Fullupdate,
 
     Entities = { },
     Players  = { },
@@ -93,10 +94,54 @@ function Coffee.Records:MatchCompensation( Target, Current )
     end
 end
 
+function Coffee.Records:GenerateAnimationData( Target )
+    local Animations = { 
+        Sequence = Target:GetSequence( ),
+        Cycle    = Target:GetCycle( ),
+        Color    = Target:GetColor( ),
+        Angles   = Target:EyeAngles( ),
+
+        Layers = { },
+        Poses  = { }
+    }
+
+    local Layer = 0
+
+    while ( true ) do
+        Layer = Layer + 1
+        
+        if ( not Target:IsValidLayer( Layer ) ) then
+            -- I have no idea if these start at zero index so this is here just in case.
+            if ( Layer == 1 ) then 
+                continue    
+            end
+
+            break
+        end
+
+        local ID = Layer - 1
+
+        Animations.Layers[ ID ] = {
+            Weight   = Target:GetLayerWeight( ID ),
+            Cycle    = Target:GetLayerCycle( ID ),
+            Duration = Target:GetLayerDuration( ID ),
+            Playback = Target:GetLayerPlaybackRate( ID )
+        }
+    end
+
+    for i = 0, Target:GetNumPoseParameters( ) - 1 do 
+        Animations.Poses[ i ] = Target:GetPoseParameter( i )
+    end
+
+    return Animations
+end
+
 function Coffee.Records:Cleanup( )
     for Target, Record in pairs( self.Cache ) do
         if ( Target == NULL or not Target or not IsValid( Target ) ) then 
             self.Cache[ Target ] = nil
+        elseif ( Target and not Target:Alive( ) ) then 
+            self.Cache[ Target ] = { }
         end
     end
 end
@@ -144,6 +189,8 @@ function Coffee.Records:Construct( Target )
         Data.maxArmor = Target:GetMaxArmor( )
 
         Data.Fake = Data.Angles.z != 0 or math.abs( Data.Angles.x ) == 180 
+
+        Data.Animations = self:GenerateAnimationData( Target )
     end
 
     return Data
@@ -152,6 +199,10 @@ end
 function Coffee.Records:Update( Stage )
     if ( Stage != FRAME_NET_UPDATE_POSTDATAUPDATE_END ) then 
         return 
+    end
+
+    if ( self.Fullupdate:IsUpdating( ) ) then 
+        return
     end
 
     -- Execute main loop, fill our records with a new one if the player/npc is valid.
@@ -182,7 +233,7 @@ function Coffee.Records:Update( Stage )
         end
 
         -- No need to keep this many records.
-        while ( #self.Cache[ Target ] > 64 ) do 
+        while ( #self.Cache[ Target ] > 67 ) do 
             table.remove( self.Cache[ Target ] )
         end
     end
