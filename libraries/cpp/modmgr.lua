@@ -70,6 +70,10 @@ Coffee.Require = {
 
             [ 'BSendPacket' ] = function( self, Value )
                 return ded.SetBSendPacket( Value )
+            end,
+            
+            [ 'GetRandomSeed' ] = function( self, CUserCMD )
+                return ded.GetRandomSeed( CUserCMD )
             end
         },
     }

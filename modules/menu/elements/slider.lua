@@ -13,14 +13,11 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
 
     -- Add some paint to this empty slider.
     Slider.Paint = function( self, W, H )
-        -- Get color.
-        local Color = Color( Coffee.Menu.Color.r, Coffee.Menu.Color.g, Coffee.Menu.Color.b )
-
         -- Get value.
         local Value = ( ( Coffee.Config[ Assignment ] - Minimum ) / ( Maximum - Minimum ) )
 
         -- Render overlay.
-        surface.SetDrawColor( Color )
+        surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
             
         surface.SetMaterial( Coffee.Menu.Gradients.Right )

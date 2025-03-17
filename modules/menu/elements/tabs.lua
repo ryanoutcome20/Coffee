@@ -1,14 +1,15 @@
-function Coffee.Menu:GenerateTab( Name, Width, Height )
+function Coffee.Menu:GenerateTab( Name, Width, Height, Single )
     -- Generate main tab panel.
-    local Tab = vgui.Create( 'DFrame', self.Background )
+    local Tab = vgui.Create( 'DFrame' )
     Tab:SetSize( Width, Height )
 	Tab:Center( )
 	Tab:SetTitle( '' )
 	Tab:SetDraggable( true )
     Tab:ShowCloseButton( false )
-	Tab:SetVisible( false )
     Tab:SetKeyboardInputEnabled( true )
     Tab:SetMouseInputEnabled( true )
+    Tab:MakePopup( )
+	Tab:SetVisible( false )
 
     Tab.Paint = function( self, W, H )
         surface.SetDrawColor( 18, 18, 18 )
@@ -21,34 +22,66 @@ function Coffee.Menu:GenerateTab( Name, Width, Height )
         surface.SetMaterial( Coffee.Menu.Gradients.Right )
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawTexturedRect( 0, 0, W, 20 )
-
-        surface.SetMaterial( Coffee.Menu.Gradients.Left )
-        surface.SetDrawColor( 40, 40, 40 )
-        surface.DrawTexturedRect( 0, 0, W, 20 )
-
-        surface.SetFont( 'DefaultSmall' )
-        surface.SetTextColor( Coffee.Menu.Color )
-        surface.SetTextPos( 5, 4 ) 
-        surface.DrawText( Name )
         
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+
+        if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
+            surface.SetTextColor( Coffee.Menu.Color )
+        else
+            surface.SetTextColor( Coffee.Colors[ 'White' ] )
+        end
+
+        surface.SetFont( 'DefaultSmall' )
+        surface.SetTextPos( 5, 4 ) 
+        surface.DrawText( Name )
     end
 
-    -- Generate handler for the sub colums.
-    local Handler = vgui.Create( 'DIconLayout', Tab )
+    if ( not Single ) then 
+        -- Generate handler for the sub colums.
+        local Handler = vgui.Create( 'DIconLayout', Tab )
+        Handler:Dock( FILL )
+        Handler:SetStretchWidth( true )
+        Handler:SetStretchHeight( true )
+        Handler:SetSpaceX( 5 )
+
+        -- Generate sub colum panels (left, right).
+        local WW, HH = Width / 2 - self:Scale( 8 ), Height / 1.08 -- Yes, this is ugly; no, it is not my fault.
+
+        -- Should we be using DHorizontalDivider here?
+        local Left = self:GenerateTabSubPanel( Handler, WW, HH )
+        local Right = self:GenerateTabSubPanel( Handler, WW, HH )
+
+        Handler:Layout( )
+
+        -- Assign tab for the later indexing.
+        self.Tabs[ Name ] = {
+            -- Main block.
+            Parent = Tab,
+
+            -- Subpanels.
+            Handler = Handler,
+            Left    = Left,
+            Right   = Right,
+
+            -- Scrollpanels.
+            LeftS  = self:GenerateScrollBar( Left ),
+            RightS = self:GenerateScrollBar( Right ),
+        }
+
+        return
+    end
+
+    -- Generate our tab.
+    local Handler = vgui.Create( 'DPanel', Tab )
     Handler:Dock( FILL )
-    Handler:SetStretchWidth( true )
-    Handler:SetStretchHeight( true )
-    Handler:SetSpaceX( 5 )
+    Handler.Paint = function( self, W, H )
+        surface.SetDrawColor( 20, 20, 20, 120 )
+        surface.DrawRect( 0, 0, W, H )
 
-    -- Generate sub colum panels (left, right).
-    local WW, HH = Width / 2 - self:Scale( 8 ), Height / 1.08 -- Yes, this is ugly; no, it is not my fault.
-
-    local Left = self:GenerateTabSubPanel( Handler, WW, HH )
-    local Right = self:GenerateTabSubPanel( Handler, WW, HH )
-
-    Handler:Layout( )
+        surface.SetDrawColor( Coffee.Menu.Color )
+        surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+    end
 
     -- Assign tab for the later indexing.
     self.Tabs[ Name ] = {
@@ -57,12 +90,12 @@ function Coffee.Menu:GenerateTab( Name, Width, Height )
 
         -- Subpanels.
         Handler = Handler,
-        Left    = Left,
-        Right   = Right,
+        Left    = Handler,
+        Right   = Handler,
 
         -- Scrollpanels.
-        LeftS  = self:GenerateScrollBar( Left ),
-        RightS = self:GenerateScrollBar( Right ),
+        LeftS  = Handler,
+        RightS = Handler,
     }
 end
 
@@ -90,6 +123,8 @@ function Coffee.Menu:GenerateScrollBar( Panel )
     local Scroll = vgui.Create( 'DScrollPanel', Panel )
     Scroll:Dock( FILL )
     Scroll:DockMargin( self:Scale( 6 ), self:Scale( 6 ), self:Scale( 6 ), self:Scale( 6 ) )
+    Scroll:SetMouseInputEnabled( true )
+    Scroll:SetKeyboardInputEnabled( true )
 
     -- Edit our sidebar.
     local Bar = Scroll:GetVBar(  )

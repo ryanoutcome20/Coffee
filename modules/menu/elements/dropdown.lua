@@ -1,7 +1,9 @@
-function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width )
+function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width, Callback )
     -- Have to generate the dropdowns used in the menu.
     
-    local Dropdown = vgui.Create( 'DComboBox', Panel or self.Last )
+    Panel = Panel or self.Last
+
+    local Dropdown = vgui.Create( 'DComboBox', Panel )
     Dropdown:SetSize( Width and self:Scale( Width ) or self:Scale( 100 ), 15 )
     Dropdown:Dock( RIGHT )
     Dropdown:DockMargin( self:Scale( 5 ), 0, self:Scale( 4 ), 0 )
@@ -15,6 +17,10 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width 
 
     Dropdown.OnSelect = function( self, Index, Value )
         Coffee.Config[ Assignment ] = Value
+
+        if ( Callback ) then 
+            Callback( Value )
+        end
     end
 
     Dropdown:SetFont( 'DefaultSmall' )
@@ -34,6 +40,8 @@ function Coffee.Menu:GenerateFixedDropdown( Dropdown )
 
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+
+        self:SetTextColor( Coffee.Menu.Color )
     end
 
     -- Fix the default hover, clicked, and other colors.
@@ -49,10 +57,21 @@ function Coffee.Menu:GenerateFixedDropdown( Dropdown )
     Dropdown.DropButton.Paint = function( self, W, H ) end
 
     -- Fix the entire dropdown menu and every color within the many sub panels.
-    Dropdown.OnMenuOpened = function( Panel, Menu )
+    Dropdown.OnMenuOpened = function( self, Menu )
         -- Horrific code below. VGUI has forced my hand.
 
-        local childMenu = Panel:GetChildren( )[ 2 ]
+        local Children = self:GetChildren( )
+
+        local childFrame = Children[ 1 ]
+        local childMenu = Children[ 2 ]
+
+        childFrame.Think = function( self )
+            local Parent = self:GetParent( )
+            
+            if ( Parent and not Parent:IsVisible( ) ) then 
+                return self:Remove( )
+            end
+        end
 
         childMenu.Paint = function( self, W, H )
             surface.SetDrawColor( 20, 20, 20, 200 )
@@ -60,6 +79,27 @@ function Coffee.Menu:GenerateFixedDropdown( Dropdown )
     
             surface.SetDrawColor( Coffee.Menu.Color )
             surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+
+            -- Comical VGUI moment.
+            local Parent = self:GetParent( )
+
+            while ( true ) do -- This runs about 15 times. Thanks Garry.
+                local Sub = Parent:GetParent( )
+
+                if ( not Sub ) then 
+                    break
+                end
+
+                if ( Sub:GetClassName( ) == 'CGModBase' ) then 
+                    break
+                end
+                
+                Parent = Sub
+            end
+
+            if ( not Parent or not Parent:IsVisible( ) ) then
+                self:Remove( ) 
+            end
         end
     
         for i = 1, #Dropdown.Choices do 

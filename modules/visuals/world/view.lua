@@ -1,3 +1,35 @@
+function Coffee.Visuals:Thirdperson( Origin, Angles )
+    local Distance = self.Config[ 'world_thirdperson_distance' ]
+
+    if ( self.Config[ 'world_thirdperson_interpolation' ] ) then 
+        Distance = Lerp( ( CurTime( ) - self.prevTime ) / 4, self.prevDistance, Distance )
+    end
+
+    local Adjusted = Origin
+
+    Adjusted = Adjusted - ( Angles:Forward( ) * Distance )
+    Adjusted = Adjusted + ( Angles:Right( ) * self.Config[ 'world_thirdperson_distance_right' ] )
+    Adjusted = Adjusted + ( Angles:Up( ) * self.Config[ 'world_thirdperson_distance_up' ] )
+
+    if ( self.Config[ 'world_thirdperson_collisions' ] ) then 
+        local Trace = util.TraceLine( {
+            start  = Origin,
+            endpos = Adjusted,
+            filter = self.Client.Local
+        } )
+
+        Adjusted = Trace.HitPos
+
+        if ( Trace.Fraction != 1 ) then 
+            Adjusted = Adjusted + Trace.HitNormal * 5
+        end
+    end
+
+    self.prevDistance = Distance
+
+    return Adjusted
+end
+
 function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
     local View = { }
 
@@ -6,8 +38,11 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
     View.angles = Angles
     
     if ( self.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
-        View.origin     = View.origin - ( Angles:Forward( ) * self.Config[ 'world_thirdperson_distance' ] )
+        View.origin = self:Thirdperson( Origin, Angles )
         View.drawviewer = true
+    else 
+        self.prevTime     = CurTime( )
+        self.prevDistance = 0
     end
     
     if ( self.Config[ 'world_fov' ] ) then 

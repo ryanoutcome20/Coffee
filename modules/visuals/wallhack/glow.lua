@@ -53,7 +53,9 @@ function Coffee.Visuals:Halo( Targets, Color, blurX, blurY, scaledBlur, Passes, 
 				render.SetStencilZFailOperation( STENCIL_KEEP )
 
 					for k, Target in ipairs( Targets ) do
-						Target:DrawModel( )
+                        if ( IsValid( Target ) ) then 
+						    Target:DrawModel( )
+                        end
 					end
 
 				render.SetStencilCompareFunction( STENCIL_EQUAL )
@@ -127,7 +129,7 @@ function Coffee.Visuals:Glow( )
         end
 
         -- Get front record.
-        local Front = self.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target )
+        local Front = self.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target, true )
 
         if ( not Front ) then 
             continue

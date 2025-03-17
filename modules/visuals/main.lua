@@ -10,6 +10,17 @@ Coffee.Visuals = {
     Ragebot    = Coffee.Ragebot,
     Overlay    = Coffee.Overlay,
     CSEntity   = Coffee.CSEntity,
+    Hitmarker  = Coffee.Hitmarker,
+    Items      = Coffee.Items,
+
+    Effects = {
+        [ 'Tesla' ]        = 'TeslaHitboxes',
+        [ 'Gibs' ]         = 'AntlionGib',
+        [ 'Sparks' ]       = 'ElectricSpark',
+        [ 'Heavy Sparks' ] = 'Sparks',
+        [ 'Explosion' ]    = 'Explosion',
+        [ 'Vortigaunt' ]   = 'VortDispel'
+    },
 
     Fade = { },
     Offsets = { }
@@ -40,10 +51,15 @@ Coffee:LoadFile( 'lua/coffee/modules/visuals/animations/handler.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/chams/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/footsteps.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/modulate.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/impacts.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/view.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/sky.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/weather.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/anonymizer.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/indicators.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/items.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/glow.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/dock.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/renderer.lua' )
@@ -59,6 +75,7 @@ function Coffee.Visuals:Update( )
     self:Notifications( )
     self:Indicators( )
     self:Wallhack( )
+    self:Entities( )
 end
 
 function Coffee.Visuals:Update3D( ) 
@@ -70,6 +87,8 @@ function Coffee.Visuals:Update3D( )
         self:PlayerChams( )
         self:FakeChams( )
     cam.End3D( )
+
+    self.Sky:Handler( )
 end
 
 Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Visuals.Update3D, Coffee.Visuals )

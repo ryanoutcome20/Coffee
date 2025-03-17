@@ -1,5 +1,16 @@
 function Coffee.Ragebot:Aimbot( CUserCMD )
-    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then 
+    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then
+        if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
+            local Angles = self:CalculateCompensation( 
+                CUserCMD, 
+                CUserCMD:GetViewAngles( ), 
+                self.Config[ 'aimbot_norecoil' ], 
+                self.Config[ 'aimbot_nospread' ] 
+            )
+
+            CUserCMD:SetViewAngles( Angles )
+        end
+        
         return
     end
 
@@ -17,15 +28,21 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     if ( self.Config[ 'aimbot_ignore_sticky' ] ) then 
         local Trace = self.Client.Local:GetEyeTrace( )
 
-        if ( Trace.Entity and Trace.Entity:IsPlayer( ) ) then 
-            return 
+        local isPlayer = Trace.Entity and Trace.Entity:IsPlayer( )
+
+        if ( self.Config[ 'aimbot_always_sticky' ] ) then
+            if ( not isPlayer ) then 
+                return 
+            end
+        elseif ( isPlayer ) then 
+            return
         end
     end
 
     -- Get active SWEP.
     local SWEP = self.Client.Local:GetActiveWeapon( )
 
-    if ( not IsValid( SWEP ) ) then 
+    if ( not IsValid( SWEP ) or not SWEP:IsValid( ) ) then 
         return
     end
 
@@ -40,18 +57,46 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         return 
     end
 
+    -- Check if we are using optimizations.
+    local simpleRecords = self.Optimizations:Valid( 'aimbot_optimizations_records' )
+    local limitTargets  = self.Optimizations:Valid( 'aimbot_optimizations_targets' )
+    local noBones       = self.Optimizations:Valid( 'aimbot_optimizations_hitboxes' )
+
     -- Check if we are using backtrack.
-    local usingBacktrack = self.Config[ 'aimbot_backtrack' ]
+    local usingBacktrack = not noBones and self.Config[ 'aimbot_backtrack' ]
+
+    -- Get targets.
+    local Targets = self.Records.Players
+
+    if ( self.Config[ 'aimbot_world_sphere' ] ) then 
+        local Hit    = self.Client.Local:GetEyeTrace( ).HitPos
+        local Radius = self.Config[ 'aimbot_world_sphere_fov' ] 
+        
+        Targets = { }
+
+        for k, Target in pairs( ents.FindInSphere( Hit, Radius ) ) do 
+            if ( Target:IsPlayer( ) ) then 
+                table.insert( Targets, Target )
+            end
+        end
+
+        if ( self.Config[ 'aimbot_world_sphere_visualize' ] ) then 
+            self.Overlay:Sphere( Hit, Radius, 10, 0.1, self.Config[ 'aimbot_world_sphere_visualize_color' ], true )
+        end
+    end
+
+    -- Check if we have limit targets.
+    local Limit, Count = self.Config[ 'aimbot_optimizations_targets_amount' ], 0
 
     -- Get our best records from the valid players.
     local Best;
 
-    for k, Target in pairs( self.Records.Players ) do 
+    for k, Target in pairs( Targets ) do 
         if ( not self:Valid( Target, Best ) ) then 
             continue
         end
 
-        if ( usingBacktrack ) then 
+        if ( usingBacktrack and not simpleRecords ) then 
             local Ideal = self.Records:GetIdeal( CUserCMD, Target, self.Config[ 'aimbot_inverse' ] )
 
             if ( Ideal and self.Records:Valid( CUserCMD, Ideal ) ) then 
@@ -77,6 +122,29 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
                     Info = Info
                 }
             end 
+        end
+
+        if ( usingBacktrack ) then 
+            local Last = self.Records:GetLast( CUserCMD, Target )
+
+            if ( Last and self.Records:Valid( CUserCMD, Last ) ) then 
+                local Info = self:GetHitboxInfo( Last )
+
+                if ( Info ) then 
+                    Best = {
+                        Record = Last,
+                        Info = Info
+                    }
+                end 
+            end
+        end
+
+        if ( Best ) then 
+            Count = Count + 1 
+
+            if ( Count >= Limit ) then
+                break
+            end
         end
     end
 
@@ -105,9 +173,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
 
     local Delta = self.Records:GetTickDelta( CUserCMD, Best.Record.Simtime )
 
-    if ( Delta > 0.2 ) then 
-        -- Shouldn't doing this be based on our ping?
-        
+    if ( Delta > 0.2 ) then       
         local Time = self.Require:Servertime( CUserCMD )
 
         self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
@@ -124,8 +190,17 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     -- Get our ideal hitbox.
     local Spot = self.Config[ 'aimbot_invert_hitboxes' ] and Best.Info[ #Best.Info ] or Best.Info[ 1 ]
 
+    Spot = Spot - self.Client.Local:EyePos( )
+
     -- Set angles.
-    self:SetAngles( CUserCMD, ( Spot - self.Client.EyePos ):Angle( ) )
+    local Angles = self:CalculateCompensation( 
+        CUserCMD, 
+        Spot, 
+        self.Config[ 'aimbot_norecoil' ], 
+        self.Config[ 'aimbot_nospread' ] 
+    )
+
+    self:SetAngles( CUserCMD, Angles )
 
     -- Shoot if needed.
     if ( self.Config[ 'aimbot_autofire' ] ) then 
@@ -146,5 +221,5 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         self.Shots:PushShot( Best.Record )
     end
     
-    self.currentAngle = CUserCMD:GetViewAngles( )
+    self.currentAngle = Angles
 end

@@ -8,12 +8,15 @@ Coffee.Colors = {
     [ 'Main' ]       = Color( 133, 99, 88 ), 
     [ 'Main Light' ] = Color( 179, 156, 149 ),
 
-    [ 'White' ] = Color( 255, 255, 255 ),
-    [ 'Black' ] = Color( 0, 0, 0 ),
-    [ 'Gray' ]  = Color( 30, 30, 30 ),
-    
-    [ 'Dark Gray' ] = Color( 18, 18, 18 ),
-    [ 'Cyan' ]      = Color( 60, 180, 225 ),
+    [ 'White' ]     = Color( 255, 255, 255 ),
+    [ 'Black' ]     = Color( 0, 0, 0 ),
+    [ 'Gray' ]      = Color( 30, 30, 30 ),
+    [ 'Invisible' ] = Color( 0, 0, 0, 0 ),
+
+    [ 'Light Gray' ] = Color( 80, 80, 80 ),
+    [ 'Dark Gray' ]  = Color( 18, 18, 18 ),
+    [ 'Cyan' ]       = Color( 60, 180, 225 ),
+    [ 'Purple' ]     = Color( 133, 97, 136 ),
 
     [ 'Red' ]   = Color( 255, 0, 0 ),
     [ 'Green' ] = Color( 0, 255, 0 ),
@@ -26,6 +29,8 @@ Coffee.Resolution = {
     Height = ScrH( ),
     Width  = ScrW( )
 }
+
+Coffee.Gamemode = engine.ActiveGamemode( )
 
 Coffee.Config = { }
 
@@ -101,6 +106,7 @@ if ( not Coffee:LoadFile( 'lua/coffee/libraries/cpp/modmgr.lua' ) ) then
     return 
 end
 
+Coffee:LoadFile( 'lua/coffee/libraries/external/random.lua' )
 
 Coffee:LoadFile( 'lua/coffee/libraries/render/materials.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/render/beams.lua' )
@@ -109,10 +115,13 @@ Coffee:LoadFile( 'lua/coffee/libraries/sdk/engine.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hitboxes.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/items.lua' )
 
 Coffee:LoadFile( 'lua/coffee/libraries/render/overlay.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/render/hitmarker.lua' )
 
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/fullupdate.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/optimizations.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/client.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/records.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/notify.lua' )

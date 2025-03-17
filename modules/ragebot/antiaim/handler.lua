@@ -156,14 +156,6 @@ function Coffee.Ragebot:AntiAim( CUserCMD )
     -- Set our angles.
     self.Real = Angle( Pitch, Yaw, 0 )
 
-    -- if ( self.Packet ) then 
-    --     self.Real.x = 90
-    --     self.Real.y = 90
-    -- else
-    --     self.Real.x = -90
-    --     self.Real.y = -180
-    -- end
-
     -- Set angles.
     CUserCMD:SetViewAngles( self.Real )
 
@@ -208,7 +200,15 @@ function Coffee.Ragebot:Speedhack( CUserCMD )
         return
     end
 
-    self.Require:SetOutSequence( self.Require:GetOutSequence( ) + self.Config[ 'hvh_speedhack_ticks' ] )
+    local Ticks = self.Config[ 'hvh_speedhack_ticks' ]
+
+    if ( self.Config[ 'hvh_speedhack_airstuck' ] ) then 
+        -- This only works if sv_maxusrcmdprocessticks is set to a number other than zero since
+        -- it relies entirely on the server holding you in place.
+        Ticks = Ticks * 10
+    end
+
+    self.Require:SetOutSequence( self.Require:GetOutSequence( ) + Ticks )
 
     self.isManipulating = true
 end 

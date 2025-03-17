@@ -1,9 +1,9 @@
-function Coffee.Visuals:Valid( Target, ignoreStatus )
+function Coffee.Visuals:Valid( Target )
     if ( not self.Config[ 'esp_enabled' ]  ) then 
         return false
     end
 
-    if ( not ignoreStatus and not self.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
+    if ( not self.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
         return false
     end
 
@@ -27,9 +27,15 @@ function Coffee.Visuals:Valid( Target, ignoreStatus )
 end
 
 function Coffee.Visuals:Wallhack( )
+    local Distance = self.Client.Position
+
     for k, Target in pairs( self.Records.Players ) do 
         if ( not self.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
             break
+        end
+
+        if ( self.Config[ 'esp_limit_distance' ] and Distance:Distance2D( Target:GetPos( ) ) >= self.Config[ 'esp_limit_distance_distance' ] ) then 
+            continue
         end
 
         if ( not self:Valid( Target ) ) then 
@@ -48,7 +54,7 @@ function Coffee.Visuals:Wallhack( )
         }
 
         -- Get front record.
-        local Front = self.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target )
+        local Front = self.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target, true )
         
         if ( not Front ) then 
             continue
@@ -56,7 +62,7 @@ function Coffee.Visuals:Wallhack( )
 
         -- Check dormant.
         if ( Front.Dormant and not self.Config[ 'esp_visualize_dormant' ] ) then 
-            return
+            continue
         end
 
         -- Get positional information.
@@ -76,8 +82,20 @@ function Coffee.Visuals:Wallhack( )
                 surface.SetDrawColor( self.Config[ 'esp_box_color_outline' ] )
                 surface.DrawOutlinedRect( self.Position.X - self.Position.W / 2, self.Position.Y - self.Position.H + 2, self.Position.W, self.Position.H, 2 )
             
-                surface.SetDrawColor( self.Config[ 'esp_box_color' ] )
+                surface.SetDrawColor( Front.Dormant and self.Config[ 'esp_visualize_dormant_color' ] or self.Config[ 'esp_box_color' ] )
                 surface.DrawOutlinedRect( self.Position.X - self.Position.W / 2, self.Position.Y - self.Position.H + 2, self.Position.W, self.Position.H, 1 )
+            
+                if ( self.Config[ 'esp_box_fill' ] ) then
+                    surface.SetMaterial( self.Menu.Gradients.Up ) 
+                    surface.SetDrawColor( self.Config[ 'esp_box_fill_up' ] )
+                    surface.DrawTexturedRect( self.Position.X - self.Position.W / 2 + 1, self.Position.Y - self.Position.H + 3, self.Position.W - 2, self.Position.H - 2 )
+
+                    surface.SetMaterial( self.Menu.Gradients.Down ) 
+                    surface.SetDrawColor( self.Config[ 'esp_box_fill_down' ] )
+                    surface.DrawTexturedRect( self.Position.X - self.Position.W / 2 + 1, self.Position.Y - self.Position.H + 3, self.Position.W - 2, self.Position.H - 2 )
+                    
+                    draw.NoTexture( )
+                end
             else
                 cam.Start3D( )
                     render.DrawWireframeBox( Front.Position, angle_zero, Front.Mins, Front.Maxs, self.Config[ 'esp_box_color' ], true )
@@ -121,6 +139,16 @@ function Coffee.Visuals:Wallhack( )
         -- Run our flag ESP.
         self:RenderText( Front.Ping, 'esp_ping' )
 
+        self:RenderText( Target.GetUserGroup and Target:GetUserGroup( ) or 'none', 'esp_usergroup' )
+        
+        if ( team ) then 
+            local Team = team.GetName( Target.Team )
+
+            if ( Team ) then
+                self:RenderText( Team != '' and Team or 'none', 'esp_team_name' )
+            end
+        end
+
         -- We need to get the current record for these even if server visualization is off.
         local Prediction = self.Records:GetFront( Target ) or Front
 
@@ -141,7 +169,7 @@ function Coffee.Visuals:Wallhack( )
 
         -- Render our light.
         if ( self.Config[ 'esp_light' ] ) then         
-            local Light = DynamicLight( Target:EntIndex( ), self.Config[ 'esp_light_elight' ] )
+            local Light = DynamicLight( Front.Index, self.Config[ 'esp_light_elight' ] )
 
             if ( Light ) then 
                 Light.pos = Front.Position
@@ -156,7 +184,7 @@ function Coffee.Visuals:Wallhack( )
                 Light.g = Color.g
                 Light.b = Color.b
 
-                local Size = ( self.Config[ 'esp_light_size' ] / 100 ) * 1024
+                local Size = ( self.Config[ 'esp_light_size' ] / 100 ) * 4096
 
                 Light.size = Size
             end
@@ -164,23 +192,50 @@ function Coffee.Visuals:Wallhack( )
 
         -- Render our ring.
         if ( self.Config[ 'esp_ring' ] ) then 
-            local Position = Front.Position
+            local Position = Vector( Front.Position.x, Front.Position.y, Front.Position.z ) 
             
             -- Move the position upwards so that it doesn't clip into the floor.
             Position.z = Position.z + 3
             
+            -- Get our end radius.
+            local endRadius = self.Config[ 'esp_ring_end_radius' ]
+
+            if ( self.Config[ 'esp_ring_end_radius_pulsate' ] ) then 
+                endRadius = math.random( 1, endRadius )
+            end
+
+            -- Get our width.
+            local Width = self.Config[ 'esp_ring_width' ]
+
+            if ( self.Config[ 'esp_ring_width_pulsate' ] ) then 
+                Width = Width + math.sin( CurTime( ) * Width )
+            end
+
             effects.BeamRingPoint( 
                 Position,
                 3 * ( self.Config[ 'esp_ring_time' ] / 100 ),
                 self.Config[ 'esp_ring_start_radius' ],
-                self.Config[ 'esp_ring_end_radius' ],
-                self.Config[ 'esp_ring_width' ],
+                endRadius,
+                Width,
                 self.Config[ 'esp_ring_amplitude' ] / 100,        
                 self.Config[ 'esp_ring_color' ],
                 {
                     material = 'sprites/lgtning.vmt'
                 }
             )
+        end
+
+        -- Render our effects.
+        if ( self.Config[ 'esp_blink' ] ) then 
+            Target:AddEffects( EF_ITEM_BLINK )
+        else 
+            Target:RemoveEffects( EF_ITEM_BLINK )
+        end
+
+        if ( self.Config[ 'esp_remove_shadows' ] ) then 
+            Target:AddEffects( EF_NOSHADOW )
+        else 
+            Target:RemoveEffects( EF_NOSHADOW )
         end
     end
 end

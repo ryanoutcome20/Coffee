@@ -1,6 +1,8 @@
 Coffee.Menu = { 
     Resolution = Coffee.Resolution,
     Colors     = Coffee.Colors,
+    Config     = Coffee.Config,
+    Items      = Coffee.Items,
 
     Gradients = {
         Up    = Material( 'vgui/gradient_up' ),
@@ -26,7 +28,9 @@ Coffee.Menu = {
 }
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/tabs.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/list.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/label.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/input.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/slider.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/button.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/binder.lua' )
@@ -49,9 +53,10 @@ function Coffee.Menu:Init( Tabs )
     -- Generate the background.
     local Background = vgui.Create( 'DPanel' )
     Background:SetSize( self.Resolution.Width, self.Resolution.Height )
+    Background:SetMouseInputEnabled( true )
     Background:SetKeyboardInputEnabled( true )
     Background.Paint = function( self, W, H )
-        surface.SetDrawColor( 0, 0, 0, 200 )
+        surface.SetDrawColor( 0, 0, 0, 20 )
         surface.DrawRect( 0, 0, W, H )
     end
 
@@ -78,8 +83,9 @@ function Coffee.Menu:Init( Tabs )
         surface.SetDrawColor( 0, 0, 0, 150 )
         surface.DrawRect( 0, 0, W, H )
 
+        surface.SetMaterial( Coffee.Menu.Gradients.Left )
         surface.SetDrawColor( Coffee.Menu.Color )
-        surface.DrawOutlinedRect( -4, 0, W + 8, H, 2 )
+        surface.DrawTexturedRect( 0, 0, W, 2 )
     end
 
     self.Bottom = Bottom
@@ -88,7 +94,7 @@ function Coffee.Menu:Init( Tabs )
     for i = 0, #Tabs - 1 do 
         local Index = Tabs[ i + 1 ]
 
-        self:GenerateTab( Index.Title, self:Scale( 600 ), self:Scale( Index.Height ) )
+        self:GenerateTab( Index.Title, self:Scale( 750 ), self:Scale( Index.Height ), Index.Single )
 
         local TabButton = vgui.Create( 'DButton', Bottom )
         TabButton:SetText( Index.Title )
@@ -103,7 +109,10 @@ function Coffee.Menu:Init( Tabs )
         end
 
         TabButton.DoClick = function( self, W, H )
-            Coffee.Menu.Tabs[ Index.Title ].Parent:ToggleVisible( )
+            local Frame = Coffee.Menu.Tabs[ Index.Title ].Parent
+
+            Frame:ToggleVisible( )
+            Frame:MakePopup( )
         end
     end
 
@@ -112,7 +121,13 @@ function Coffee.Menu:Init( Tabs )
     Timestamp:Dock( RIGHT )
     Timestamp:DockMargin( 0, -self:Scale( 50 ), -self:Scale( 15 ), 0 )
     Timestamp:SetText( '' )
-    
+    Timestamp:SetMouseInputEnabled( true )
+    Timestamp:SetCursor( 'hand' )
+
+    Timestamp.DoClick = function( self )
+        Coffee.Menu:Input( true )
+    end
+
     Timestamp.Paint = function( self, W, H ) 
         self:SetColor( Coffee.Menu.Color )    
     end
@@ -132,10 +147,14 @@ function Coffee.Menu:Handle( Title, Callback, Side )
     Callback( self, Side and Tab.RightS or Tab.LeftS )
 end
 
-function Coffee.Menu:Input( )
-    if ( input.IsKeyDown( KEY_INSERT ) ) then 
+function Coffee.Menu:Input( Override )
+    if ( Override or input.IsKeyDown( KEY_INSERT ) ) then 
         if ( not self.Toggle ) then 
             self.Background:ToggleVisible( )
+
+            for k, Tab in pairs( self.Tabs ) do 
+                Tab.Parent:SetVisible( false )
+            end
         end
         
         self.Toggle = true
@@ -145,11 +164,12 @@ function Coffee.Menu:Input( )
 end
 
 Coffee.Menu:Init( {
-    { Title = 'Aimbot', Height = 500 },
-    { Title = 'Anti-Aim', Height = 500 },
-    { Title = 'Players', Height = 500 },
-    { Title = 'World', Height = 500 },
-    { Title = 'Miscellaneous', Height = 500 },
+    { Title = 'Aimbot', Height = 500, Single = false },
+    { Title = 'Anti-Aim', Height = 500, Single = false },
+    { Title = 'Players', Height = 500, Single = false },
+    { Title = 'World', Height = 500, Single = false },
+    { Title = 'Items', Height = 500, Single = false },
+    { Title = 'Miscellaneous', Height = 500, Single = false },
 } )
 
 Coffee.Hooks:New( 'Think', Coffee.Menu.Input, Coffee.Menu )

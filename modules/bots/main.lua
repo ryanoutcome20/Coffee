@@ -2,10 +2,20 @@ Coffee.Bots = {
     Client = Coffee.Client
 }
 
-Coffee:LoadFile( 'lua/coffee/modules/bots/point/handler.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/bots/simple/handler.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/bots/spawnbots/handler.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/bots/other/handler.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/bots/walkbots/point/handler.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/bots/walkbots/simple/handler.lua' )
 
 function Coffee.Bots:Update( CUserCMD )
+    if ( not self.Client.Local or not self.Client.Alive ) then 
+        return
+    end
+
+    self.Spawnbot:Handler( CUserCMD )
+    self.Otherbot:Handler( CUserCMD )
+
     if ( self.Client.Movetype == MOVETYPE_NOCLIP or self.Client.Movetype == MOVETYPE_LADDER ) then 
         return
     end
@@ -14,6 +24,6 @@ function Coffee.Bots:Update( CUserCMD )
         return
     end
     
-    self.Simple:Simple( CUserCMD )
-    self.Point:Point( CUserCMD )
+    self.Simple:Handler( CUserCMD )
+    self.Point:Handler( CUserCMD )
 end

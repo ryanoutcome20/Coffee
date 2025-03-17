@@ -1,12 +1,14 @@
 function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Default, Callback )
     -- Have to generate the colorpicker buttons used in the menu.
   
+    Panel = Panel or self.Last
+
     -- Disassociate the default color object with the current color array.
     Default = Color( Default.r, Default.g, Default.b )
 
     Coffee.Config[ Assignment ] = Default
 
-    local Button = vgui.Create( 'DButton', Panel or self.Last )
+    local Button = vgui.Create( 'DButton', Panel )
     Button:SetSize( 15, 15 )
     Button:SetText( '' )
     Button:Dock( RIGHT )
@@ -23,26 +25,35 @@ function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Default, Callback )
     end
 
     Button.DoClick = function( self, W, H )
-        Coffee.Menu:GenerateColorpickerWindow( Assignment, Coffee.Config[ Assignment ], Callback )
+        Coffee.Menu:GenerateColorpickerWindow( Panel, Assignment, Coffee.Config[ Assignment ], Callback )
     end
 
     Button.DoRightClick = function( self, W, H )
-        Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
+        if ( input.IsButtonDown( KEY_LSHIFT	) ) then 
+            local Color = Coffee.Config[ Assignment ]
+
+            SetClipboardText( string.format( 'Color( %s, %s, %s )', Color.r, Color.g, Color.b ) )
+
+            return
+        end
+
+        Coffee.Menu:GenerateColorpickerSubPanel( Panel, Assignment, Callback )
     end
 
     return Button
 end
 
-function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
+function Coffee.Menu:GenerateColorpickerWindow( Panel, Assignment, Color, Callback )
     -- Have to generate the colorpicker frames used in the menu.
 
     -- Get main frame that everything will parent too.
-    local Frame = vgui.Create( 'DFrame', self.Background )
+    local Frame = vgui.Create( 'DFrame', Panel )
     Frame:SetPos( gui.MouseX( ), gui.MouseY( ) )
     Frame:SetSize( self:Scale( 155 ), self:Scale( 155 ) )
     Frame:ShowCloseButton( false )
     Frame:SetDraggable( false )
     Frame:SetTitle( '' )
+    Frame:MakePopup( )
 
     Frame.Paint = function( self, W, H ) 
         surface.SetDrawColor( 20, 20, 20, 200 )
@@ -53,6 +64,12 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
     end
 
     Frame.Think = function( self )
+        local Parent = self:GetParent( )
+
+        if ( Parent and not Parent:IsVisible( ) ) then 
+            return self:Remove( )
+        end
+
         if ( not input.IsMouseDown( MOUSE_LEFT ) and not input.IsMouseDown( MOUSE_RIGHT ) ) then
             return 
         end
@@ -143,16 +160,21 @@ function Coffee.Menu:GenerateColorpickerWindow( Assignment, Color, Callback )
         end
 
         Coffee.Config[ Assignment ].a = math.Remap( self.LastX, 1, self:GetWide( ), 1, 255 )
+
+        if ( Callback ) then 
+            Callback( Coffee.Config[ Assignment ] )
+        end
     end
 end
 
-function Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
+function Coffee.Menu:GenerateColorpickerSubPanel( Panel, Assignment, Callback )
     -- Have to generate the colorpicker copy and paste menu.
 
     -- Get main frame that everything will parent too.
-    local Frame = vgui.Create( 'DPanel', self.Background )
+    local Frame = vgui.Create( 'DPanel', Panel )
     Frame:SetPos( gui.MouseX( ), gui.MouseY( ) )
     Frame:SetSize( self:Scale( 60 ), self:Scale( 50 ) - 1 )
+    Frame:MakePopup( )
 
     Frame.Paint = function( self, W, H ) 
         surface.SetDrawColor( 20, 20, 20, 200 )
@@ -163,6 +185,12 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
     end
 
     Frame.Think = function( self )
+        local Parent = self:GetParent( )
+
+        if ( Parent and not Parent:IsVisible( ) ) then 
+            return self:Remove( )
+        end
+
         if ( not input.IsMouseDown( MOUSE_LEFT ) and not input.IsMouseDown( MOUSE_RIGHT ) ) then
             return 
         end
@@ -190,6 +218,10 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Assignment )
         Coffee.Config[ Assignment ] = Color( New.r, New.g, New.b, New.a )
 
         Frame:Remove( )
+
+        if ( Callback ) then 
+            Callback( Coffee.Config[ Assignment ] )
+        end
     end, function( self )
         self:DockMargin( 0, 0, 0, Coffee.Menu:Scale( 5 ) )
     end )

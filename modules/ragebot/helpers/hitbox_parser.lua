@@ -21,10 +21,13 @@ function Coffee.Ragebot:GetHitboxInfo( Record )
         return 
     end
 
+    local Autowall = self.Config[ 'aimbot_autowall' ]
+    local Damage   = self.Config[ 'aimbot_autowall_damage' ]
+
     for i = 0, HITGROUP_RIGHTLEG do 
         local Data, Group = Record.Bones[ i ], self.Hitboxes[ i ]
 
-        if ( not Group or not self.Config[ Group ] ) then 
+        if ( not Data or not Group or not self.Config[ Group ] ) then 
             continue
         end
 
@@ -37,7 +40,7 @@ function Coffee.Ragebot:GetHitboxInfo( Record )
         end 
 
         for i = 1, #Data do 
-            if ( not self:RunTrace( Record, Data[ i ] ) ) then 
+            if ( not self:RunTrace( Record, Data[ i ], Autowall, Damage ) ) then 
                 continue
             end
 

@@ -1,4 +1,4 @@
-function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment )
+function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback )
     -- Have to generate the checkboxes used in the menu.
 
     -- Generate main checkbox handler.
@@ -11,8 +11,12 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment )
     
     Checkbox.OnChange = function( self, Value )
         Coffee.Config[ Assignment ] = Value
-    end
 
+        if ( Callback ) then 
+            Callback( Value )
+        end
+    end
+    
     -- Fix layout and painting on button.
     Checkbox.Button:Dock( LEFT )
 
@@ -25,6 +29,14 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment )
     Checkbox.Label:SetFont( 'DefaultSmall' )
     Checkbox.Label:Dock( LEFT )
     Checkbox.Label:DockMargin( self:Scale( 5 ), 0, 0, 0 )
+
+    Checkbox.Label.Think = function( self )
+        if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
+            self:SetTextColor( Coffee.Menu.Color )
+        else
+            self:SetTextColor( Coffee.Colors[ 'White' ] )
+        end
+    end
 
     -- Set our last for the right docking elements.
     self.Last = Checkbox

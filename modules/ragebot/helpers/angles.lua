@@ -19,7 +19,7 @@ function Coffee.Ragebot:SetAngles( CUserCMD, Target )
     local Mode = self.Config[ 'aimbot_silent_mode' ]
     
     if ( Mode == 'Serverside' ) then 
-        self.Require:SetContextVector( CUserCMD, Target:Forward( ), true )
+        self.Require:SetContextVector( CUserCMD, angle_zero )
     else
         if ( self.Config[ 'aimbot_silent_hide' ] ) then 
             Target.y = Target.y + 720

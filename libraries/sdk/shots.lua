@@ -1,8 +1,10 @@
 Coffee.Shots = { 
-    Client = Coffee.Client,
-    Notify = Coffee.Notify,
-    Config = Coffee.Config,
-    Hooks  = Coffee.Hooks,
+    Client    = Coffee.Client,
+    Notify    = Coffee.Notify,
+    Config    = Coffee.Config,
+    Hooks     = Coffee.Hooks,
+    Require   = Coffee.Require,
+    Hitmarker = Coffee.Hitmarker,
 
     Cache = { }
 }
@@ -79,6 +81,10 @@ function Coffee.Shots:Processed( ENT, Data )
         return
     end
 
+    if ( not self.Config[ 'world_hitmarker_check_hit' ] or Data.Trace.Entity:IsPlayer( ) ) then 
+        self.Hitmarker:New( self.Config[ 'world_hitmarker_time' ], Data.Trace.HitPos )
+    end
+
     for k, Slot in pairs( self.Cache ) do 
         if ( Slot.Processed ) then 
             continue
@@ -117,7 +123,14 @@ function Coffee.Shots:Finish( )
 
     -- This is a ghetto fix to an issue I was having at high ping where the playerhurt event was 
     -- way too delayed.
-    local Timeslot = ( self.Client.Ping / 6 )
+
+    -- Note this still isn't perfect but I don't know if I could make a non module based check for
+    -- this.
+    local Timeslot = self.Client.Ping / 4
+
+    if ( Coffee.Ragebot and Coffee.Ragebot.Choked ) then 
+        Timeslot = Timeslot + Coffee.Ragebot.Choked
+    end
 
     for k, Slot in pairs( self.Cache ) do 
         if ( not Slot.Processed ) then 

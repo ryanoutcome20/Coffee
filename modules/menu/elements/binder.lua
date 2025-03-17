@@ -1,7 +1,9 @@
 function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     -- Have to generate the keybinders used in the menu.
     
-    local Binder = vgui.Create( 'DBinder', Panel or self.Last )
+    Panel = Panel or self.Last
+
+    local Binder = vgui.Create( 'DBinder', Panel )
     Binder:SetFont( 'DefaultSmall' )
     Binder:SetSize( 25, 15 )
     Binder:SetText( '' )
@@ -17,6 +19,8 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
 
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+
+        self:SetTextColor( Coffee.Menu.Color )
     end
     
     Binder.UpdateText = function( self )
@@ -39,7 +43,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     end
 
     Binder.DoRightClick = function( self )
-        Coffee.Menu:GenerateKeybindSubpanel( Assignment )
+        Coffee.Menu:GenerateKeybindSubpanel( Panel, Assignment )
     end
 
     Binder.GetTextStyleColor = function( )
@@ -57,13 +61,14 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     return Button
 end
 
-function Coffee.Menu:GenerateKeybindSubpanel( Assignment )
+function Coffee.Menu:GenerateKeybindSubpanel( Panel, Assignment )
     -- Have to generate the keybind style menu.
 
     -- Get main frame that everything will parent too.
-    local Frame = vgui.Create( 'DPanel', self.Background )
+    local Frame = vgui.Create( 'DPanel', Panel )
     Frame:SetPos( gui.MouseX( ), gui.MouseY( ) )
     Frame:SetSize( self:Scale( 125 ), self:Scale( 15 ) )
+    Frame:MakePopup( )
 
     Frame.Paint = function( self, W, H ) 
         surface.SetDrawColor( 20, 20, 20, 200 )
@@ -74,6 +79,12 @@ function Coffee.Menu:GenerateKeybindSubpanel( Assignment )
     end
 
     Frame.Think = function( self )
+        local Parent = self:GetParent( )
+
+        if ( Parent and not Parent:IsVisible( ) ) then 
+            return self:Remove( )
+        end
+
         if ( not input.IsMouseDown( MOUSE_LEFT ) and not input.IsMouseDown( MOUSE_RIGHT ) ) then
             return 
         end

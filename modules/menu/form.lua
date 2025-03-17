@@ -22,12 +22,15 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Delay Shots', 'aimbot_delay' )
     self:GenerateSlider( nil, 'aimbot_delay_time', 1, 1000, 500, 0, false, 'ms' )
 
+    self:GenerateCheckbox( Panel, 'Autowall', 'aimbot_autowall' )
+    self:GenerateSlider( nil, 'aimbot_autowall_damage', 1, 100, 50, 0, false, 'hp' )
+
     self:GenerateCheckbox( Panel, 'Compensate Recoil', 'aimbot_norecoil' )
 
     self:GenerateCheckbox( Panel, 'Compensate Spread', 'aimbot_nospread' )
 
     self:GenerateCheckbox( Panel, 'Engine Prediction', 'aimbot_engine' )
-
+    
     self:GenerateCheckbox( Panel, 'Autostop', 'aimbot_autostop' )
     self:GenerateKeybind( nil, 'aimbot_autostop_keybind' )
     self:GenerateSlider( nil, 'aimbot_autostop_speed', 1, 250, 125, 0, false, '' )
@@ -48,6 +51,16 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Log Spread Misses', 'aimbot_log_spread' )
     
     self:GenerateCheckbox( Panel, 'Log Desync Misses', 'aimbot_log_desync' )
+
+    self:GenerateCheckbox( Panel, 'Optimizations', 'aimbot_optimizations' )
+    self:GenerateMiniCheckbox( nil, 'Avoid Generating Hitbox Matrixes', 'aimbot_optimizations_hitboxes' )
+    self:GenerateMiniCheckbox( nil, 'Simple Record Selection', 'aimbot_optimizations_records' )
+    self:GenerateMiniCheckbox( nil, 'Avoid Multiple Records', 'aimbot_optimizations_small_records' )
+    self:GenerateMiniCheckbox( nil, 'Limit Aimbot Scan', 'aimbot_optimizations_targets' )
+
+    self:GenerateLabel( Panel, 'Optimize Scan' )
+    self:GenerateSlider( nil, 'aimbot_optimizations_targets_amount', 1, 3, 2, 0 )
+
 end )
 
 Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
@@ -72,8 +85,19 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Ignore Head Airbourne', 'aimbot_ignore_airbourne_head' )
 
     self:GenerateCheckbox( Panel, 'Ignore Sticky', 'aimbot_ignore_sticky' )
+    self:GenerateMiniCheckbox( nil, 'Invert', 'aimbot_always_sticky' )
 
     self:GenerateCheckbox( Panel, 'Invert Hitbox Selection', 'aimbot_invert_hitboxes' )
+
+    self:GenerateCheckbox( Panel, 'Compensate Grenade Lag', 'aimbot_grenade' )
+    self:GenerateKeybind( nil, 'aimbot_grenade_keybind' )
+    self:GenerateSlider( nil, 'aimbot_grenade_distance', -100, 100, 0, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'World Sphere FOV', 'aimbot_world_sphere' )
+    self:GenerateSlider( nil, 'aimbot_world_sphere_fov', 1, 2500, 1250, 0 )
+
+    self:GenerateCheckbox( Panel, 'Visualize World Sphere', 'aimbot_world_sphere_visualize' )
+    self:GenerateColorpicker( nil, 'aimbot_world_sphere_visualize_color', self.Colors.Gray )
 
     self:GenerateLabel( Panel, 'Avoid' )
     self:GenerateMiniCheckbox( nil, 'Teammates', 'aimbot_avoid_teammates' )
@@ -163,7 +187,8 @@ Coffee.Menu:Handle( 'Anti-Aim', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Speedhack', 'hvh_speedhack' )
     self:GenerateKeybind( nil, 'hvh_speedhack_keybind' )
     self:GenerateSlider( nil, 'hvh_speedhack_ticks', 1, 23, 1, 0, false, '' )
-    
+    self:GenerateMiniCheckbox( nil, 'Airstuck', 'hvh_speedhack_airstuck' )
+
     self:GenerateCheckbox( Panel, 'Lag Switch', 'hvh_lagswitch' )
     self:GenerateKeybind( nil, 'hvh_lagswitch_keybind' )
     self:GenerateMiniCheckbox( nil, 'Force Packets', 'hvh_lagswitch_force_packets' )
@@ -194,8 +219,14 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Draw Local', 'esp_local' )
    
     self:GenerateCheckbox( Panel, 'Visualize Updates', 'esp_server' )
+    
     self:GenerateCheckbox( Panel, 'Visualize Dead', 'esp_visualize_dead' )
+    
     self:GenerateCheckbox( Panel, 'Visualize Dormancy', 'esp_visualize_dormant' )
+    self:GenerateColorpicker( nil, 'esp_visualize_dormant_color', self.Colors.Gray )
+
+    self:GenerateCheckbox( Panel, 'Limit Distance', 'esp_limit_distance'  )
+    self:GenerateSlider( nil, 'esp_limit_distance_distance', 1, 10000, 5000, 0 )
 
     self:GenerateCheckbox( Panel, 'Box', 'esp_box' )
     self:GenerateColorpicker( nil, 'esp_box_color', self.Colors.White )
@@ -205,6 +236,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         '3D'
     } )
     
+    self:GenerateCheckbox( Panel, 'Fill Box', 'esp_box_fill' )
+    self:GenerateColorpicker( nil, 'esp_box_fill_up', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_box_fill_down', self.Colors.Black )
+
     self:GenerateCheckbox( Panel, 'Name', 'esp_name' )
     self:GenerateColorpicker( nil, 'esp_name_color', self.Colors.White )
     self:GenerateDropdown( nil, 3, 'esp_name_dock', {
@@ -317,6 +352,24 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Bottom'
     }, 50 )
 
+    self:GenerateCheckbox( Panel, 'Usergroup', 'esp_usergroup'  )
+    self:GenerateColorpicker( nil, 'esp_usergroup_color', self.Colors.White )
+    self:GenerateDropdown( nil, 3, 'esp_usergroup_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 50 )
+
+    self:GenerateCheckbox( Panel, 'Team', 'esp_team_name'  )
+    self:GenerateColorpicker( nil, 'esp_team_name_color', self.Colors.White )
+    self:GenerateDropdown( nil, 4, 'esp_team_name_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 50 )
+
     self:GenerateCheckbox( Panel, 'Glow', 'esp_glow'  )
     self:GenerateColorpicker( nil, 'esp_glow_color', self.Colors.Main )
     self:GenerateMiniCheckbox( nil, 'Bloom', 'esp_glow_bloom' )
@@ -362,9 +415,11 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateLabel( Panel, 'Ring End Radius' )
     self:GenerateSlider( nil, 'esp_ring_end_radius', 1, 500, 250, 0 )
+    self:GenerateMiniCheckbox( nil, 'Pulsate', 'esp_ring_end_radius_pulsate' )
 
     self:GenerateLabel( Panel, 'Ring Width' )
-    self:GenerateSlider( nil, 'esp_ring_width', 1, 6, 3, 0 )
+    self:GenerateSlider( nil, 'esp_ring_width', -6, 6, 0, 0 )
+    self:GenerateMiniCheckbox( nil, 'Pulsate', 'esp_ring_width_pulsate' )
 
     self:GenerateLabel( Panel, 'Ring Amplitude' )
     self:GenerateSlider( nil, 'esp_ring_amplitude', 1, 100, 50, 0, false, '%' )
@@ -375,6 +430,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Use Pulse', 'esp_light_flicker'  )
     self:GenerateSlider( nil, 'esp_light_size', 1, 100, 1, 0, false, '%' )
 
+    self:GenerateCheckbox( Panel, 'Blink Light', 'esp_blink'  )
+
+    self:GenerateCheckbox( Panel, 'Remove Shadows', 'esp_remove_shadows'  )
+    
     self:GenerateCheckbox( Panel, 'Visualize Footsteps', 'esp_footstep_visualize'  )
     self:GenerateColorpicker( nil, 'esp_footstep_visualize_left', self.Colors.Main )
     self:GenerateColorpicker( nil, 'esp_footstep_visualize_right', self.Colors.Main )
@@ -637,6 +696,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Viewmodel', 'esp_chams_viewmodel'  )
     self:GenerateColorpicker( nil, 'esp_chams_viewmodel_color', self.Colors.White )
     self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_viewmodel_original' )
+    self:GenerateMiniCheckbox( nil, 'Avoid Passover Hands', 'esp_chams_viewmodel_original_no_hands' )
     self:GenerateDropdown( nil, 1, 'esp_chams_viewmodel_material', {
         'Normal',
         'Flat',
@@ -669,6 +729,188 @@ end, true )
 -- World Tab
 
 Coffee.Menu:Handle( 'World', function( self, Panel )
+    self:GenerateCheckbox( Panel, 'Weather Modulation', 'world_weather' )
+    self:GenerateDropdown( nil, 1, 'world_weather_mode', {
+        'Rain',
+        'Snow',
+        'Custom'   
+    } )
+    self:GenerateMiniCheckbox( nil, 'Allow Indoors', 'world_weather_indoors' )
+
+    self:GenerateLabel( Panel, 'Custom Particle' )
+    self:GenerateInput( nil, 'particles/smokey', 'world_weather_mode_custom' )
+
+    self:GenerateLabel( Panel, 'Area' )
+    self:GenerateSlider( nil, 'world_weather_area', 1, 2000, 1000, 0 )
+
+    self:GenerateLabel( Panel, 'Height' )
+    self:GenerateSlider( nil, 'world_weather_height', 1, 2000, 1000, 0 )
+
+    self:GenerateLabel( Panel, 'Gravity' )
+    self:GenerateSlider( nil, 'world_weather_gravity', 1, 500, 250, 0 )
+
+    self:GenerateLabel( Panel, 'Velocity' )
+    self:GenerateSlider( nil, 'world_weather_velocity', 1, 50, 25, 0 )
+
+    self:GenerateLabel( Panel, 'Size' )
+    self:GenerateSlider( nil, 'world_weather_size', 1, 10, 5, 0 )
+
+    self:GenerateCheckbox( Panel, 'Adjust Particle Wind', 'world_weather_wind' )
+
+    self:GenerateLabel( Panel, 'X Axis' )
+    self:GenerateSlider( nil, 'world_weather_wind_x', 0, 200, 100, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Y Axis' )
+    self:GenerateSlider( nil, 'world_weather_wind_y', 0, 200, 100, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Z Axis' )
+    self:GenerateSlider( nil, 'world_weather_wind_z', 0, 200, 100, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'Audio Ambience Modulation', 'world_weather_audio', function( Enabled )
+        Coffee.Weather:Audio( Enabled, self.Config[ 'world_weather_audio_mode' ] )
+    end )
+    self:GenerateDropdown( nil, 1, 'world_weather_audio_mode', {
+        'Rain',
+        'Snow',
+        'Nature'    
+    }, nil, function( Value )
+        Coffee.Weather:Audio( self.Config[ 'world_weather_audio' ], Value )
+    end )
+
+    self:GenerateCheckbox( Panel, 'Sky Modulation', 'world_sky' )
+    self:GenerateInput( nil, 'skybox/sky_day03_06', 'world_sky_basic' )
+
+    self:GenerateLabel( Panel, 'Colors' )
+    self:GenerateColorpicker( nil, 'world_sky_top', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'world_sky_bottom', self.Colors.White )
+    self:GenerateSlider( nil, 'world_sky_fade_bias', 0, 1, 0.5, 1 )
+
+    self:GenerateLabel( Panel, 'HDR' )
+    self:GenerateSlider( nil, 'world_sky_hdr', 0, 1, 1, 1 )
+
+    self:GenerateCheckbox( Panel, 'Star Modulation', 'world_sky_stars' )
+    self:GenerateInput( nil, 'skybox/starfield', 'world_sky_stars_texture' )
+
+    self:GenerateLabel( Panel, 'Density' )
+    self:GenerateSlider( nil, 'world_sky_stars_density', 1, 4, 2, 0 )
+
+    self:GenerateLabel( Panel, 'Speed' )
+    self:GenerateSlider( nil, 'world_sky_stars_speed', -150, 150, 0, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Edge Fade' )
+    self:GenerateSlider( nil, 'world_sky_stars_fade', 0, 1, 0.5, 1 )
+
+    self:GenerateLabel( Panel, 'Scale' )
+    self:GenerateSlider( nil, 'world_sky_stars_scale', 0, 5, 2.5, 1 )
+    
+    self:GenerateCheckbox( Panel, 'Dusk Modulation', 'world_sky_dusk' )
+    self:GenerateColorpicker( nil, 'world_sky_dusk_color', self.Colors.Main )
+    self:GenerateSlider( nil, 'world_sky_dusk_intensity', 1, 100, 0, 0, false, '%' )
+    self:GenerateSlider( nil, 'world_sky_dusk_scale', 0, 1, 0.5, 1 )
+
+    self:GenerateCheckbox( Panel, 'Sun Modulation', 'world_sky_sun' )
+    self:GenerateColorpicker( nil, 'world_sky_sun_color', self.Colors.Main )
+    self:GenerateSlider( nil, 'world_sky_sun_size', 1, 100, 0, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'World Modulation', 'world_modulation', function( Enabled )
+        Coffee.Modulate:UpdateWorld( Enabled, self.Config[ 'world_modulation_color' ] )
+    end )
+    self:GenerateColorpicker( nil, 'world_modulation_color', self.Colors.Purple, function( Color )
+        Coffee.Modulate:UpdateWorld( self.Config[ 'world_modulation' ], Color )
+    end )
+
+    self:GenerateCheckbox( Panel, 'World Fullbright', 'world_fullbright' )
+    self:GenerateDropdown( nil, 1, 'world_fullbright_mode', {
+        'Total',
+        'Edged'    
+    } )
+
+    self:GenerateCheckbox( Panel, 'World Material Modulation', 'world_material' )
+    self:GenerateInput( nil, 'models/shadertest/shader4', 'world_material_material' )
+
+    self:GenerateCheckbox( Panel, 'Color Overlay Modulation', 'world_color_overlay' )
+    self:GenerateMiniCheckbox( nil, 'Invert Colors', 'world_color_overlay_invert' )
+
+    self:GenerateLabel( Panel, 'Saturation' )
+    self:GenerateSlider( nil, 'world_color_overlay_saturation', 1, 4, 2, 1 )
+
+    self:GenerateLabel( Panel, 'Brightness' )
+    self:GenerateSlider( nil, 'world_color_overlay_brightness', 0, 255, 128, 0 )
+
+    self:GenerateLabel( Panel, 'Contrast' )
+    self:GenerateSlider( nil, 'world_color_overlay_contrast', 1, 4, 2, 1 )
+
+    self:GenerateCheckbox( Panel, 'Multiply Color', 'world_color_overlay_multiply' )
+    self:GenerateColorpicker( nil, 'world_color_overlay_multiply_color', self.Colors.Black )
+
+    self:GenerateCheckbox( Panel, 'Add Color', 'world_color_overlay_add' )
+    self:GenerateColorpicker( nil, 'world_color_overlay_add_color', self.Colors.Black )
+
+    self:GenerateCheckbox( Panel, 'Material Overlay Modulation', 'world_material_overlay' )
+    self:GenerateInput( nil, 'effects/water_warp01', 'world_material_overlay_material' )
+
+    self:GenerateLabel( Panel, 'Refraction' )
+    self:GenerateSlider( nil, 'world_material_overlay_refract', -1, 1, 0, 2 )
+
+    self:GenerateCheckbox( Panel, 'Bloom Modulation', 'world_bloom' )
+    self:GenerateColorpicker( nil, 'world_bloom_color', self.Colors.White )
+    self:GenerateSlider( nil, 'world_bloom_vivid', 1, 10, 5, 2 )
+
+    self:GenerateLabel( Panel, 'Multiply' )
+    self:GenerateSlider( nil, 'world_bloom_multiply', 0, 5, 2.5, 2 )
+
+    self:GenerateLabel( Panel, 'Light Level' )
+    self:GenerateSlider( nil, 'world_bloom_light', -1, 1, 0, 2 )
+
+    self:GenerateLabel( Panel, 'Pitch Size' )
+    self:GenerateSlider( nil, 'world_bloom_size_x', 0, 10, 5, 0 )
+
+    self:GenerateLabel( Panel, 'Yaw Size' )
+    self:GenerateSlider( nil, 'world_bloom_size_y', 0, 10, 5, 0 )
+
+    self:GenerateLabel( Panel, 'Passes' )
+    self:GenerateSlider( nil, 'world_bloom_passes', 1, 5, 3, 0 )
+
+    self:GenerateCheckbox( Panel, 'Motion Blur Modulation', 'world_motion_blur' )
+
+    self:GenerateLabel( Panel, 'Alpha Increment' )
+    self:GenerateSlider( nil, 'world_motion_blur_alpha', 0, 1, 0.5, 2 )
+
+    self:GenerateLabel( Panel, 'Alpha Frames' )
+    self:GenerateSlider( nil, 'world_motion_blur_alpha_frames', 0, 1, 0.5, 2 )
+    
+    self:GenerateLabel( Panel, 'Capture Delay' )
+    self:GenerateSlider( nil, 'world_motion_blur_delay', 0, 0.1, 0.05, 2 )
+
+    self:GenerateCheckbox( Panel, 'Sharpen Modulation', 'world_sharpen' )
+    self:GenerateMiniCheckbox( nil, 'Exponent', 'world_sharpen_exponent' )
+
+    self:GenerateLabel( Panel, 'Contrast' )
+    self:GenerateSlider( nil, 'world_sharpen_contrast', 0, 3, 2, 1 )
+
+    self:GenerateLabel( Panel, 'Distance' )
+    self:GenerateSlider( nil, 'world_sharpen_distance', 0, 3, 2, 1 )
+
+    self:GenerateCheckbox( Panel, 'Sobel Modulation', 'world_sobel' )
+    self:GenerateSlider( nil, 'world_sobel_threshold', 0, 1, 0.5, 2 )
+
+    self:GenerateCheckbox( Panel, 'Sunbeam Modulation', 'world_sunbeams' )
+
+    self:GenerateLabel( Panel, 'Contrast' )
+    self:GenerateSlider( nil, 'world_sunbeams_multiply', 0, 1, 0.5, 2 )
+
+    self:GenerateLabel( Panel, 'Darkness' )
+    self:GenerateSlider( nil, 'world_sunbeams_darkness', 0, 0.1, 0.05, 2 )
+
+    self:GenerateLabel( Panel, 'Sun Size' )
+    self:GenerateSlider( nil, 'world_sunbeams_size', 0, 1, 0.5, 2 )
+
+    self:GenerateCheckbox( Panel, 'Texturized Modulation', 'world_texturized' )
+    self:GenerateInput( nil, 'pp/texturize/rainbow.png', 'world_texturized_material' )
+
+    self:GenerateLabel( Panel, 'Scale' )
+    self:GenerateSlider( nil, 'world_texturized_scale', -1, 1, 0, 2 )
+    self:GenerateMiniCheckbox( nil, 'Randomized', 'world_texturized_scale_random' )
 
 end )
 
@@ -724,6 +966,79 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateLabel( Panel, 'Beam Amplitude' )
     self:GenerateSlider( nil, 'world_beams_amplitude', 1, 100, 50, 0, false, '%' )
 
+    self:GenerateCheckbox( Panel, 'Impact Effect', 'world_effects' )
+    self:GenerateMiniCheckbox( nil, 'Strip flags', 'world_effects_no_flags' )
+
+    self:GenerateLabel( Panel, 'Magnitude' )
+    self:GenerateSlider( nil, 'world_effects_magnitude', 1, 32, 16 )
+
+    self:GenerateLabel( Panel, 'Radius' )
+    self:GenerateSlider( nil, 'world_effects_radius', 0, 1, 0.5, 2 )
+
+    self:GenerateLabel( Panel, 'Scale' )
+    self:GenerateSlider( nil, 'world_effects_scale', 1, 20, 10 )
+
+    self:GenerateLabel( Panel, 'Hurt Effect' )
+    self:GenerateDropdown( nil, 1, 'world_effects_hurt', {
+        'Tesla', 
+        'Gibs', 
+        'Sparks', 
+        'Heavy Sparks', 
+        'Explosion',
+        'Vortigaunt',
+        'Custom'
+    } )
+
+    self:GenerateLabel( Panel, 'Custom Hurt Effect' )
+    self:GenerateInput( nil, 'balloon_pop', 'world_effects_hurt_custom' )
+
+    self:GenerateLabel( Panel, 'Kill Effect' )
+    self:GenerateDropdown( nil, 1, 'world_effects_kill', {
+        'Tesla', 
+        'Gibs', 
+        'Sparks', 
+        'Heavy Sparks', 
+        'Explosion',
+        'Vortigaunt',
+        'Custom'
+    } )
+
+    self:GenerateLabel( Panel, 'Custom Kill Effect' )
+    self:GenerateInput( nil, 'balloon_pop', 'world_effects_kill_custom' )
+
+    self:GenerateCheckbox( Panel, 'Hitsound', 'world_hitsound' )
+    self:GenerateInput( nil, 'garrysmod/balloon_pop_cute.wav', 'world_hitsound_sound' )
+
+    self:GenerateLabel( Panel, 'Volume' )
+    self:GenerateSlider( nil, 'world_hitsound_volume', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateLabel( Panel, 'Passes' )
+    self:GenerateSlider( nil, 'world_hitsound_passes', 1, 10, 5 )
+
+    self:GenerateCheckbox( Panel, 'Hitmarker', 'world_hitmarker' )
+    self:GenerateColorpicker( nil, 'world_hitmarker_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Check 3D Hit', 'world_hitmarker_check_hit' )
+    self:GenerateDropdown( nil, 1, 'world_hitmarker_mode', {
+        '2D', 
+        '3D',
+        'Both'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Dynamic Fade', 'world_hitmarker_fade' )
+
+    self:GenerateLabel( Panel, 'Time' )
+    self:GenerateSlider( nil, 'world_hitmarker_time', 0.1, 5, 2.5, 2 )
+
+    self:GenerateLabel( Panel, 'Space' )
+    self:GenerateSlider( nil, 'world_hitmarker_space', 1, 32, 8 )
+
+    self:GenerateLabel( Panel, 'Center Space' )
+    self:GenerateSlider( nil, 'world_hitmarker_length', 1, 5, 3 )
+
+    self:GenerateCheckbox( Panel, 'Overlay Hitmarker', 'world_hitmarker_overlay' )
+    self:GenerateColorpicker( nil, 'world_hitmarker_overlay_color', self.Colors.Main )
+    self:GenerateSlider( nil, 'world_hitmarker_overlay_space', 1, 32, 16 )
+
     self:GenerateCheckbox( Panel, 'Local Update Visualizer', 'world_update' )
     self:GenerateColorpicker( nil, 'world_update_current_color', self.Colors.Main )
     self:GenerateColorpicker( nil, 'world_update_line_color', self.Colors.Main )
@@ -731,6 +1046,16 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Thirdperson', 'world_thirdperson' )
     self:GenerateKeybind( nil, 'world_thirdperson_keybind' )
     self:GenerateSlider( nil, 'world_thirdperson_distance', 1, 250, 125, 0 )
+
+    self:GenerateLabel( Panel, 'Up Modifier' )
+    self:GenerateSlider( nil, 'world_thirdperson_distance_up', -250, 250, 0, 0 )
+
+    self:GenerateLabel( Panel, 'Right Modifier' )
+    self:GenerateSlider( nil, 'world_thirdperson_distance_right', -250, 250, 0, 0 )
+
+    self:GenerateCheckbox( Panel, 'Camera Collisions', 'world_thirdperson_collisions' )
+    
+    self:GenerateCheckbox( Panel, 'Camera Interpolation', 'world_thirdperson_interpolation' )
 
     self:GenerateCheckbox( Panel, 'Viewmodel Adjustments', 'world_viewmodel' )
     self:GenerateMiniCheckbox( nil, 'No Sway', 'world_viewmodel_sway' )
@@ -763,6 +1088,58 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateLabel( Panel, 'Roll' )
     self:GenerateSlider( nil, 'world_offsets_roll', -180, 180, 0, 0, false, '°' )
 
+    self:GenerateCheckbox( Panel, 'Anonymizer', 'world_anonymizer' )
+
+    self:GenerateLabel( Panel, 'Name Length' )
+    self:GenerateSlider( nil, 'world_anonymizer_length', 1, 8, 4, 0 )
+
+    self:GenerateButton( Panel, 'Strip Icons', function( )
+        Coffee.Anonymizer:Update( )
+    end )
+end, true )
+
+-- Items Tab
+
+Coffee.Menu:Handle( 'Items', function( self, Panel )
+    self:GenerateCheckbox( Panel, 'Render Items', 'items_render' )
+    self:GenerateColorpicker( nil, 'items_render_color', self.Colors.White )
+    self:GenerateDropdown( nil, 1, 'items_render_font', {
+        'Main',
+        'Small'
+    }, 50 )
+
+    self:GenerateCheckbox( Panel, 'Visualize Dormancy', 'items_visualize_dormant' )
+    self:GenerateColorpicker( nil, 'items_visualize_dormant_color', self.Colors.Gray )
+
+    self:GenerateCheckbox( Panel, 'Limit Distance', 'items_limit_distance'  )
+    self:GenerateSlider( nil, 'items_limit_distance_distance', 1, 10000, 5000, 0 )
+
+    -- I wanted to make this more dynamic and kinda just made it
+    -- really fat. Maybe recode? This can be used in other projects
+    -- so I kinda did my job.
+
+    self:GenerateButton( Panel, 'Select', function( self )
+        Coffee.Items:Select( true, Coffee.Menu.Items.DCollapsible )
+    end )
+
+    self:GenerateButton( Panel, 'Deselect', function( self )
+        Coffee.Items:Select( false, Coffee.Menu.Items.DCollapsible )
+    end )
+
+    self:GenerateButton( Panel, 'Select All', function( self )
+        Coffee.Items:Select( true, Coffee.Menu.Items.DCollapsible, true )
+    end )
+
+    self:GenerateButton( Panel, 'Deselect All', function( self )
+        Coffee.Items:Select( false, Coffee.Menu.Items.DCollapsible, true )
+    end )
+end )
+
+
+Coffee.Menu:Handle( 'Items', function( self, Panel )
+    self:GenerateList( Panel, 'Items', function( self )
+        Coffee.Items:Update( self )
+    end )
 end, true )
 
 -- Miscellaneous Tab
@@ -772,6 +1149,7 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateColorpicker( nil, 'miscellaneous_menu', self.Color, function( Color )
         self.Color = Color
     end )
+    self:GenerateMiniCheckbox( nil, 'Affect Labels', 'miscellaneous_menu_labels' )
 
     self:GenerateCheckbox( Panel, 'Watermark', 'miscellaneous_watermark'  )
 
@@ -835,4 +1213,19 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Render Points', 'miscellaneous_point_bot_render'  )
     self:GenerateColorpicker( nil, 'miscellaneous_point_bot_render_color', self.Colors.Main )
     self:GenerateMiniCheckbox( nil, 'Draw Number', 'miscellaneous_point_bot_render_number' )
+
+    self:GenerateCheckbox( Panel, 'Equipbot', 'miscellaneous_equipbot'  )
+    self:GenerateMiniCheckbox( nil, 'Ingore Gamemode', 'miscellaneous_equipbot_ignore_gamemode' )
+    self:GenerateMiniCheckbox( nil, 'Auto Select', 'miscellaneous_equipbot_auto_select' )
+    self:GenerateInput( nil, nil, 'miscellaneous_equipbot_item' )
+
+    self:GenerateCheckbox( Panel, 'Coverbot', 'miscellaneous_coverbot'  )
+    self:GenerateKeybind( nil, 'miscellaneous_coverbot_keybind' )
+    self:GenerateInput( nil, 'models/hunter/blocks/cube6x6x6.mdl', 'miscellaneous_coverbot_prop' )
+
+    self:GenerateCheckbox( Panel, 'Spawn Shield', 'miscellaneous_spawnshield'  )
+    self:GenerateInput( nil, 'models/hunter/blocks/cube6x6x6.mdl', 'miscellaneous_spawnshield_prop' )
+
+    -- Beam Materials?
+    -- Headbeams
 end, true )

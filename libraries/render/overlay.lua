@@ -41,6 +41,17 @@ function Coffee.Overlay:Beam( Start, End, Decay, Width, Speed, Amplitude, Twist,
     } )    
 end
 
+function Coffee.Overlay:Sphere( Origin, Radius, Steps, Decay, Color, Wireframe, IgnoreZ )
+    self:Insert( 'Sphere', Decay, {
+        Origin    = Origin,
+        Radius    = Radius,
+        Steps     = Steps,
+        Wireframe = Wireframe,
+        Color     = Color,
+        IgnoreZ   = IgnoreZ
+    } )
+end
+
 function Coffee.Overlay:Line( Start, End, Decay, Color, IgnoreZ )
     self:Insert( 'Line', Decay, {
         Start   = Start,
@@ -98,6 +109,12 @@ function Coffee.Overlay:Render( )
             self.Beams:Render( Object.Start, Object.End, Object.Speed, Object.Amplitude, Object.Twist, Object.Cone, Object.Segments, Object.Width, Object.firstColor, Object.secondColor, Object.Material )
         elseif ( Name == 'Line' ) then 
             render.DrawLine( Object.Start, Object.End, Object.Color, Object.IgnoreZ )
+        elseif ( Name == 'Sphere' ) then 
+            if ( Object.Wireframe ) then 
+                render.DrawWireframeSphere( Object.Origin, Object.Radius, Object.Steps, Object.Steps, Object.Color, Object.IgnoreZ )
+            else
+                render.DrawSphere( Object.Origin, Object.Radius, Object.Steps, Object.Steps, Object.Color )
+            end
         elseif ( Name == 'Text' ) then 
             cam.Start2D( )
                 local Origin = Object.Origin:ToScreen( )

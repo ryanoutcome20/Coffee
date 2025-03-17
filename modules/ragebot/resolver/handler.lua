@@ -7,11 +7,11 @@ function Coffee.Ragebot:OnMissedShot( wasResolver, Record )
         return
     end
 
-    local Index = self.Indexes[ Record.Target:EntIndex( ) ] or 0
+    local Index = self.Indexes[ Record.Index ] or 0
 
     Index = Index + 1
 
-    self.Indexes[ Record.Target:EntIndex( ) ] = Index
+    self.Indexes[ Record.Index ] = Index
 end
 
 function Coffee.Ragebot:Resolve( Record )
@@ -23,7 +23,7 @@ function Coffee.Ragebot:Resolve( Record )
     local Angles = angle_zero
 
     -- Get our misses.
-    local Misses = self.Indexes[ Record.Target:EntIndex( ) ] or 0
+    local Misses = self.Indexes[ Record.Index ] or 0
 
     -- Check if we'll be using an extended mode.
     local Extended = self.Config[ 'aimbot_resolver_mode' ] == 'Extended'

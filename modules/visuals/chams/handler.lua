@@ -8,13 +8,20 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
         ENT:SetRenderMode( RENDERMODE_NONE )
     end
 
+    -- Get the actual material.
+    Material = self.Materials:Get( Material, Occluded, Color )
+
     -- Set our IgnoreZ.
     cam.IgnoreZ( Occluded )
 
     -- Setup materials and colors.
-    render.MaterialOverride( self.Materials:Get( Material, Occluded, Color ) )
+    render.MaterialOverride( Material )
     render.SetColorModulation( Color.r / 255, Color.g / 255, Color.b / 255 )
     render.SetBlend( Color.a / 255 )
+
+    if ( self.Materials:GetEngineLighting( Material ) ) then 
+        render.SuppressEngineLighting( true )
+    end
 
     -- Render.
     ENT:DrawModel( )
@@ -25,7 +32,8 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     render.MaterialOverride( nil )
     render.SetColorModulation( 1, 1, 1 )
     render.SetBlend( 1 )
-
+    render.SuppressEngineLighting( false )
+        
     -- Render overlay.
     if ( not isOverlay ) then
         local Overlay = Assignment .. '_overlay'
@@ -42,6 +50,10 @@ function Coffee.Visuals:PlayerChams( )
     for k, Target in pairs( self.Records.Entities ) do 
         if ( ( not Target:IsPlayer( ) or not Target:Alive( ) ) and not Target:IsRagdoll( ) ) then
             continue 
+        end
+
+        if ( Target:IsDormant( ) ) then 
+            continue
         end
 
         Target:SetRenderMode( RENDERMODE_NORMAL )
@@ -106,7 +118,7 @@ function Coffee.Visuals:BacktrackChams( Target, Index )
         return
     end
 
-    local ENT = self.CSEntity:New( Target:EntIndex( ) )
+    local ENT = self.CSEntity:New( Target:EntIndex( ) + 128 )
 
     self.CSEntity:SetModel( ENT, Target:GetModel( ) )
     self.CSEntity:SetPosition( ENT, Record.Position )
@@ -151,6 +163,21 @@ function Coffee.Visuals:FakeChams( )
     self:RenderChams( ENT, 'esp_chams_local_fake' )
 end
 
+function Coffee.Visuals:PreDrawEffects( )
+    if ( not self.Config[ 'esp_chams_viewmodel' ] ) then 
+        return 
+    end
+
+    -- I really hate having to do this but otherwise you'll get leakage into
+    -- other addons, especially when using rare rendering options that people
+    -- don't fix (SuppressEngineLighting).
+
+    render.SetColorModulation( 1, 1, 1 )
+    render.MaterialOverride( nil ) 
+    render.SetBlend( 1 )
+    render.SuppressEngineLighting( false )
+end
+
 function Coffee.Visuals:PostDrawViewModel( )
     if ( not self.Config[ 'esp_chams_viewmodel' ] ) then 
         return 
@@ -172,16 +199,15 @@ function Coffee.Visuals:PostDrawViewModel( )
     elseif ( self.ViewmodelOverlay ) then 
         Color = self.Config[ 'esp_chams_viewmodel_overlay_color' ]
         Material = self.Config[ 'esp_chams_viewmodel_overlay_material' ]
-    elseif ( not self.Config[ 'esp_chams_viewmodel_original' ] ) then 
-        render.SetColorModulation( 1, 1, 1 )
-        render.MaterialOverride( nil ) 
-        render.SetBlend( 0 )   
     end
 
-    if ( Color and Material ) then 
-        render.MaterialOverride( self.Materials:Get( Material, false, Color ) )
+    if ( Color and Material ) then
+        Material = self.Materials:Get( Material, false, Color )
+        
+        render.MaterialOverride( Material )
         render.SetColorModulation( Color.r / 255, Color.g / 255, Color.b / 255 )
         render.SetBlend( Color.a / 255 )
+        render.SuppressEngineLighting( self.Materials:GetEngineLighting( Material ) )
     end
 end
 
@@ -189,8 +215,15 @@ function Coffee.Visuals:PreDrawViewModel( Viewmodel, Local )
     if ( self.Config[ 'esp_chams_viewmodel' ] ) then 
         render.SetColorModulation( 1, 1, 1 )
         render.MaterialOverride( nil ) 
-        render.SetBlend( 1 )
-        
+
+        if ( self.Config[ 'esp_chams_viewmodel_original' ] ) then 
+            render.SetBlend( 1 )
+            render.SuppressEngineLighting( false )
+        else 
+            render.SetBlend( 0 )
+            render.SuppressEngineLighting( true )
+        end
+
         if ( not self.Viewmodel ) then             
             self.Viewmodel = true 
                 Viewmodel:DrawModel( )
@@ -203,11 +236,12 @@ function Coffee.Visuals:PreDrawViewModel( Viewmodel, Local )
             self.ViewmodelOverlay = false 
         end
 
-        if ( self.Config[ 'esp_chams_viewmodel_original' ] ) then 
+        if ( self.Config[ 'esp_chams_viewmodel_original' ] and not self.Config[ 'esp_chams_viewmodel_original_no_hands' ] ) then 
             Local:GetHands( ):DrawModel( )
-        end
+        end    
     end
 end
 
 Coffee.Hooks:New( 'PostDrawViewModel', Coffee.Visuals.PostDrawViewModel, Coffee.Visuals )
 Coffee.Hooks:New( 'PreDrawViewModel', Coffee.Visuals.PreDrawViewModel, Coffee.Visuals )
+Coffee.Hooks:New( 'PreDrawEffects', Coffee.Visuals.PreDrawEffects, Coffee.Visuals )

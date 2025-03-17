@@ -38,7 +38,7 @@ function Coffee.Client:Update( )
     self.Maxs = self.Local:OBBMaxs( )
     self.Mins = self.Local:OBBMins( )
     self.Step = self.Local:GetStepSize( )
-
+    
     self.Origin = Origin
     self.Velocity = self.Local:GetVelocity( )
     self.Speed = self.Velocity:Length2D( )

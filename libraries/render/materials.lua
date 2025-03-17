@@ -68,8 +68,9 @@ Coffee.Materials = {
                 [ '$nocull' ] = 1,
                 [ '$selfillum' ] = 1,
                 [ '$selfIllumFresnel' ] = 1,
+                [ '$supressedenginelighting' ] = 1,
                 [ '$selfIllumFresnelMinMaxExp' ] = '[ 0 1 2 ]',
-                [ '$selfillumtint' ] = '[ 0 0 0 ]'
+                [ '$selfillumtint' ] = '[ 0 0 0 ]',
             }
         },
 
@@ -83,6 +84,7 @@ Coffee.Materials = {
                 [ '$additive' ] = 1,
                 [ '$selfillum' ] = 1,
                 [ '$selfIllumFresnel' ] = 1,
+                [ '$supressedenginelighting' ] = 1,
                 [ '$selfIllumFresnelMinMaxExp' ] = '[ 0 1 2 ]',
                 [ '$selfillumtint' ] = '[ 0 0 0 ]',
             }
@@ -130,6 +132,7 @@ Coffee.Materials = {
         [ 'Hue' ] = {  
             'Refract',
             {
+                [ '$additive' ] = 1,
                 [ '$basetexture' ] = 'particle/warp_rain_normal',
                 [ '$normalmap' ] = 'gm_construct/water_13_normal',
                 [ '$refracttexture' ] = '_rt_WaterRefraction',
@@ -343,6 +346,14 @@ function Coffee.Materials:Get( Name, IgnoreZ, Color )
     end
 
     return Material
+end
+
+function Coffee.Materials:GetColoredVector( Color )
+    return Vector( Color.r / 255, Color.g / 255, Color.b / 255 )
+end
+
+function Coffee.Materials:GetEngineLighting( Material )
+    return tobool( Material:GetInt( '$supressedenginelighting' ) )
 end
 
 function Coffee.Materials:CreateMaterial( Name, Shader, Data )

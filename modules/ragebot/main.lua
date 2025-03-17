@@ -1,12 +1,14 @@
 Coffee.Ragebot = { 
-    Records = Coffee.Records,
-    Menu    = Coffee.Menu,
-    Config  = Coffee.Config,
-    Require = Coffee.Require,
-    Client  = Coffee.Client,
-    Shots   = Coffee.Shots,
+    Optimizations = Coffee.Optimizations,
+    Records       = Coffee.Records,
+    Require       = Coffee.Require,
+    Overlay       = Coffee.Overlay,
+    Config        = Coffee.Config,
+    Client        = Coffee.Client,
+    Shots         = Coffee.Shots,
+    Menu          = Coffee.Menu,
     
-    Bots    = Coffee.Bots,
+    Bots = Coffee.Bots,
 
     Hitboxes = {
         [ HITGROUP_GENERIC ] = 'aimbot_hitboxes_generic',
@@ -20,6 +22,7 @@ Coffee.Ragebot = {
     },
 
     Indexes = { },
+    Cones   = { },
 
     isManipulating = false,
 
@@ -37,13 +40,16 @@ Coffee:LoadFile( 'lua/coffee/modules/ragebot/aimbot/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/antiaim/handler.lua' )
 
-Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/swcs.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/hl2.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/m9k.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/swcs.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/tfa.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/pack.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/targeter.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/silent.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/angles.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/targeter.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/grenades.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/hitbox_parser.lua' )
 
 function Coffee.Ragebot:Update( CUserCMD )
@@ -76,6 +82,8 @@ function Coffee.Ragebot:Update( CUserCMD )
         self:Fakelag( CUserCMD )
 
         self:Aimbot( CUserCMD )
+
+        self:AdjustGrenades( CUserCMD )
 
         self:SetupMovement( CUserCMD )
 

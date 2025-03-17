@@ -1,8 +1,10 @@
 Coffee.Records = { 
     Client = Coffee.Client,
+    Config = Coffee.Config,
     Require = Coffee.Require,
     Hitboxes = Coffee.Hitboxes,
     Fullupdate = Coffee.Fullupdate,
+    Optimizations = Coffee.Optimizations,
 
     Entities = { },
     Players  = { },
@@ -11,6 +13,7 @@ Coffee.Records = {
 }
 
 RunConsoleCommand( 'cl_interp', 0 )
+RunConsoleCommand( 'cl_interp_ratio', 0 )
 
 function Coffee.Records:GetFront( Target )
     local Records = self.Cache[ Target ] or { }
@@ -37,17 +40,31 @@ function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse )
             continue
         end
 
-        if ( not Best ) then 
-            Best = Record
-            continue
-        end
-
-        if ( Record.Speed > 0 and Record.Ground ) then 
-            Best = Record
-        end
+        Best = Record
     end
 
     return Best
+end
+
+function Coffee.Records:GetLast( CUserCMD, Target )
+    local Records = table.Copy( self.Cache[ Target ] ) or { }
+    local Last;
+
+    table.remove( Records, 1 )
+
+    Records = table.Reverse( Records )
+
+    for k, Record in pairs( Records ) do 
+        if ( not self:Valid( CUserCMD, Record ) or k == 1 ) then 
+            continue
+        end
+
+        if ( Record.Shift ) then
+            continue
+        end
+
+        return Record
+    end
 end
 
 function Coffee.Records:GetTickDelta( CUserCMD, Time )
@@ -146,7 +163,7 @@ function Coffee.Records:Cleanup( )
     end
 end
 
-function Coffee.Records:Construct( Target )
+function Coffee.Records:Construct( Target, noBones )
     local Data = {
         Target = Target,
 
@@ -171,8 +188,6 @@ function Coffee.Records:Construct( Target )
         Mins = Target:OBBMins( ),
         Maxs = Target:OBBMaxs( ),
 
-        Bones = self.Hitboxes:GetMatrixInformation( Target ),
-
         Shift = false,
         LC = false,
         Fake = false
@@ -193,6 +208,10 @@ function Coffee.Records:Construct( Target )
         Data.Animations = self:GenerateAnimationData( Target )
     end
 
+    if ( not noBones ) then 
+        Data.Bones = self.Hitboxes:GetMatrixInformation( Target )
+    end
+
     return Data
 end
 
@@ -204,6 +223,12 @@ function Coffee.Records:Update( Stage )
     if ( self.Fullupdate:IsUpdating( ) ) then 
         return
     end
+
+    -- Check if we are using a smaller record frame.
+    local Maximum = self.Optimizations:Valid( 'aimbot_optimizations_small_records' ) and 3 or 67
+    
+    -- Check if we are using no bone matrixes.
+    local Bones = self.Optimizations:Valid( 'aimbot_optimizations_hitboxes' )
 
     -- Execute main loop, fill our records with a new one if the player/npc is valid.
     for k, Target in pairs( ents.GetAll( ) ) do
@@ -221,7 +246,7 @@ function Coffee.Records:Update( Stage )
         end
 
         -- Insert newly constructed records.
-        local newRecord = self:Construct( Target )
+        local newRecord = self:Construct( Target, Bones )
 
         if ( istable( newRecord ) ) then 
             table.insert( self.Cache[ Target ], 1, newRecord )
@@ -233,7 +258,7 @@ function Coffee.Records:Update( Stage )
         end
 
         -- No need to keep this many records.
-        while ( #self.Cache[ Target ] > 67 ) do 
+        while ( #self.Cache[ Target ] > Maximum ) do 
             table.remove( self.Cache[ Target ] )
         end
     end
@@ -247,3 +272,9 @@ function Coffee.Records:Update( Stage )
 end
 
 Coffee.Hooks:New( Coffee.Require:FrameStageNotify( ), Coffee.Records.Update, Coffee.Records )
+
+concommand.Add( 'records', function( )
+    for k,v in pairs( player.GetAll() ) do 
+        MsgN( table.Count( Coffee.Records.Cache[ v ]  ) )
+    end
+end )
