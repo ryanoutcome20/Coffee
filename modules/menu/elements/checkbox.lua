@@ -39,9 +39,7 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback, avoidL
     end
 
     -- Set our last for the right docking elements.
-    if ( not avoidLast ) then 
-        self.Last = Checkbox
-    end
+    self.Last = Checkbox
 
     return Checkbox
 end

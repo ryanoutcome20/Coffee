@@ -20,9 +20,7 @@ function Coffee.Menu:GenerateLabel( Panel, Text, avoidLast )
     end
 
     -- Set our last for the right docking elements.
-    if ( not avoidLast ) then 
-        self.Last = Label
-    end
+    self.Last = Label
 
     return Label
 end

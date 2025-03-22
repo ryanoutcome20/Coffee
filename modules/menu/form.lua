@@ -553,6 +553,7 @@ end )
 Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Enemy Visible', 'esp_chams_enemy_visible'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_secondary_color', self.Colors.White )
     self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_enemy_visible_original' )
     self:GenerateDropdown( nil, 1, 'esp_chams_enemy_visible_material', {
         'Normal',
@@ -571,6 +572,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Enemy Visible Overlay', 'esp_chams_enemy_visible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_visible_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_enemy_visible_overlay_material', {
         'Outline',
         'Wireframe',
@@ -582,11 +584,13 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
     self:GenerateCheckbox( Panel, 'Enemy Invisible', 'esp_chams_enemy_invisible'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_color', self.Colors.Black )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 2, 'esp_chams_enemy_invisible_material', {
         'Normal',
         'Flat',
@@ -604,6 +608,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Enemy Invisible Overlay', 'esp_chams_enemy_invisible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_invisible_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_enemy_invisible_overlay_material', {
         'Outline',
         'Wireframe',
@@ -615,11 +620,13 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
     self:GenerateCheckbox( Panel, 'Enemy Backtrack', 'esp_chams_enemy_backtrack'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_backtrack_color', self.Colors.Black )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_backtrack_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 2, 'esp_chams_enemy_backtrack_material', {
         'Normal',
         'Flat',
@@ -637,6 +644,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Enemy Backtrack Overlay', 'esp_chams_enemy_backtrack_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_enemy_backtrack_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_enemy_backtrack_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_enemy_backtrack_overlay_material', {
         'Outline',
         'Wireframe',
@@ -648,12 +656,14 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
 
     self:GenerateCheckbox( Panel, 'Friendly Visible', 'esp_chams_friendly_visible'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_secondary_color', self.Colors.White )
     self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_friendly_visible_original' )
     self:GenerateDropdown( nil, 1, 'esp_chams_friendly_visible_material', {
         'Normal',
@@ -672,6 +682,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Friendly Visible Overlay', 'esp_chams_friendly_visible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_visible_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_friendly_visible_overlay_material', {
         'Outline',
         'Wireframe',
@@ -683,11 +694,13 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
     self:GenerateCheckbox( Panel, 'Friendly Invisible', 'esp_chams_friendly_invisible'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_color', self.Colors.Black )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 2, 'esp_chams_friendly_invisible_material', {
         'Normal',
         'Flat',
@@ -705,6 +718,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Friendly Invisible Overlay', 'esp_chams_friendly_invisible_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_invisible_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_friendly_invisible_overlay_material', {
         'Outline',
         'Wireframe',
@@ -716,11 +730,13 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
     self:GenerateCheckbox( Panel, 'Friendly Backtrack', 'esp_chams_friendly_backtrack'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_backtrack_color', self.Colors.Black )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_backtrack_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 2, 'esp_chams_friendly_backtrack_material', {
         'Normal',
         'Flat',
@@ -738,6 +754,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Friendly Backtrack Overlay', 'esp_chams_friendly_backtrack_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_friendly_backtrack_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_friendly_backtrack_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_friendly_backtrack_overlay_material', {
         'Outline',
         'Wireframe',
@@ -749,12 +766,14 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
 
     self:GenerateCheckbox( Panel, 'Local Real', 'esp_chams_local'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_chams_local_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_local_material', {
         'Normal',
         'Flat',
@@ -772,6 +791,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Local Real Overlay', 'esp_chams_local_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_local_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_local_overlay_material', {
         'Outline',
         'Wireframe',
@@ -783,11 +803,13 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
     self:GenerateCheckbox( Panel, 'Local Fake', 'esp_chams_local_fake'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_fake_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_chams_local_fake_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 2, 'esp_chams_local_fake_material', {
         'Normal',
         'Flat',
@@ -805,6 +827,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Local Fake Overlay', 'esp_chams_local_fake_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_local_fake_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_local_fake_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_local_fake_overlay_material', {
         'Outline',
         'Wireframe',
@@ -816,12 +839,14 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 
 
     self:GenerateCheckbox( Panel, 'Viewmodel', 'esp_chams_viewmodel'  )
     self:GenerateColorpicker( nil, 'esp_chams_viewmodel_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_chams_viewmodel_secondary_color', self.Colors.White )
     self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_viewmodel_original' )
     self:GenerateMiniCheckbox( nil, 'Avoid Passover Hands', 'esp_chams_viewmodel_original_no_hands' )
     self:GenerateDropdown( nil, 1, 'esp_chams_viewmodel_material', {
@@ -841,6 +866,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Viewmodel Overlay', 'esp_chams_viewmodel_overlay'  )
     self:GenerateColorpicker( nil, 'esp_chams_viewmodel_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_viewmodel_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_viewmodel_overlay_material', {
         'Outline',
         'Wireframe',
@@ -852,6 +878,7 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Spawn Effect',
         'Animated Wireframe Dots',
         'Animated Dots',
+        'Animated Breathing',
         'Animated Teleport'
     } )
 end, true )

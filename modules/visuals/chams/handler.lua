@@ -14,8 +14,9 @@ end
 
 function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     -- Get constants from menu.
-    local Color = self.Config[ Assignment .. '_color' ]
-    local Material = self.Config[ Assignment .. '_material' ]
+    local Color          = self.Config[ Assignment .. '_color' ]
+    local secondaryColor = self.Config[ Assignment .. '_secondary_color' ]
+    local Material       = self.Config[ Assignment .. '_material' ]
 
     -- Check if we need to remove the orignal model.
     if ( not isOverlay and not Occluded and not self.Config[ Assignment .. '_original' ] ) then 
@@ -23,7 +24,7 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     end
 
     -- Get the actual material.
-    Material = self.Materials:Get( Material, Occluded, Color )
+    Material = self.Materials:Get( Material, Occluded, Color, secondaryColor )
 
     -- Set our IgnoreZ.
     cam.IgnoreZ( Occluded )
@@ -32,10 +33,7 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     render.MaterialOverride( Material )
     render.SetColorModulation( Color.r / 255, Color.g / 255, Color.b / 255 )
     render.SetBlend( Color.a / 255 )
-
-    if ( self.Materials:GetEngineLighting( Material ) ) then 
-        render.SuppressEngineLighting( true )
-    end
+    render.SuppressEngineLighting( self.Materials:GetEngineLighting( Material ) )
 
     -- Render.
     ENT:DrawModel( )
@@ -123,7 +121,7 @@ function Coffee.Visuals:PlayerChams( )
     end
 end
 
-function Coffee.Visuals:BacktrackChams( Target, Index )
+function Coffee.Visuals:BacktrackChams( Target, Assignment )
     local Records = self.Records.Cache[ Target ]
 
     if ( not Records ) then 
@@ -144,7 +142,7 @@ function Coffee.Visuals:BacktrackChams( Target, Index )
 
     self.CSEntity:AssignAnimations( ENT, Record.Animations )
 
-    self:RenderChams( ENT, Index )
+    self:RenderChams( ENT, Assignment )
 end
 
 function Coffee.Visuals:FakeChams( )
@@ -209,18 +207,20 @@ function Coffee.Visuals:PostDrawViewModel( )
     -- Anything after PostDrawViewModel is effected.
     -- https://wiki.facepunch.com/gmod/Render_Order
 
-    local Color, Material = nil, nil
+    local Color, secondaryColor, Material = nil, nil, nil
 
     if ( self.Viewmodel ) then 
-        Color = self.Config[ 'esp_chams_viewmodel_color' ]
-        Material = self.Config[ 'esp_chams_viewmodel_material' ]
+        Color          = self.Config[ 'esp_chams_viewmodel_color' ]
+        secondaryColor = self.Config[ 'esp_chams_viewmodel_secondary_color' ]
+        Material       = self.Config[ 'esp_chams_viewmodel_material' ]
     elseif ( self.ViewmodelOverlay ) then 
-        Color = self.Config[ 'esp_chams_viewmodel_overlay_color' ]
-        Material = self.Config[ 'esp_chams_viewmodel_overlay_material' ]
+        Color          = self.Config[ 'esp_chams_viewmodel_overlay_color' ]
+        secondaryColor = self.Config[ 'esp_chams_viewmodel_overlay_secondary_color' ]
+        Material       = self.Config[ 'esp_chams_viewmodel_overlay_material' ]
     end
 
-    if ( Color and Material ) then
-        Material = self.Materials:Get( Material, false, Color )
+    if ( Color and secondaryColor and Material ) then
+        Material = self.Materials:Get( Material, false, Color, secondaryColor )
         
         render.MaterialOverride( Material )
         render.SetColorModulation( Color.r / 255, Color.g / 255, Color.b / 255 )

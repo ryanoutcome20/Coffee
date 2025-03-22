@@ -139,6 +139,8 @@ Coffee.Materials = {
                 [ '$reflecttexture' ] = '_rt_WaterReflection',
                 [ '$dudvmap' ] = 'gm_construct/water_13_dudv',
                 [ '$refracttint' ] = '[ 0 0 0 ]',
+                [ '$envmap' ] = 'env_cubemap',
+                [ '$envmaptint ' ] = '[ 0 0 0 ]',
                 [ '$model' ] = 1,
             }
         },
@@ -146,12 +148,15 @@ Coffee.Materials = {
         [ 'Cracked' ] = {
             'Refract',
             {
+                [ '$additive' ] = 1,
                 [ '$basetexture' ] = 'effects/flashlight/caustics',
                 [ '$normalmap' ] = 'gm_construct/water_13_normal',
                 [ '$refracttexture' ] = '_rt_WaterRefraction',
                 [ '$reflecttexture' ] = '_rt_WaterReflection',
                 [ '$dudvmap' ] = 'gm_construct/water_13_dudv',
                 [ '$refracttint' ] = '[ 0 0 0 ]',
+                [ '$envmap' ] = 'env_cubemap',
+                [ '$envmaptint ' ] = '[ 0 0 0 ]',
                 [ '$model' ] = 1,
             }
         },
@@ -182,11 +187,42 @@ Coffee.Materials = {
                 [ '$selfIllumFresnel' ] = 1,
                 [ '$selfIllumFresnelMinMaxExp' ] = '[0 1 4]',
                 [ '$selfillumtint' ] = '[0 0 0]',
+
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
                         [ 'texturescrollvar' ] = '$basetexturetransform',
                         [ 'texturescrollrate' ] = 0.2,
                         [ 'texturescrollangle' ] = 60,
+                    }
+                }
+            }
+        },
+
+        [ 'Animated Breathing' ] = {
+            'Refract',
+            {
+                [ '$additive' ] = 1,
+                [ '$basetexture' ] = 'sprites/glow01',
+                [ '$normalmap' ] = 'gm_construct/water_13_normal',
+                [ '$refracttexture' ] = '_rt_WaterRefraction',
+                [ '$reflecttexture' ] = '_rt_WaterReflection',
+                [ '$dudvmap' ] = 'gm_construct/water_13_dudv',
+                [ '$refracttint' ] = '[ 0 0 0 ]',
+                [ '$model' ] = 1,
+
+                [ 'Proxies' ] = {
+                    [ 'TextureScroll' ] = {
+                        [ 'texturescrollvar' ] = '$bumptransform',
+                        [ 'texturescrollrate' ] = 0.05,
+                        [ 'texturescrollangle' ] = 90,
+                    },
+
+                    [ 'Sine' ] = {
+                        [ 'sinePeriod' ] = 2,
+                        [ 'sineMin' ] = 0,
+                        [ 'sineMax' ] = 4,
+                        [ 'timeOffset' ] = 0,
+                        [ 'resultVar' ] = '$refractamount'
                     }
                 }
             }
@@ -340,7 +376,7 @@ Coffee.Materials = {
             {
                 [ '$model' ] = 1,
                 [ '$refractamount' ] = 0.2,
-                [ '$refracttint' ] = '[ 250 250 250 ]',
+                [ '$refracttint' ] = '[ 1 1 1 ]',
                 [ '$scale' ] = '[ 1 1 ]',
                 [ '$dudvmap' ] = 'models/shadertest/shieldnoise0_dudv',
                 [ '$normalmap' ] = 'models/shadertest/shieldnoise0_normal',
@@ -397,11 +433,28 @@ Coffee.Materials = {
     Cache = { }
 }
 
-function Coffee.Materials:Get( Name, IgnoreZ, Color )
+function Coffee.Materials:Get( Name, IgnoreZ, Color, secondaryColor )
     local Material = self.Cache[ IgnoreZ and Name .. 'IgnoreZ' or Name ]
 
     if ( Color ) then 
-        Material:SetVector( '$refracttint', Vector( Color.r / 255, Color.g / 255, Color.b / 255 ) )
+        local Tint = self:GetColoredVector( Color )
+
+        Material:SetVector( '$refracttint', Tint )
+    end
+
+    if ( secondaryColor ) then 
+        local Tint = self:GetColoredVector( secondaryColor )
+        
+        Material:SetVector( '$envmaptint', Tint )
+        Material:SetVector( '$selfillumtint', Tint )
+
+        local Ranges = Material:GetVector( '$selfIllumFresnelMinMaxExp' ) 
+
+        if ( Ranges ) then 
+            Ranges.y = secondaryColor.a / 255
+
+            Material:SetVector( '$selfIllumFresnelMinMaxExp', Ranges )
+        end
     end
 
     return Material

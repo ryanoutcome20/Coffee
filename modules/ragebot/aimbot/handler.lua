@@ -65,6 +65,9 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     -- Check if we are using interpolation.
     local disableInterpolation = self.Config[ 'aimbot_interpolation' ]
 
+    -- Check if we are inversing records.
+    local shouldInverse = self.Config[ 'aimbot_inverse' ]
+
     -- Check if we are using backtrack.
     local usingBacktrack = not disableInterpolation and not noBones and self.Config[ 'aimbot_backtrack' ]
 
@@ -135,7 +138,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         end
 
         if ( usingBacktrack and not noIdeal ) then 
-            local Ideal = self.Records:GetIdeal( CUserCMD, Target, self.Config[ 'aimbot_inverse' ], simpleRecords )
+            local Ideal = self.Records:GetIdeal( CUserCMD, Target, shouldInverse, simpleRecords )
 
             if ( Ideal and self.Records:Valid( CUserCMD, Ideal ) ) then 
                 local Info = self:GetHitboxInfo( Ideal )
