@@ -13,7 +13,7 @@ Coffee.Menu = {
         Grid  = Material( 'gui/alpha_grid.png', 'nocull' )
     },
 
-    Color  = Coffee.Colors[ 'Main Light' ],
+    Color  = Coffee.Colors[ 'Main' ],
     Copied = Coffee.Colors[ 'Main' ],
 
     Background = NULL,
@@ -23,9 +23,12 @@ Coffee.Menu = {
     
     Tabs    = { },
     Toggles = { },
+    Dots    = { },
 
     Held = false
 }
+
+Coffee:LoadFile( 'lua/coffee/modules/menu/constellation.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/tabs.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/list.lua' )
@@ -36,6 +39,7 @@ Coffee:LoadFile( 'lua/coffee/modules/menu/elements/button.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/binder.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/checkbox.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/dropdown.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/draggable.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/colorpicker.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/minicheckbox.lua' )
 
@@ -50,14 +54,19 @@ function Coffee.Menu:Init( Tabs )
 
     local Offset = self:Scale( 50 )
 
+    -- Generate the constellation.
+    self:SetupConstellation( )
+
     -- Generate the background.
     local Background = vgui.Create( 'DPanel' )
     Background:SetSize( self.Resolution.Width, self.Resolution.Height )
     Background:SetMouseInputEnabled( true )
     Background:SetKeyboardInputEnabled( true )
     Background.Paint = function( self, W, H )
-        surface.SetDrawColor( 0, 0, 0, 20 )
+        surface.SetDrawColor( 0, 0, 0, 180 )
         surface.DrawRect( 0, 0, W, H )
+
+        Coffee.Menu:RenderConstellation( )
     end
 
     self.Background = Background
@@ -94,7 +103,7 @@ function Coffee.Menu:Init( Tabs )
     for i = 0, #Tabs - 1 do 
         local Index = Tabs[ i + 1 ]
 
-        self:GenerateTab( Index.Title, self:Scale( 750 ), self:Scale( Index.Height ), Index.Single )
+        self:GenerateTab( Index.Title, 750, Index.Height, Index.Single )
 
         local TabButton = vgui.Create( 'DButton', Bottom )
         TabButton:SetText( Index.Title )

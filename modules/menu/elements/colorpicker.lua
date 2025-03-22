@@ -4,7 +4,7 @@ function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Default, Callback )
     Panel = Panel or self.Last
 
     -- Disassociate the default color object with the current color array.
-    Default = Color( Default.r, Default.g, Default.b )
+    Default = Color( Default.r, Default.g, Default.b, Default.a )
 
     Coffee.Config[ Assignment ] = Default
 
@@ -84,6 +84,12 @@ function Coffee.Menu:GenerateColorpickerWindow( Panel, Assignment, Color, Callba
     Cube:SetPos( self:Scale( 5 ), self:Scale( 5 ) )
     Cube:SetSize( self:Scale( 135 ), self:Scale( 135 ) )
     Cube:SetColor( Color )
+
+    Cube.Knob:SetSize( 5, 5 )
+    
+    Cube.Knob.Paint = function( self, W, H )
+        draw.RoundedBox( 32, 0, 0, W, H, Coffee.Menu.Colors.White )
+    end
 
     Cube.OnUserChanged = function( self, Color )
         Color.a = Coffee.Config[ Assignment ].a
@@ -201,7 +207,7 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Panel, Assignment, Callback )
     end
 
     -- Get the save button.
-    self:GenerateButton( Frame, 'Save', function( self )
+    self:GenerateButton( Frame, 'Copy', function( self )
         local Current = Coffee.Config[ Assignment ]
         
         Coffee.Menu.Copied = Color( Current.r, Current.g, Current.b, Current.a )
@@ -212,7 +218,7 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Panel, Assignment, Callback )
     end )
 
     -- Get the load button.
-    self:GenerateButton( Frame, 'Load', function( self )
+    self:GenerateButton( Frame, 'Paste', function( self )
         local New = Coffee.Menu.Copied
 
         Coffee.Config[ Assignment ] = Color( New.r, New.g, New.b, New.a )

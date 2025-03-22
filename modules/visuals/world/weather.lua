@@ -40,6 +40,32 @@ function Coffee.Weather:GetEmitter( )
     return self.Emitter
 end
 
+function Coffee.Weather:Indoors( Position, t )
+    -- Check trace to see if we are indoors.
+    if ( not self.Config[ 'world_weather_indoors' ] ) then
+        -- Particles may still pull themselves indoors through velocity but this
+        -- is a fine check for basic stuff, also will work to shade the user when
+        -- they are COMPLETELY indoors and not just sitting on the edge of a building.
+        local Adjusted = Vector( Position.x, Position.y, self.Client.Position.z ) 
+
+        local Trace = util.TraceLine( {
+            start  = Adjusted,
+            endpos = Adjusted + ( vector_up * 16384 ),
+            filter = self.Client.Local
+        } )
+        
+        if ( self.Config[ 'world_weather_textureless' ] and Trace.HitTexture == '**empty**' ) then 
+            Trace.HitSky = true
+        end
+
+        if ( not Trace.HitSky ) then 
+            return true
+        end
+    end
+
+    return false
+end
+
 function Coffee.Weather:Particles( )
     if ( not self.Config[ 'world_weather' ] ) then 
         return
@@ -66,23 +92,8 @@ function Coffee.Weather:Particles( )
     self.Particle[ 'Custom' ] = self.Config[ 'world_weather_mode_custom' ]
 
     -- Check trace to see if we are indoors.
-    if ( not self.Config[ 'world_weather_indoors' ] ) then
-        -- Particles may still pull themselves indoors through velocity but this
-        -- is a fine check for basic stuff, also will work to shade the user when
-        -- they are COMPLETELY indoors and not just sitting on the edge of a building.
-        local Adjusted = Vector( Position.x, Position.y, self.Client.Position.z ) 
-
-        local Trace = util.TraceLine( {
-            start  = Adjusted,
-            endpos = Adjusted + ( vector_up * 16384 ),
-            filter = self.Client.Local
-        } )
-
-        -- debugoverlay.Line( Trace.StartPos, Trace.HitPos, 1, Trace.HitSky and Color( 0, 255, 0 ) or Color( 255, 0, 0 ), true )
-
-        if ( not Trace.HitSky ) then 
-            return
-        end
+    if ( self:Indoors( Position ) ) then 
+        return
     end
 
     -- Create our actual particle and setup our configuration based options.
@@ -112,6 +123,19 @@ function Coffee.Weather:Particles( )
     end
 
     Particle:SetVelocity( Velocity * self.Config[ 'world_weather_velocity' ] )
+
+    -- Setup per particle traces.
+    if ( self.Config[ 'world_weather_per_particle' ] ) then 
+        Particle:SetNextThink( CurTime( ) )
+
+        Particle:SetThinkFunction( function( self )
+            if ( Coffee.Weather:Indoors( self:GetPos( ) ) ) then 
+                self:SetDieTime( 0 )
+            end
+
+            self:SetNextThink( CurTime( ) )
+        end )
+    end
 
     -- Setup rain specific drag/lengthen.
     if ( Mode == 'Rain' ) then 

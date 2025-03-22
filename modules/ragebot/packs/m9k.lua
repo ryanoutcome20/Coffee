@@ -93,8 +93,12 @@ function Coffee.Ragebot.M9K:RunTrace( Record, Matrix, Autowall, Minimum )
     return self.Client.Weapon.Primary.Damage * Damage > Minimum
 end
 
-function Coffee.Ragebot.M9K:CalculateSpread( Spot, Cone, Seed )
+function Coffee.Ragebot.M9K:CalculateSpread( CUserCMD, Spot, Cone, Seed )
     -- https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/mp/src/game/shared/shot_manipulator.h#L59
+
+    if ( self.Config[ 'aimbot_nospread_engine' ] ) then 
+        return Spot + ded.PredictSpread( CUserCMD, Spot, Cone ):Angle( )
+    end
 
     self.UniformRandomStream:SetSeed( Seed )
 
@@ -139,7 +143,7 @@ function Coffee.Ragebot.M9K:CalculateCompensation( CUserCMD, Spot, Recoil, Sprea
     end
 
     if ( not Recoil ) then
-        Spot = Spot + self:CalculateRecoil( )
+        Spot = Spot - self:CalculateRecoil( )
     end
 
     if ( not Spread ) then 
@@ -153,7 +157,7 @@ function Coffee.Ragebot.M9K:CalculateCompensation( CUserCMD, Spot, Recoil, Sprea
     end
 
     -- Get our spread calculation.
-    Spot = self:CalculateSpread( Spot, Cone, self.Require:GetRandomSeed( CUserCMD ) )
+    Spot = self:CalculateSpread( CUserCMD, Spot, Cone, self.Require:GetRandomSeed( CUserCMD ) )
 
     Spot:Normalize( )
 

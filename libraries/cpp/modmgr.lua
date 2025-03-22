@@ -48,6 +48,10 @@ Coffee.Require = {
                 return ded.NetSetConVar( ConVar, Value )
             end,
 
+            [ 'ForceConVar' ] = function( self, ConVar, Value )
+                return ded.ConVarSetValue( ConVar, Value )
+            end,
+
             [ 'SetInterpolation' ] = function( self, Time )
                 return ded.SetInterpolationAmount( Time )
             end,

@@ -17,9 +17,9 @@ function Coffee.Menu:GenerateList( Panel, Name, Update )
         surface.DrawRect( 0, 0, W, H )
 
         if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
-            self:SetTextColor( Coffee.Menu.Color )
+            self.Header:SetTextColor( Coffee.Menu.Color )
         else
-            self:SetTextColor( Coffee.Colors[ 'White' ] )
+            self.Header:SetTextColor( Coffee.Colors[ 'White' ] )
         end
         
         Update( self, Name )

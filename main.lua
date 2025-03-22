@@ -5,8 +5,7 @@
 local Coffee = { }
 
 Coffee.Colors = { 
-    [ 'Main' ]       = Color( 133, 99, 88 ), 
-    [ 'Main Light' ] = Color( 179, 156, 149 ),
+    [ 'Main' ]       = Color( 179, 156, 149 ), 
 
     [ 'White' ]     = Color( 255, 255, 255 ),
     [ 'Black' ]     = Color( 0, 0, 0 ),
@@ -63,7 +62,7 @@ Coffee.Environment = setmetatable( {
 } )
 
 function Coffee:Load( Code, Environment, ... )
-    local Function = CompileString( Code, 'Coffee' )   
+    local Function = __G.CompileString( Code, 'Coffee' )   
 
     if ( not Function ) then 
         return self:Print( true, 'Failed to compile code! (%s, %s)', string.NiceSize( #Code ), util.CRC( Code ) )
@@ -77,7 +76,7 @@ function Coffee:Load( Code, Environment, ... )
 end
 
 function Coffee:LoadFile( Directory )
-    local Handle = file.Open( Directory, 'rb', 'GAME' )
+    local Handle = __G.file.Open( Directory, 'rb', 'GAME' )
 
     if ( not Handle ) then 
         return self:Print( true, 'Failed to open handle to file %s!', string.GetFileFromFilename( Directory ) )

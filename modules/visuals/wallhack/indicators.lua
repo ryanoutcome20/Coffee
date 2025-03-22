@@ -26,6 +26,7 @@ function Coffee.Visuals:Notifications( )
 
     -- Draw notifications.
     local Offset = 0
+    local Target = self.Config[ 'miscellaneous_notifications_color' ]
 
     for k, Index in ipairs( Cache ) do
         if ( not Index.Delta ) then 
@@ -34,7 +35,7 @@ function Coffee.Visuals:Notifications( )
 
         local Alpha = math.Clamp( ( Index.Delta / 0.5 ) * 255, 0, 255 )
 
-        surface.SetTextColor( Color( self.Colors.White.r, self.Colors.White.g, self.Colors.White.b, Alpha ) )
+        surface.SetTextColor( Color( Target.r, Target.g, Target.b, Alpha ) )
 
         local tW, tH = surface.GetTextSize( Index.Text )
         surface.SetTextPos( X - tW, Y + Offset ) 
@@ -68,7 +69,8 @@ function Coffee.Visuals:Watermark( )
     local W, H = tW + 8, 15
 
     -- Render glowing outline.
-    local Outline = Color( self.Menu.Color.r, self.Menu.Color.g, self.Menu.Color.b )
+    local Target  = self.Config[ 'miscellaneous_watermark_color' ]
+    local Outline = Color( Target.r, Target.g, Target.b )
 
     local Intensity = ( 0.25 + math.abs( math.sin( CurTime( ) ) ) )
 
@@ -81,14 +83,10 @@ function Coffee.Visuals:Watermark( )
     end
 
     -- Render backdrop.
-    local Background = Color( self.Colors[ 'Dark Gray' ].r, self.Colors[ 'Dark Gray' ].g, self.Colors[ 'Dark Gray' ].b )
-
-    Background.a = 200
-
-    draw.RoundedBox( 4, X - tW - 5, Y, W, H, Background )
+    draw.RoundedBox( 4, X - tW - 5, Y, W, H, self.Config[ 'miscellaneous_watermark_background_color' ] )
 
     -- Render text.
-    surface.SetTextColor( self.Menu.Color )
+    surface.SetTextColor( self.Config[ 'miscellaneous_watermark_text_color' ] )
     surface.SetTextPos( X - tW, Y ) 
     surface.DrawText( Text )
 end

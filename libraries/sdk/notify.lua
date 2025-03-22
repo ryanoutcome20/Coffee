@@ -16,7 +16,17 @@ function Coffee.Notify:Add( Text, Decay )
         Time  = CurTime( )
     } )
 
-    Coffee:Print( false, Text )
+    if ( self.Config[ 'miscellaneous_notifications_hints' ] ) then 
+        notification.AddLegacy( Text, self.Config[ 'miscellaneous_notifications_hints_type' ], 2 )
+
+        if ( self.Config[ 'miscellaneous_notifications_hints_noise' ] ) then 
+            surface.PlaySound( 'buttons/button15.wav' )
+        end
+    end
+
+    if ( self.Config[ 'miscellaneous_notifications_console' ] ) then 
+        Coffee:Print( false, Text )
+    end
 end
 
 function Coffee.Notify:Hurt( Data )

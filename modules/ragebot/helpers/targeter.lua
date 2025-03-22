@@ -7,6 +7,10 @@ function Coffee.Ragebot:Valid( Target, Best )
         return false
     end
 
+    if ( Target.HasGodMode and Target:HasGodMode( ) ) then 
+        return false
+    end
+
     if ( self.Config[ 'aimbot_avoid_teammates' ] and Target:Team( ) == self.Client.Team ) then 
         return false
     end

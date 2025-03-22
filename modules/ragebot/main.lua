@@ -76,6 +76,7 @@ function Coffee.Ragebot:Update( CUserCMD )
     self.Require:StartPrediction( CUserCMD )
         self:Speedhack( CUserCMD )
         self:Lagswitch( CUserCMD )
+        self:Networking( CUserCMD )
 
         self:AntiAim( CUserCMD )
 

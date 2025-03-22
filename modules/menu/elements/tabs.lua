@@ -38,15 +38,15 @@ function Coffee.Menu:GenerateTab( Name, Width, Height, Single )
     end
 
     if ( not Single ) then 
-        -- Generate handler for the sub colums.
+        -- Generate handler for the sub columns.
         local Handler = vgui.Create( 'DIconLayout', Tab )
         Handler:Dock( FILL )
         Handler:SetStretchWidth( true )
         Handler:SetStretchHeight( true )
         Handler:SetSpaceX( 5 )
 
-        -- Generate sub colum panels (left, right).
-        local WW, HH = Width / 2 - self:Scale( 8 ), Height / 1.08 -- Yes, this is ugly; no, it is not my fault.
+        -- Generate sub column panels (left, right).
+        local WW, HH = Width / 2 - 8, Height / 1.08 -- Yes, this is ugly; no, it is not my fault.
 
         -- Should we be using DHorizontalDivider here?
         local Left = self:GenerateTabSubPanel( Handler, WW, HH )
@@ -116,7 +116,7 @@ function Coffee.Menu:GenerateTabSubPanel( Panel, W, H )
 end
 
 function Coffee.Menu:GenerateScrollBar( Panel )
-    -- Have to generate the scrollbar for the inside of tabs (left and right colum) such that
+    -- Have to generate the scrollbar for the inside of tabs (left and right column) such that
     -- they'll fit our elements that we plan to put in them.
 
     -- Generate main panel.

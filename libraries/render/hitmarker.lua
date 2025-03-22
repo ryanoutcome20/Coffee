@@ -65,7 +65,7 @@ function Coffee.Hitmarker:Render( )
         local X, Y = 0, 0
 
         if ( Data.World ) then 
-            local Position = Data.World:ToScreen()
+            local Position = Data.World:ToScreen( )
 
             X, Y = Position.x, Position.y
         else

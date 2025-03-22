@@ -116,6 +116,10 @@ end
 
 function Coffee.Visuals:Glow( )
     for k, Target in pairs( self.Records.Players ) do 
+        if ( not IsValid( Target ) ) then 
+            continue
+        end
+
         if ( not self.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
             break
         end
@@ -177,7 +181,7 @@ function Coffee.Visuals:Glow( )
                 scaledBlur,
                 self.Config[ 'esp_glow_passes' ], 
                 not self.Config[ 'esp_glow_overlay_bloom' ], 
-                true,
+                not self.Config[ 'esp_glow_overlay_only_visible' ],
                 self.Config[ 'esp_glow_overlay_self_illumination' ]
             )
         end
@@ -190,7 +194,7 @@ function Coffee.Visuals:Glow( )
             scaledBlur,
             self.Config[ 'esp_glow_passes' ], 
             not self.Config[ 'esp_glow_bloom' ], 
-            true,
+            not self.Config[ 'esp_glow_only_visible' ],
             self.Config[ 'esp_glow_self_illumination' ],
             Material,
             self.Config[ 'esp_glow_material_overlay_color' ]

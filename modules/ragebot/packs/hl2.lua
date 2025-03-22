@@ -7,13 +7,35 @@ Coffee.Ragebot.HL2 = {
 }
 
 function Coffee.Ragebot.HL2:RunTrace( Record, Matrix, Autowall, Minimum )
-    local Trace = util.TraceLine( { start = self.Client.EyePos, endpos = Matrix, filter = { self.Client.Local, Record.Target }, mask = MASK_SHOT } )
+    local Trace = util.TraceLine( { 
+        start = self.Client.EyePos, 
+        endpos = Matrix, 
+        filter = { self.Client.Local, Record.Target }, 
+        mask = MASK_SHOT 
+    } )
+
+    if ( self.Config[ 'aimbot_engine_entity' ] and not Trace.HitWorld ) then
+        if ( IsValid( Trace.Entity ) and Trace.Entity:GetMaxHealth( ) >= self.Config[ 'aimbot_engine_entity_damage' ] ) then 
+            local Secondary = util.TraceLine( { 
+                start = Trace.HitPos, 
+                endpos = Matrix, 
+                filter = { self.Client.Local, Record.Target, Trace.Entity }, 
+                mask = MASK_SHOT 
+            } )
+
+            return Secondary.Fraction == 1
+        end
+    end
 
     return Trace.Fraction == 1
 end
 
-function Coffee.Ragebot.HL2:CalculateSpread( Spot, Cone, Seed )
+function Coffee.Ragebot.HL2:CalculateSpread( CUserCMD, Spot, Cone, Seed )
     -- https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/mp/src/game/shared/shot_manipulator.h#L59
+
+    if ( self.Config[ 'aimbot_nospread_engine' ] ) then 
+        return Spot + ded.PredictSpread( CUserCMD, Spot, Cone ):Angle( )
+    end
 
     self.UniformRandomStream:SetSeed( Seed )
 
@@ -76,7 +98,7 @@ function Coffee.Ragebot.HL2:CalculateCompensation( CUserCMD, Spot, Recoil, Sprea
     end
 
     -- Get our spread calculation.
-    Spot = self:CalculateSpread( Spot, Cone, self.Require:GetRandomSeed( CUserCMD ) )
+    Spot = self:CalculateSpread( CUserCMD, Spot, Cone, self.Require:GetRandomSeed( CUserCMD ) )
 
     Spot:Normalize( )
 

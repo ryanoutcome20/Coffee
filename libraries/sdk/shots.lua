@@ -44,6 +44,22 @@ function Coffee.Shots:PushShot( Record, Time )
     while ( #self.Cache > 32 ) do 
         table.remove( self.Cache )
     end
+
+    self.Cache = self:Clean( self.Cache, Time )
+end
+
+function Coffee.Shots:Clean( Cache, Time )
+    local Rebuilt = table.Copy( Cache )
+
+    -- Usually it'll never register because the server
+    -- fails to receive it.
+    for k, Slot in pairs( Cache ) do 
+        if ( Slot.Time + 1 < Time ) then 
+            table.remove( Rebuilt, k )
+        end
+    end
+
+    return Rebuilt
 end
 
 function Coffee.Shots:Landed( Data )

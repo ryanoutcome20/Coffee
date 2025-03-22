@@ -75,7 +75,7 @@ function Coffee.Visuals:PostImpacts( ENT, Data )
         self.Config[ 'world_beams_twist' ] * 10,
         self.Config[ 'world_beams_cone' ] / 100,
         self.Config[ 'world_beams_segments' ],
-        self.Materials:Get( 'Physbeam' ),
+        self.Materials:Get( self.Config[ 'world_beams_material' ] ),
         Colors.Main,
         Colors.Secondary,
         false

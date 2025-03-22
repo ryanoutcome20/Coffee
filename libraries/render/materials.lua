@@ -139,7 +139,6 @@ Coffee.Materials = {
                 [ '$reflecttexture' ] = '_rt_WaterReflection',
                 [ '$dudvmap' ] = 'gm_construct/water_13_dudv',
                 [ '$refracttint' ] = '[ 0 0 0 ]',
-                [ '$envmap' ] = 'env_cubemap',
                 [ '$model' ] = 1,
             }
         },
@@ -153,7 +152,6 @@ Coffee.Materials = {
                 [ '$reflecttexture' ] = '_rt_WaterReflection',
                 [ '$dudvmap' ] = 'gm_construct/water_13_dudv',
                 [ '$refracttint' ] = '[ 0 0 0 ]',
-                [ '$envmap' ] = 'env_cubemap',
                 [ '$model' ] = 1,
             }
         },
@@ -194,6 +192,64 @@ Coffee.Materials = {
             }
         },
 
+        [ 'Animated Metal' ] = {
+            'VertexLitGeneric',
+            {
+                [ '$basetexture' ] = 'models/XQM/Deg360_diffuse',
+                [ '$surfaceprop' ] = 'metal',
+                [ '$bumpmap' ] = 'models/XQM/Deg360_normal',
+                [ '$model' ] = 1,       
+                [ '$phong' ] = 1,
+                [ '$phongexponent' ] = 80,
+                [ '$phongboost' ] = 4,
+                [ '$phongfresnelranges' ] = '[ 1 1 1 ]',
+                [ '$halflambert' ] = 1,
+
+                [ 'Proxies' ] = {
+                    [ 'TextureScroll' ] = {
+                        [ 'textureScrollVar' ] = '$basetexturetransform',
+                        [ 'textureScrollRate' ] = 0.25,
+                        [ 'textureScrollAngle' ] = 90,
+                    },
+                }                
+            }
+        },
+
+        [ 'Animated Dots' ] = {
+            'VertexLitGeneric',
+            {
+                [ '$basetexture' ] = 'models/props_lab/warp_sheet',
+                [ '$alpha' ] = 1,
+                [ '$additive' ] = 1,
+
+                [ 'Proxies' ] = {
+                    [ 'TextureScroll' ] = {
+                        [ 'textureScrollVar' ] = '$basetexturetransform',
+                        [ 'textureScrollRate' ] = 0.45,
+                        [ 'textureScrollAngle' ] = 60,
+                    },
+                }
+            }
+        },
+
+        [ 'Animated Wireframe Dots' ] = {
+            'VertexLitGeneric',
+            {
+                [ '$basetexture' ] = 'models/props_lab/warp_sheet',
+                [ '$alpha' ] = 1,
+                [ '$additive' ] = 1,
+                [ '$wireframe' ] = 1,
+
+                [ 'Proxies' ] = {
+                    [ 'TextureScroll' ] = {
+                        [ 'textureScrollVar' ] = '$basetexturetransform',
+                        [ 'textureScrollRate' ] = 0.45,
+                        [ 'textureScrollAngle' ] = 60,
+                    },
+                }
+            }
+        },
+
         [ 'Animated Highlight Wireframe' ] = {
             'VertexLitGeneric',	
             {
@@ -202,7 +258,6 @@ Coffee.Materials = {
                 [ '$additive' ] = 1,
                 [ '$selfillum' ] = 1,
                 [ '$wireframe' ] = 1,
-                [ '$ignorez' ] = 0,
                 [ '$angle' ] = 90,
                 [ '$texturescrollrate' ] = 0.25,
                 [ '$texturescrollangle' ] = 180,
@@ -245,7 +300,6 @@ Coffee.Materials = {
                 [ '$additive' ] = 1,
                 [ '$selfillum' ] = 1,
                 [ '$wireframe' ] = 1,
-                [ '$ignorez' ] = 0,
                 [ '$angle' ] = 90,
                 [ '$scaleinput' ] = 100,
                 [ '$texturescrollrate' ] = 0.25,
@@ -333,6 +387,11 @@ Coffee.Materials = {
 
         [ 'Animated Plasma' ] = 'models/effects/comball_sphere',
         [ 'Physbeam' ]        = 'trails/physbeam',
+        [ 'Laser' ]           = 'trails/laser',
+        [ 'Lightning' ]       = 'trails/electric',
+        [ 'Plasma' ]          = 'trails/plasma',
+        [ 'LOL!' ]            = 'trails/lol',
+        [ 'Smoke' ]           = 'trails/smoke'
     },
 
     Cache = { }
@@ -362,7 +421,7 @@ function Coffee.Materials:CreateMaterial( Name, Shader, Data )
         return
     end
 
-    self.Cache[ Name ] = CreateMaterial( Name, Shader, Data )
+    self.Cache[ Name ] = CreateMaterial( Name..math.random(1,100000), Shader, Data )
 end
 
 function Coffee.Materials:Init( )

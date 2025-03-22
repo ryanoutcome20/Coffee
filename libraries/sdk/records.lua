@@ -21,7 +21,7 @@ function Coffee.Records:GetFront( Target )
     return Records[ 1 ]
 end
 
-function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse )
+function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse, Break )
     local Records = table.Copy( self.Cache[ Target ] ) or { }
     local Best;
 
@@ -32,7 +32,7 @@ function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse )
     end
 
     for k, Record in pairs( Records ) do 
-        if ( not self:Valid( CUserCMD, Record ) or k == 1 ) then 
+        if ( not self:Valid( CUserCMD, Record ) ) then 
             continue
         end
 
@@ -41,6 +41,10 @@ function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse )
         end
 
         Best = Record
+        
+        if ( Break ) then 
+            return Best
+        end
     end
 
     return Best
@@ -179,6 +183,7 @@ function Coffee.Records:Construct( Target, noBones )
         Angles   = Target:EyeAngles( ),
         Velocity = Target:GetVelocity( ),
         Origin   = Target:GetNetworkOrigin( ),
+        EyePos   = Target:EyePos( ),
 
         Ground   = Target:IsFlagSet( FL_ONGROUND ),
         Duck     = Target:IsFlagSet( FL_DUCKING ),
@@ -272,9 +277,3 @@ function Coffee.Records:Update( Stage )
 end
 
 Coffee.Hooks:New( Coffee.Require:FrameStageNotify( ), Coffee.Records.Update, Coffee.Records )
-
-concommand.Add( 'records', function( )
-    for k,v in pairs( player.GetAll() ) do 
-        MsgN( table.Count( Coffee.Records.Cache[ v ]  ) )
-    end
-end )

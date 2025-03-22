@@ -1,4 +1,4 @@
-function Coffee.Menu:GenerateLabel( Panel, Text )
+function Coffee.Menu:GenerateLabel( Panel, Text, avoidLast )
     -- Have to generate the labels for things to dock too.
 
     -- Generate our label.
@@ -20,7 +20,9 @@ function Coffee.Menu:GenerateLabel( Panel, Text )
     end
 
     -- Set our last for the right docking elements.
-    self.Last = Label
+    if ( not avoidLast ) then 
+        self.Last = Label
+    end
 
     return Label
 end

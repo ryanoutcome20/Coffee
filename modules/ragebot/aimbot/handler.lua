@@ -1,21 +1,20 @@
 function Coffee.Ragebot:Aimbot( CUserCMD )
-    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then
-        if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
-            local Angles = self:CalculateCompensation( 
-                CUserCMD, 
-                CUserCMD:GetViewAngles( ), 
-                self.Config[ 'aimbot_norecoil' ], 
-                self.Config[ 'aimbot_nospread' ] 
-            )
-
-            CUserCMD:SetViewAngles( Angles )
-        end
-        
+    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then        
         return
     end
 
     -- Check client information.
     if ( not self.Client.Local or not self.Client.Weapon ) then 
+        return 
+    end
+
+    -- Don't aim if we are typing.
+    if ( self.Client.Local:IsTyping( ) and not self.Config[ 'hvh_animations_break_arms' ] ) then 
+        return
+    end
+
+    -- Don't aim in the main menu or console.
+    if ( gui.IsConsoleVisible( ) or gui.IsGameUIVisible( ) ) then 
         return 
     end
 
@@ -47,7 +46,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Get primary fire time and check if we need to add delay.
-    local Time = SWEP:GetNextPrimaryFire( )
+    local Time = self.Config[ 'aimbot_continuous' ] and CurTime( ) or SWEP:GetNextPrimaryFire( )
 
     if ( self.Config[ 'aimbot_delay' ] ) then 
         Time = Time + math.Round( self.Config[ 'aimbot_delay_time' ] / 1000, 2 )
@@ -58,18 +57,29 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Check if we are using optimizations.
+    local noIdeal       = self.Optimizations:Valid( 'aimbot_optimizations_ideal_records' )
     local simpleRecords = self.Optimizations:Valid( 'aimbot_optimizations_records' )
     local limitTargets  = self.Optimizations:Valid( 'aimbot_optimizations_targets' )
     local noBones       = self.Optimizations:Valid( 'aimbot_optimizations_hitboxes' )
 
+    -- Check if we are using interpolation.
+    local disableInterpolation = self.Config[ 'aimbot_interpolation' ]
+
     -- Check if we are using backtrack.
-    local usingBacktrack = not noBones and self.Config[ 'aimbot_backtrack' ]
+    local usingBacktrack = not disableInterpolation and not noBones and self.Config[ 'aimbot_backtrack' ]
 
     -- Get targets.
     local Targets = self.Records.Players
 
     if ( self.Config[ 'aimbot_world_sphere' ] ) then 
-        local Hit    = self.Client.Local:GetEyeTrace( ).HitPos
+        local Hit    = vector_origin
+
+        if ( self.Config[ 'aimbot_obb_range' ] ) then 
+            Hit = self.Client.EyePos
+        else
+            Hit = self.Client.Local:GetEyeTrace( ).HitPos
+        end
+
         local Radius = self.Config[ 'aimbot_world_sphere_fov' ] 
         
         Targets = { }
@@ -95,16 +105,16 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         if ( not self:Valid( Target, Best ) ) then 
             continue
         end
+        
+        if ( usingBacktrack ) then 
+            local Last = self.Records:GetLast( CUserCMD, Target )
 
-        if ( usingBacktrack and not simpleRecords ) then 
-            local Ideal = self.Records:GetIdeal( CUserCMD, Target, self.Config[ 'aimbot_inverse' ] )
-
-            if ( Ideal and self.Records:Valid( CUserCMD, Ideal ) ) then 
-                local Info = self:GetHitboxInfo( Ideal )
+            if ( Last and self.Records:Valid( CUserCMD, Last ) ) then 
+                local Info = self:GetHitboxInfo( Last )
 
                 if ( Info ) then 
                     Best = {
-                        Record = Ideal,
+                        Record = Last,
                         Info = Info
                     }
                 end 
@@ -124,15 +134,15 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             end 
         end
 
-        if ( usingBacktrack ) then 
-            local Last = self.Records:GetLast( CUserCMD, Target )
+        if ( usingBacktrack and not noIdeal ) then 
+            local Ideal = self.Records:GetIdeal( CUserCMD, Target, self.Config[ 'aimbot_inverse' ], simpleRecords )
 
-            if ( Last and self.Records:Valid( CUserCMD, Last ) ) then 
-                local Info = self:GetHitboxInfo( Last )
+            if ( Ideal and self.Records:Valid( CUserCMD, Ideal ) ) then 
+                local Info = self:GetHitboxInfo( Ideal )
 
                 if ( Info ) then 
                     Best = {
-                        Record = Last,
+                        Record = Ideal,
                         Info = Info
                     }
                 end 
@@ -169,24 +179,26 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- If we need to manipulate interpolation we can do it here.
-    self.Require:SetConVar( 'cl_interpolate', '1' )
+    self.Require:SetConVar( 'cl_interpolate', disableInterpolation and '0' or '1' )
 
-    local Delta = self.Records:GetTickDelta( CUserCMD, Best.Record.Simtime )
+    if ( not disableInterpolation ) then 
+        local Delta = self.Records:GetTickDelta( CUserCMD, Best.Record.Simtime )
 
-    if ( Delta > 0.2 ) then       
-        local Time = self.Require:Servertime( CUserCMD )
+        if ( Delta > 0.2 ) then       
+            local Time = self.Require:Servertime( CUserCMD )
 
-        self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
-        self.Require:SetInterpolation( Time - Best.Record.Simtime )
+            self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
+            self.Require:SetInterpolation( Time - Best.Record.Simtime )
 
-        self.Require:SetTickCount( CUserCMD, TIME_TO_TICKS( Time ) - 1 )
-    else
-        self.Require:SetConVar( 'cl_interp', '0' )
-        self.Require:SetInterpolation( 0 )
+            self.Require:SetTickCount( CUserCMD, TIME_TO_TICKS( Time ) - 1 )
+        else
+            self.Require:SetConVar( 'cl_interp', '0' )
+            self.Require:SetInterpolation( 0 )
 
-        self.Require:SetTickCount( CUserCMD, TIME_TO_TICKS( Best.Record.Simtime ) )
+            self.Require:SetTickCount( CUserCMD, TIME_TO_TICKS( Best.Record.Simtime ) )
+        end
     end
-
+    
     -- Get our ideal hitbox.
     local Spot = self.Config[ 'aimbot_invert_hitboxes' ] and Best.Info[ #Best.Info ] or Best.Info[ 1 ]
 

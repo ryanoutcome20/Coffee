@@ -1,3 +1,17 @@
+function Coffee.Visuals:GetChamsRagdoll( Target )
+    local ENT = Target:GetRagdollOwner( )
+            
+    if ( not IsValid( ENT ) or not ENT:IsPlayer( ) ) then 
+        return 
+    end
+
+    if ( ENT:IsDormant( ) ) then 
+        return
+    end
+
+    return ENT
+end
+
 function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     -- Get constants from menu.
     local Color = self.Config[ Assignment .. '_color' ]
@@ -48,6 +62,10 @@ function Coffee.Visuals:PlayerChams( )
     cam.IgnoreZ( true )
 
     for k, Target in pairs( self.Records.Entities ) do 
+        if ( not IsValid( Target ) ) then 
+            continue
+        end
+
         if ( ( not Target:IsPlayer( ) or not Target:Alive( ) ) and not Target:IsRagdoll( ) ) then
             continue 
         end
@@ -61,15 +79,15 @@ function Coffee.Visuals:PlayerChams( )
         local ENT = Target 
 
         if ( Target:IsRagdoll( ) ) then 
-            ENT = Target:GetRagdollOwner( )
-            
-            if ( not ENT:IsPlayer( ) ) then 
-                continue 
+            ENT = self:GetChamsRagdoll( ENT )
+
+            if ( not ENT ) then 
+                continue
             end
         end
 
-        self.CSEntity:Remove( Target:EntIndex( ) )
-
+        self.CSEntity:Remove( ENT:EntIndex( ) + 128 )
+        
         local isLocal = ENT == self.Client.Local
         local isFriendly = ENT:Team( ) == self.Client.Team
 
@@ -87,19 +105,19 @@ function Coffee.Visuals:PlayerChams( )
             end
 
             if ( self.Config[ 'esp_chams_friendly_backtrack' ] ) then 
-                self:BacktrackChams( Target, 'esp_chams_friendly_backtrack' )
+                self:BacktrackChams( ENT, 'esp_chams_friendly_backtrack' )
             end
         else 
             if ( self.Config[ 'esp_chams_enemy_visible' ] ) then 
                 if ( self.Config[ 'esp_chams_enemy_invisible' ] ) then 
                     self:RenderChams( Target, 'esp_chams_enemy_invisible', true )
                 end
-    
+        
                 self:RenderChams( Target, 'esp_chams_enemy_visible', false )
             end
             
             if ( self.Config[ 'esp_chams_enemy_backtrack' ] ) then 
-                self:BacktrackChams( Target, 'esp_chams_enemy_backtrack' )
+                self:BacktrackChams( ENT, 'esp_chams_enemy_backtrack' )
             end
         end
     end

@@ -164,6 +164,40 @@ function Coffee.Modulate:PostUpdateWorldMaterial( )
     end
 end
 
+function Coffee.Modulate:SetupWorldFog( )
+    if ( not self.Config[ 'world_fog' ] ) then 
+        return
+    end
+
+    local Color = self.Config[ 'world_fog_color' ]
+
+    render.FogMode( MATERIAL_FOG_LINEAR )
+    render.FogStart( self.Config[ 'world_fog_start' ] )
+    render.FogEnd( self.Config[ 'world_fog_end' ] )
+    render.FogMaxDensity( Color.a / 255 )
+    render.FogColor( Color.r, Color.g, Color.b )
+
+    return true
+end
+
+function Coffee.Modulate:SetupSkyboxFog( Scale )
+    if ( not self.Config[ 'world_fog' ] ) then 
+        return
+    end
+
+    local Color = self.Config[ 'world_fog_color' ]
+
+    render.FogMode( MATERIAL_FOG_LINEAR )
+    render.FogStart( self.Config[ 'world_fog_start' ] * Scale )
+    render.FogEnd( self.Config[ 'world_fog_end' ] * Scale )
+    render.FogMaxDensity( Color.a / 255 )
+    render.FogColor( Color.r, Color.g, Color.b )
+
+    return true
+end
+
+Coffee.Hooks:New( 'SetupSkyboxFog', Coffee.Modulate.SetupSkyboxFog, Coffee.Modulate )
+Coffee.Hooks:New( 'SetupWorldFog', Coffee.Modulate.SetupWorldFog, Coffee.Modulate )
 Coffee.Hooks:New( 'PreDrawEffects', Coffee.Modulate.PostUpdateWorldMaterial, Coffee.Modulate )
 Coffee.Hooks:New( 'RenderScene', Coffee.Modulate.UpdateWorldMaterial, Coffee.Modulate )
 Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Modulate.UpdateEffects, Coffee.Modulate )

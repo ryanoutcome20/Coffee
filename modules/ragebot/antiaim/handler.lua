@@ -4,7 +4,7 @@ function Coffee.Ragebot:GetYawBase( )
     if ( Mode == 'Crosshair' ) then 
         return self.Silent.y
     elseif ( Mode == 'Distance' ) then 
-        for k, Target in pairs( player.GetAll( ) ) do 
+        for k, Target in pairs( self.Records.Players ) do 
             if ( self:Valid( Target ) ) then 
                 return ( Target:GetPos( ) - self.Client.Position ):Angle( ).y
             end
@@ -227,6 +227,22 @@ function Coffee.Ragebot:Lagswitch( CUserCMD )
     else
         self.Require:SetOutSequence( self.Require:GetOutSequence( ) + ( self.Config[ 'hvh_lagswitch_ticks' ] ) )
     end
+end
+
+function Coffee.Ragebot:Networking( CUserCMD )
+    local Lag    = self.Config[ 'hvh_networking_lag' ]
+    local Loss   = self.Config[ 'hvh_networking_loss' ]
+    local Jitter = self.Config[ 'hvh_networking_jitter' ]
+
+    if ( not self.Config[ 'hvh_networking' ] ) then 
+        Lag    = 0
+        Loss   = 0
+        Jitter = 0
+    end
+
+    self.Require:ForceConVar( 'net_fakelag', Lag )
+    self.Require:ForceConVar( 'net_fakeloss', Loss )
+    self.Require:ForceConVar( 'net_fakejitter', Jitter )
 end
 
 function Coffee.Ragebot:BreakAnimations( CUserCMD )

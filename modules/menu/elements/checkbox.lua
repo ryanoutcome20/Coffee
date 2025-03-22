@@ -1,4 +1,4 @@
-function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback )
+function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback, avoidLast )
     -- Have to generate the checkboxes used in the menu.
 
     -- Generate main checkbox handler.
@@ -39,7 +39,9 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback )
     end
 
     -- Set our last for the right docking elements.
-    self.Last = Checkbox
+    if ( not avoidLast ) then 
+        self.Last = Checkbox
+    end
 
     return Checkbox
 end

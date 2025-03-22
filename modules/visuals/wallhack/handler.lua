@@ -23,18 +23,32 @@ function Coffee.Visuals:Valid( Target )
         return false
     end
 
+    if ( self.Config[ 'esp_culled' ] ) then 
+        local Position = Target:GetPos( ):ToScreen( )
+
+        if ( not Position.visible ) then 
+            return false
+        end
+    end
+
+    if ( isLocal and not self.Config[ 'esp_first_person' ] ) then 
+        return self.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' )
+    end
+
     return true
 end
 
 function Coffee.Visuals:Wallhack( )
-    local Distance = self.Client.Position
-
     for k, Target in pairs( self.Records.Players ) do 
+        if ( not IsValid( Target ) ) then 
+            continue
+        end
+
         if ( not self.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
             break
         end
 
-        if ( self.Config[ 'esp_limit_distance' ] and Distance:Distance2D( Target:GetPos( ) ) >= self.Config[ 'esp_limit_distance_distance' ] ) then 
+        if ( self.Config[ 'esp_limit_distance' ] and self.Client.Position:Distance2D( Target:GetPos( ) ) >= self.Config[ 'esp_limit_distance_distance' ] ) then 
             continue
         end
 
@@ -110,7 +124,7 @@ function Coffee.Visuals:Wallhack( )
 
         -- Run our armor ESP.
         if ( self.Config[ 'esp_armorbar_always' ] or Front.Armor > 0 ) then 
-            self:RenderBar( self:HandleFillament( Front.Armor, Front.maxArmor ), nil, 'esp_armorbar' )
+            self:RenderBar( self:HandleFillament( Front.Armor, Front.maxArmor ), self.Colors.Cyan, 'esp_armorbar' )
 
             self:RenderText( Front.Armor, 'esp_armorbar_number' )
         end
@@ -123,15 +137,21 @@ function Coffee.Visuals:Wallhack( )
 
         -- Run our weapon ESP.
         if ( Front.Weapon and Front.Weapon != NULL ) then 
-            local Name = 'Unknown'
+            local Name, Class = 'Unknown', Front.Weapon:GetClass( )
 
             if ( self.Config[ 'esp_weapon_smart' ] ) then 
                 Name = language.GetPhrase( Front.Weapon:GetPrintName( ) )
             else 
-                Name = Front.Weapon:GetClass( ) 
+                Name = Class
             end
 
             self:RenderText( Name, 'esp_weapon' )
+
+            local Icon = self.Icons:Get( Front.Weapon, Class )
+
+            if ( Class and Icon ) then 
+                self:RenderText( Icon, 'esp_weapon_icon', nil, 'Icons' )
+            end
         else 
             self:RenderText( 'Unarmed', 'esp_weapon' )
         end
@@ -139,13 +159,15 @@ function Coffee.Visuals:Wallhack( )
         -- Run our flag ESP.
         self:RenderText( Front.Ping, 'esp_ping' )
 
-        self:RenderText( Target.GetUserGroup and Target:GetUserGroup( ) or 'none', 'esp_usergroup' )
+        self:RenderText( Target:GetModel( ) or 'None', 'esp_model' )
+
+        self:RenderText( Target.GetUserGroup and Target:GetUserGroup( ) or 'None', 'esp_usergroup' )
         
         if ( team ) then 
             local Team = team.GetName( Target.Team )
 
             if ( Team ) then
-                self:RenderText( Team != '' and Team or 'none', 'esp_team_name' )
+                self:RenderText( Team != '' and Team or 'None', 'esp_team_name' )
             end
         end
 
@@ -158,6 +180,11 @@ function Coffee.Visuals:Wallhack( )
         -- If the player is dead and we're visualizing lets add a custom flag.
         if ( not Target:Alive( ) ) then 
             self:RenderText( 'DEAD', 'esp_dead' )
+        end
+
+        -- If the player is dormant and we're visualizing lets add a custom flag.
+        if ( Target:IsDormant( ) ) then 
+            self:RenderText( 'Dormant', 'esp_dormant' )
         end
 
         -- Fix our LOD.
@@ -225,6 +252,34 @@ function Coffee.Visuals:Wallhack( )
             )
         end
 
+        -- Render our headbeam.
+        if ( self.Config[ 'esp_headbeam' ] ) then 
+            cam.Start3D( )
+
+            cam.IgnoreZ( true )
+
+            local Eye = Target:EyePos( )
+
+            local Trace = util.TraceLine( {
+                start  = Eye,
+                endpos = Eye + ( vector_up * 16384 ),
+                filter = Target
+            } )
+
+            render.SetMaterial( self.Materials:Get( self.Config[ 'esp_headbeam_material' ] ) )
+
+            render.DrawBeam( 
+                Trace.StartPos, 
+                Trace.HitPos, 
+                16, 
+                1, 
+                1, 
+                self.Config[ 'esp_headbeam_color' ] 
+            )
+
+            cam.End3D( )
+        end
+
         -- Render our effects.
         if ( self.Config[ 'esp_blink' ] ) then 
             Target:AddEffects( EF_ITEM_BLINK )
@@ -236,6 +291,62 @@ function Coffee.Visuals:Wallhack( )
             Target:AddEffects( EF_NOSHADOW )
         else 
             Target:RemoveEffects( EF_NOSHADOW )
+        end
+
+        -- Render our visualized records.
+        if ( self.Config[ 'esp_visualized_records' ] ) then 
+            -- This aint a very pretty way of doing this...
+            local Records = self.Records.Cache[ Target ]
+
+            if ( not Records ) then 
+                continue
+            end
+            
+            local Color = self.Config[ 'esp_visualized_records_color' ] 
+            local Mode  = self.Config[ 'esp_visualized_records_mode' ]
+            
+            local Last;
+
+            if ( Mode != 'Dots' ) then 
+                cam.Start3D( )
+                cam.IgnoreZ( true )
+            
+                render.SetColorMaterial( )
+            end
+
+            for k, Record in pairs( Records ) do                
+                if ( Mode == 'Line' and Last ) then
+                    render.DrawLine(
+                        Record.EyePos,
+                        Last.EyePos,
+                        Color,
+                        true
+                    )
+                elseif ( Mode == 'Dots' ) then
+                    local Screen = Record.EyePos:ToScreen( )
+
+                    surface.SetDrawColor( 18, 18, 18 )
+                    surface.DrawRect( Screen.x, Screen.y, 4, 4 )
+                    
+                    surface.SetDrawColor( Color )
+                    surface.DrawRect( Screen.x + 1, Screen.y + 1, 2, 2 )
+                elseif ( Mode == 'Bounds' ) then 
+                    render.DrawWireframeBox( 
+                        Record.Position, 
+                        angle_zero, 
+                        Record.Mins, 
+                        Record.Maxs, 
+                        Color, 
+                        true 
+                    )
+                end
+                
+                Last = Record
+            end
+
+            if ( Mode != 'Dots' ) then 
+                cam.End3D( )
+            end
         end
     end
 end

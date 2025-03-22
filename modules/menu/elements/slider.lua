@@ -26,14 +26,14 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
         -- Render label.
         if ( not noLabel and ( self:IsHovered( ) or self:IsChildHovered( ) or self:GetDragging( ) ) ) then 
             local Text = Coffee.Config[ Assignment ] .. ( Prefix or '' )
-            local Width = W * Value + Coffee.Menu:Scale( 5 )
+            local Width = W * Value + 5
 
             surface.SetFont( 'DefaultFixedDropShadow' )
             surface.SetTextColor( Coffee.Menu.Colors.White )
 
             local TW, TH = surface.GetTextSize( Text )
 
-            surface.SetTextPos( math.Clamp( Width, 0, W - Coffee.Menu:Scale( TW ) - Coffee.Menu:Scale( 3 ) ), 2 ) 
+            surface.SetTextPos( math.Clamp( Width, 0, W - TW - 3 ), 2 ) 
             surface.DrawText( Text )
         end
     end

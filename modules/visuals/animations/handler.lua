@@ -14,11 +14,7 @@ function Coffee.Visuals:UpdateAnimations( ENT, Velocity )
 
     -- Fix bone jiggle adjustment.
     local Origin = Vector( 1, 1, 1 )
-
-    for i = 0, self.Client.Local:GetBoneCount( ) do 
-        self.Client.Local:ManipulateBoneJiggle( i, 0 )
-        self.Client.Local:ManipulateBoneScale( i, Origin )
-    end
+    local Jiggle = false
 
     -- Check if we need to adjust angles further than normal.
     if ( self.Config[ 'hvh_animations' ] ) then 
@@ -26,21 +22,21 @@ function Coffee.Visuals:UpdateAnimations( ENT, Velocity )
             self.Client.Local:SetCycle( 0 )
         end
 
-        if ( self.Config[ 'hvh_animations_jelly' ] ) then 
-            for i = 0, self.Client.Local:GetBoneCount( ) do 
-                self.Client.Local:ManipulateBoneJiggle( i, 1 )
-            end
-        end
+        Jiggle = self.Config[ 'hvh_animations_jelly' ]
 
         if ( self.Config[ 'hvh_animations_scale' ] ) then 
             local Scale = self.Config[ 'hvh_animations_scale_amount' ] / 100
 
-            Scale = Vector( Scale, Scale, Scale )
-
-            for i = 0, self.Client.Local:GetBoneCount( ) do 
-                self.Client.Local:ManipulateBoneScale( i, Scale )
-            end
+            Origin = Vector( Scale, Scale, Scale )
         end
+    end
+
+    -- Update bone animations.
+    Jiggle = Jiggle and 1 or 0
+
+    for i = 0, self.Client.Local:GetBoneCount( ) do 
+        self.Client.Local:ManipulateBoneJiggle( i, Jiggle )
+        self.Client.Local:ManipulateBoneScale( i, Origin )
     end
 
     -- Invalidate bone cache and setup bones.

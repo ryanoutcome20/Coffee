@@ -13,6 +13,12 @@ Coffee.Visuals = {
     Hitmarker  = Coffee.Hitmarker,
     Items      = Coffee.Items,
 
+    Fonts = {
+        [ 'Icons' ] = 'coffee-icons',
+        [ 'Main' ]  = 'coffee-main',
+        [ 'Small' ] = 'coffee-small'
+    },
+
     Effects = {
         [ 'Tesla' ]        = 'TeslaHitboxes',
         [ 'Gibs' ]         = 'AntlionGib',
@@ -36,6 +42,16 @@ surface.CreateFont( 'coffee-main', {
    outline = false
 } )
 
+surface.CreateFont( 'coffee-icons', {
+    font = 'HalfLife2',
+    extended = true,
+    size = 18, 
+    weight = 900,
+    antialias = true,
+    shadow = true,
+    outline = false
+} )
+
 surface.CreateFont( 'coffee-small', {
     font = 'Consolas',
     extended = false,
@@ -48,6 +64,8 @@ surface.CreateFont( 'coffee-small', {
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/animations/handler.lua' )
 
+Coffee:LoadFile( 'lua/coffee/modules/visuals/draggables/handler.lua' )
+
 Coffee:LoadFile( 'lua/coffee/modules/visuals/chams/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/footsteps.lua' )
@@ -58,6 +76,7 @@ Coffee:LoadFile( 'lua/coffee/modules/visuals/world/sky.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/weather.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/anonymizer.lua' )
 
+Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/icons.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/indicators.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/items.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/glow.lua' )

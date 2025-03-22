@@ -3,8 +3,6 @@ function Coffee.Visuals:Entities( )
         return
     end
 
-    local Distance = self.Client.Position
-
     for k, Data in pairs( self.Items:Get( ) ) do 
         local Target, Class = Data.Target, Data.Class
         
@@ -12,7 +10,9 @@ function Coffee.Visuals:Entities( )
             continue
         end
 
-        if ( self.Config[ 'items_limit_distance' ] and Distance:Distance2D( Target:GetPos( ) ) >= self.Config[ 'items_limit_distance_distance' ] ) then 
+        local Distance = self.Client.Position:Distance2D( Target:GetPos( ) )
+
+        if ( self.Config[ 'items_limit_distance' ] and Distance >= self.Config[ 'items_limit_distance_distance' ] ) then 
             continue
         end
 
@@ -31,5 +31,12 @@ function Coffee.Visuals:Entities( )
         surface.SetTextColor( Color )
         surface.SetTextPos( Data.x, Data.y ) 
         surface.DrawText( Class )
+
+        if ( self.Config[ 'items_render_distance' ] ) then             
+            local W, H = surface.GetTextSize( Class )
+
+            surface.SetTextPos( Data.x, Data.y + H ) 
+            surface.DrawText( math.Round( Distance ) .. 'hu' )
+        end
     end
 end

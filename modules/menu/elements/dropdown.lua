@@ -1,4 +1,4 @@
-function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width, Callback )
+function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width, Callback, useIndex )
     -- Have to generate the dropdowns used in the menu.
     
     Panel = Panel or self.Last
@@ -9,14 +9,14 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width,
     Dropdown:DockMargin( self:Scale( 5 ), 0, self:Scale( 4 ), 0 )
     
     Dropdown:SetValue( Options[ Index ] )
-    Coffee.Config[ Assignment ] = Options[ Index ]
+    Coffee.Config[ Assignment ] = useIndex and Index - 1 or Options[ Index ]
 
     for i = 1, #Options do
         Dropdown:AddChoice( Options[ i ] )
     end
 
     Dropdown.OnSelect = function( self, Index, Value )
-        Coffee.Config[ Assignment ] = Value
+        Coffee.Config[ Assignment ] = useIndex and Index - 1 or Value
 
         if ( Callback ) then 
             Callback( Value )
@@ -103,7 +103,13 @@ function Coffee.Menu:GenerateFixedDropdown( Dropdown )
         end
     
         for i = 1, #Dropdown.Choices do 
-            childMenu:GetChild( i ):SetColor( Coffee.Menu.Colors.White ) 
+            local Menu = childMenu:GetChild( i )
+
+            if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
+                Menu:SetColor( Coffee.Menu.Color )
+            else
+                Menu:SetColor( Coffee.Menu.Colors.White ) 
+            end
         end
 
         childMenu.OpenSubMenu = function( Sub )

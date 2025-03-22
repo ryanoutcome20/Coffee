@@ -1,19 +1,18 @@
 function Coffee.Visuals:HandleFont( Font )
-    -- This can be expanded on in the future.
-    return Font == 'Main' and 'coffee-main' or 'coffee-small'
+    return self.Fonts[ Font ]
 end
 
 function Coffee.Visuals:HandleFillament( In, Max )
     return math.min( self.Position.H * In / Max, self.Position.H )
 end
 
-function Coffee.Visuals:RenderText( Text, Assignment, colorOverride )
+function Coffee.Visuals:RenderText( Text, Assignment, colorOverride, fontOverride )
     if ( not self.Config[ Assignment ] ) then 
         return
     end
 
     -- Get config handle.
-    local Dock, Font = self.Config[ Assignment .. '_dock' ], self.Config[ Assignment .. '_font' ]
+    local Dock, Font = self.Config[ Assignment .. '_dock' ], fontOverride or self.Config[ Assignment .. '_font' ]
 
     surface.SetFont( self:HandleFont( Font or 'Small' ) )
 	surface.SetTextColor( colorOverride or self.Config[ Assignment .. '_color' ] )
@@ -42,8 +41,12 @@ function Coffee.Visuals:RenderBar( Fillament, Color, Assignment )
         Y = Y + ( self.Position.H - Fillament )
     end
 
+    -- Get override options.
+    local Override = self.Config[ Assignment .. '_override' ]
+    local Material = self.Config[ Assignment .. '_override_material' ]
+
     -- Render the main healthbar element.
-    if ( not Color or self.Config[ Assignment .. '_override' ] ) then 
+    if ( Override and Material == 'Gradient' ) then 
         surface.SetMaterial( self.Menu.Gradients.Up )
         surface.SetDrawColor( self.Config[ Assignment .. '_override_up' ] )
         surface.DrawTexturedRect( X, Y, 2, Fillament )
@@ -52,7 +55,17 @@ function Coffee.Visuals:RenderBar( Fillament, Color, Assignment )
         surface.SetDrawColor( self.Config[ Assignment .. '_override_down' ] )
         surface.DrawTexturedRect( X, Y, 2, Fillament )
     else 
+        if ( Override and self.Config[ Assignment .. '_override_color' ] ) then 
+            Color = self.Config[ Assignment .. '_override_up' ] 
+        end
+
         surface.SetDrawColor( Color )
-        surface.DrawRect( X, Y, 2, Fillament )
+
+        if ( Override ) then
+            surface.SetMaterial( self.Materials:Get( Material, true, Color ) )
+            surface.DrawTexturedRect( X, Y, 2, Fillament )
+        else
+            surface.DrawRect( X, Y, 2, Fillament )
+        end
     end
 end
