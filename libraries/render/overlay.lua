@@ -13,6 +13,14 @@ function Coffee.Overlay:Insert( Object, Decay, Data )
     } )
 end
 
+function Coffee.Overlay:Hitboxes( Bones, Decay, Color, IgnoreZ )
+    self:Insert( 'Hitboxes', Decay, {
+        Bones   = Bones,
+        Color   = Color,
+        IgnoreZ = IgnoreZ
+    } )
+end
+
 function Coffee.Overlay:BoxAngles( Origin, Angles, Mins, Maxs, Decay, Color, IgnoreZ )
     self:Insert( 'Box', Decay, {
         Origin  = Origin,
@@ -99,21 +107,57 @@ function Coffee.Overlay:Render( )
 
         local Name, Object = Index.Object, Index.Data
 
-        cam.IgnoreZ( Object.IngoreZ or false )
+        cam.IgnoreZ( Object.IgnoreZ or false )
 
         render.SetColorMaterial( )
 
         if ( Name == 'Box' ) then 
-            render.DrawBox( Object.Origin, Object.Angles, Object.Mins, Object.Maxs, Object.Color )
+            render.DrawBox( 
+                Object.Origin, 
+                Object.Angles, 
+                Object.Mins, 
+                Object.Maxs, 
+                Object.Color 
+            )
         elseif ( Name == 'Beam' ) then
-            self.Beams:Render( Object.Start, Object.End, Object.Speed, Object.Amplitude, Object.Twist, Object.Cone, Object.Segments, Object.Width, Object.firstColor, Object.secondColor, Object.Material )
+            self.Beams:Render( 
+                Object.Start, 
+                Object.End, 
+                Object.Speed, 
+                Object.Amplitude, 
+                Object.Twist, 
+                Object.Cone, 
+                Object.Segments, 
+                Object.Width, 
+                Object.firstColor, 
+                Object.secondColor, 
+                Object.Material 
+            )
         elseif ( Name == 'Line' ) then 
-            render.DrawLine( Object.Start, Object.End, Object.Color, Object.IgnoreZ )
+            render.DrawLine( 
+                Object.Start, 
+                Object.End, 
+                Object.Color, 
+                Object.IgnoreZ 
+            )
         elseif ( Name == 'Sphere' ) then 
             if ( Object.Wireframe ) then 
-                render.DrawWireframeSphere( Object.Origin, Object.Radius, Object.Steps, Object.Steps, Object.Color, Object.IgnoreZ )
+                render.DrawWireframeSphere( 
+                    Object.Origin, 
+                    Object.Radius, 
+                    Object.Steps, 
+                    Object.Steps, 
+                    Object.Color, 
+                    Object.IgnoreZ 
+                )
             else
-                render.DrawSphere( Object.Origin, Object.Radius, Object.Steps, Object.Steps, Object.Color )
+                render.DrawSphere( 
+                    Object.Origin, 
+                    Object.Radius, 
+                    Object.Steps, 
+                    Object.Steps, 
+                    Object.Color 
+                )
             end
         elseif ( Name == 'Text' ) then 
             cam.Start2D( )
@@ -124,6 +168,17 @@ function Coffee.Overlay:Render( )
                 surface.SetTextPos( Origin.x, Origin.y ) 
                 surface.DrawText( Object.Text )
             cam.End2D( )
+        elseif ( Name == 'Hitboxes' ) then 
+            for k, Bones in ipairs( Object.Bones ) do 
+                render.DrawWireframeBox( 
+                    Bones.Origin, 
+                    Bones.Angles, 
+                    Bones.Mins, 
+                    Bones.Maxs, 
+                    Object.Color, 
+                    not Object.IgnoreZ 
+                )
+            end
         end
     end
 

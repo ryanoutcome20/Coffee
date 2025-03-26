@@ -11,6 +11,8 @@ Coffee.Visuals = {
     Overlay    = Coffee.Overlay,
     CSEntity   = Coffee.CSEntity,
     Hitmarker  = Coffee.Hitmarker,
+    Gamemodes  = Coffee.Gamemodes,
+    Gamemode   = Coffee.Gamemode,
     Items      = Coffee.Items,
 
     Fonts = {
@@ -75,6 +77,7 @@ Coffee:LoadFile( 'lua/coffee/modules/visuals/world/view.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/sky.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/weather.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/world/anonymizer.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/world/announcer.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/icons.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/visuals/wallhack/indicators.lua' )

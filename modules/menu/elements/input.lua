@@ -1,4 +1,4 @@
-function Coffee.Menu:GenerateInput( Panel, Text, Assignment )
+function Coffee.Menu:GenerateInput( Panel, Text, Assignment, Callback )
     -- Have to generate the little input boxes for users to type in.
 
     Text  = Text or 'Lorem ipsum'
@@ -36,6 +36,12 @@ function Coffee.Menu:GenerateInput( Panel, Text, Assignment )
     end
 
 	Input.OnEnter = function( self )
-		Coffee.Config[ Assignment ] = self:GetValue( )
+        local Value = self:GetValue( )
+
+		Coffee.Config[ Assignment ] = Value
+
+        if ( Callback ) then 
+            Callback( Value )
+        end
 	end
 end

@@ -27,7 +27,7 @@ function Coffee.Visuals:Footsteps( ENT, Position, Foot, Sound, Volume, Filter )
     end
 
     local DSP    = self.Config[ 'world_footstep_dsp' ] and self.Config[ 'world_footstep_dsp_index' ] or 0
-    local Level  = self.Config[ 'world_footstep_range' ] and 180 or 75
+    local Level  = self.Config[ 'world_footstep_range' ] and 511 or 75
     local Volume = 1
 
     if ( self.Client.Local == ENT ) then 

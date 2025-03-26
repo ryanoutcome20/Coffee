@@ -4,6 +4,60 @@ Coffee.Hitboxes = {
     Cache = { }
 }
 
+function Coffee.Hitboxes:GetSimpleBones( ENT, Target )
+    local Sets = ENT:GetHitboxSetCount( )
+    local Bones = { }
+
+    if ( not Sets ) then 
+        return Bones 
+    end
+
+    for Set = 0, Sets - 1 do
+        local Hitboxes = ENT:GetHitBoxCount( Set )
+    
+        if ( not Hitboxes ) then 
+            continue
+        end
+
+        for Hitbox = 0, Hitboxes - 1 do
+            if ( Target ) then 
+                local Group = ENT:GetHitBoxHitGroup( Hitbox, Set )
+                
+                if ( not Group or Group != Target ) then 
+                    continue
+                end
+            end
+
+            local Bone = ENT:GetHitBoxBone( Hitbox, Set )
+
+            if ( not Bone ) then 
+                continue
+            end
+            
+            local Origin, Angles = ENT:GetBonePosition( Bone )
+
+            if ( not Origin or not Angles ) then 
+                continue
+            end
+            
+            local Mins, Maxs = ENT:GetHitBoxBounds( Hitbox, Set )
+            
+            if ( not Mins or not Maxs ) then 
+                continue
+            end
+
+            table.insert( Bones, {
+                Mins   = Mins,
+                Maxs   = Maxs,
+                Origin = Origin,
+                Angles = Angles
+            } )
+        end
+    end
+
+    return Bones
+end
+
 function Coffee.Hitboxes:HandleMultipoint( ENT, Matrix, Offset, Info )
     if ( not self.Config[ 'aimbot_multipoint' ] ) then 
         return
@@ -84,7 +138,7 @@ function Coffee.Hitboxes:ParseInformation( ENT )
 
             Temp[ Group ] = Temp[ Group ] or { }
 
-            table.insert( Temp[ Group ],  { Name = Name, Hitbox = c, Set = i, Group = Group } )
+            table.insert( Temp[ Group ], { Name = Name, Hitbox = c, Set = i, Group = Group } )
         end
     end
 
@@ -103,6 +157,13 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
         Data = self:ParseInformation( ENT )
     end
 
+    -- I'm going to guess and say that the aiming at vector_origin when
+    -- the player spawns is because they are actually at the vector_origin
+    -- when the player spawns. If your laggy enough you can even see they're weapon
+    -- at vector_origin.
+
+    local Origin = ENT:GetPos( )
+
     for k,v in pairs( Data ) do 
         local Internal = { }
 
@@ -115,15 +176,25 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
                 return self:ParseInformation( ENT )
             end
 
-            local Matrix, Offset = ENT:GetBonePosition( Bone )
+            local Matrix = ENT:GetBoneMatrix( Bone )
 
-            if ( not Matrix or not Offset ) then 
+            if ( not Matrix or Matrix:IsZero( ) ) then 
+                continue
+            end
+
+            local Position, Offset = Matrix:GetTranslation( ), Matrix:GetAngles( )
+
+            if ( not Position or not Offset ) then 
                 continue
             end 
+
+            if ( Position == vector_origin or Position == Origin ) then 
+                continue
+            end
             
-            table.insert( Internal, Matrix )
+            table.insert( Internal, Position )
         
-            local Points = self:HandleMultipoint( ENT, Matrix, Offset, Info )
+            local Points = self:HandleMultipoint( ENT, Position, Offset, Info )
 
             if ( Points ) then 
                 table.Add( Internal, Points )
@@ -136,6 +207,10 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
 
         Temp[ k ] = Internal
     end
+
+    Temp[ HITGROUP_STOMACH ] = Temp[ HITGROUP_STOMACH ] or { }
+
+    table.insert( Temp[ HITGROUP_STOMACH ], ENT:LocalToWorld( ENT:OBBCenter( ) ) )
 
     return Temp
 end

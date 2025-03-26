@@ -1,5 +1,10 @@
 function Coffee.Ragebot:Aimbot( CUserCMD )
     if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then        
+        if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
+            local c = self:CalculateCompensation( CUserCMD, CUserCMD:GetViewAngles(), true, true )
+            self:SetAngles( CUserCMD, c )
+        end
+
         return
     end
 
@@ -94,7 +99,14 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         end
 
         if ( self.Config[ 'aimbot_world_sphere_visualize' ] ) then 
-            self.Overlay:Sphere( Hit, Radius, 10, 0.1, self.Config[ 'aimbot_world_sphere_visualize_color' ], true )
+            self.Overlay:Sphere( 
+                Hit, 
+                Radius, 
+                self.Config[ 'aimbot_world_sphere_visualize_step' ], 
+                0.05, 
+                self.Config[ 'aimbot_world_sphere_visualize_color' ], 
+                true 
+            )
         end
     end
 
@@ -109,24 +121,9 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             continue
         end
         
-        if ( usingBacktrack ) then 
-            local Last = self.Records:GetLast( CUserCMD, Target )
-
-            if ( Last and self.Records:Valid( CUserCMD, Last ) ) then 
-                local Info = self:GetHitboxInfo( Last )
-
-                if ( Info ) then 
-                    Best = {
-                        Record = Last,
-                        Info = Info
-                    }
-                end 
-            end
-        end
-
         local First = usingBacktrack and self.Records:GetFront( Target ) or self.Records:Construct( Target )
         
-        if ( First and self.Records:Valid( CUserCMD, First ) ) then 
+        if ( First ) then 
             local Info = self:GetHitboxInfo( First )
 
             if ( Info ) then 
@@ -137,15 +134,15 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             end 
         end
 
-        if ( usingBacktrack and not noIdeal ) then 
-            local Ideal = self.Records:GetIdeal( CUserCMD, Target, shouldInverse, simpleRecords )
+        if ( usingBacktrack ) then 
+            local Last = self.Records:GetLast( Target )
 
-            if ( Ideal and self.Records:Valid( CUserCMD, Ideal ) ) then 
-                local Info = self:GetHitboxInfo( Ideal )
+            if ( Last ) then 
+                local Info = self:GetHitboxInfo( Last )
 
                 if ( Info ) then 
                     Best = {
-                        Record = Ideal,
+                        Record = Last,
                         Info = Info
                     }
                 end 
@@ -185,9 +182,9 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     self.Require:SetConVar( 'cl_interpolate', disableInterpolation and '0' or '1' )
 
     if ( not disableInterpolation ) then 
-        local Delta = self.Records:GetTickDelta( CUserCMD, Best.Record.Simtime )
+        local Extended = self.Records:GetTickDelta( Best.Record.Simtime ) > 0.2
 
-        if ( Delta > 0.2 ) then       
+        if ( self.Config[ 'aimbot_extended' ] and Extended ) then 
             local Time = self.Require:Servertime( CUserCMD )
 
             self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
@@ -202,10 +199,14 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         end
     end
     
-    -- Get our ideal hitbox.
-    local Spot = self.Config[ 'aimbot_invert_hitboxes' ] and Best.Info[ #Best.Info ] or Best.Info[ 1 ]
+    -- Get our hitbox information.
+    local Info = self.Config[ 'aimbot_invert_hitboxes' ] and Best.Info[ #Best.Info ] or Best.Info[ 1 ]
 
-    Spot = Spot - self.Client.Local:EyePos( )
+    -- Get our ideal hitbox.
+    local Spot = Info.Hitbox
+
+    Spot:Sub( self.Client.Local:GetShootPos( ) )
+    Spot:Normalize( )
 
     -- Set angles.
     local Angles = self:CalculateCompensation( 
@@ -214,7 +215,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         self.Config[ 'aimbot_norecoil' ], 
         self.Config[ 'aimbot_nospread' ] 
     )
-
+    
     self:SetAngles( CUserCMD, Angles )
 
     -- Shoot if needed.
@@ -232,6 +233,8 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Check if we can push a shot.
+    Best.Record.Group = Info.Group
+
     if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
         self.Shots:PushShot( Best.Record )
     end

@@ -5,26 +5,26 @@ function Coffee.Menu:GenerateTab( Name, Width, Height, Single )
 	Tab:Center( )
 	Tab:SetTitle( '' )
 	Tab:SetDraggable( true )
+    Tab:SetSizable( true )
     Tab:ShowCloseButton( false )
     Tab:SetKeyboardInputEnabled( true )
     Tab:SetMouseInputEnabled( true )
     Tab:MakePopup( )
 	Tab:SetVisible( false )
 
+    Tab:SetMinWidth( Width )
+    Tab:SetMinHeight( Height )
+
     Tab.Paint = function( self, W, H )
-        surface.SetDrawColor( 18, 18, 18 )
-        surface.DrawRect( 0, 0, W, H )
-        
-        surface.SetMaterial( Coffee.Menu.Gradients.Uni )
-        surface.SetDrawColor( 24, 24, 24 )
-        surface.DrawTexturedRect( 0, 0, W, H )
+        if ( self:GetAlpha( ) == 255 ) then 
+            draw.RoundedBoxEx( 8, 0, 0, W, H, Coffee.Menu.Color, false, false, true, true )
+        end
+
+        draw.RoundedBoxEx( 8, 1, 1, W - 2, H - 2, Coffee.Menu.Colors[ 'Dark Gray' ], false, false, true, true )
 
         surface.SetMaterial( Coffee.Menu.Gradients.Right )
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawTexturedRect( 0, 0, W, 20 )
-        
-        surface.SetDrawColor( Coffee.Menu.Color )
-        surface.DrawOutlinedRect( 0, 0, W, H, 1 )
 
         if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
             surface.SetTextColor( Coffee.Menu.Color )
@@ -36,23 +36,43 @@ function Coffee.Menu:GenerateTab( Name, Width, Height, Single )
         surface.SetTextPos( 5, 4 ) 
         surface.DrawText( Name )
     end
+    
+    -- local Button = vgui.Create( 'DImageButton', Tab )
+    -- Button:SetImage( 'icon16/cup.png' )
+    -- Button:SizeToContents( )
+    -- Button:SetColor( Color( 17, 17, 17, 240 ) )
+    -- Button:SetDepressImage( false )
+
+    -- Button.Think = function( self, W, H )
+    --     local WW, HH = self:GetParent( ):GetSize( )
+
+    --     Button:SetPos( WW - 20, 2 )
+    -- end
 
     if ( not Single ) then 
         -- Generate handler for the sub columns.
-        local Handler = vgui.Create( 'DIconLayout', Tab )
+        local Handler = vgui.Create( 'DHorizontalDivider', Tab )
         Handler:Dock( FILL )
-        Handler:SetStretchWidth( true )
-        Handler:SetStretchHeight( true )
-        Handler:SetSpaceX( 5 )
+
+        Handler:InvalidateParent( true )
 
         -- Generate sub column panels (left, right).
-        local WW, HH = Width / 2 - 8, Height / 1.08 -- Yes, this is ugly; no, it is not my fault.
+        local Left  = self:GenerateTabSubPanel( Handler )
+        local Right = self:GenerateTabSubPanel( Handler )
 
-        -- Should we be using DHorizontalDivider here?
-        local Left = self:GenerateTabSubPanel( Handler, WW, HH )
-        local Right = self:GenerateTabSubPanel( Handler, WW, HH )
-
-        Handler:Layout( )
+        -- Setup our handler with our left and right panels.
+        Handler:SetLeft( Left )
+        Handler:SetRight( Right )
+        
+        -- Dynamically resize our sub panels so we can have a resizable menu.
+        Handler.Paint = function( self, W, H )
+            local WW = W / 2
+    
+            Handler:SetDividerWidth( 2 )
+            Handler:SetLeftMin( WW - 2 )
+            Handler:SetRightMin( WW )
+            Handler:SetLeftWidth( WW )
+        end
 
         -- Assign tab for the later indexing.
         self.Tabs[ Name ] = {
@@ -99,11 +119,10 @@ function Coffee.Menu:GenerateTab( Name, Width, Height, Single )
     }
 end
 
-function Coffee.Menu:GenerateTabSubPanel( Panel, W, H )
+function Coffee.Menu:GenerateTabSubPanel( Panel )
     -- Have to generate the two left and right panels within every tab.
 
     local Side = vgui.Create( 'DPanel', Panel )
-    Side:SetSize( W, H )
     Side.Paint = function( self, W, H )
         surface.SetDrawColor( 20, 20, 20, 120 )
         surface.DrawRect( 0, 0, W, H )
@@ -127,7 +146,7 @@ function Coffee.Menu:GenerateScrollBar( Panel )
     Scroll:SetKeyboardInputEnabled( true )
 
     -- Edit our sidebar.
-    local Bar = Scroll:GetVBar(  )
+    local Bar = Scroll:GetVBar( )
     Bar:SetWide( self:Scale( 6 ) )
     Bar:SetHideButtons( true )
 

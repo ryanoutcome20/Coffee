@@ -5,13 +5,16 @@ Coffee.Menu = {
     Items      = Coffee.Items,
 
     Gradients = {
-        Up    = Material( 'vgui/gradient_up' ),
-        Down  = Material( 'vgui/gradient_down' ),
-        Left  = Material( 'vgui/gradient-l' ),
-        Right = Material( 'vgui/gradient-r' ),
-        Uni   = Material( 'vgui/gradient-u' ),
-        Grid  = Material( 'gui/alpha_grid.png', 'nocull' )
+        Up     = Material( 'vgui/gradient_up' ),
+        Down   = Material( 'vgui/gradient_down' ),
+        Left   = Material( 'vgui/gradient-l' ),
+        Right  = Material( 'vgui/gradient-r' ),
+        Uni    = Material( 'vgui/gradient-u' ),
+        Center = Material( 'gui/center_gradient' ),
+        Grid   = Material( 'gui/alpha_grid.png', 'nocull' )
     },
+
+    Plain = Material( 'vgui/white' ),
 
     Color  = Coffee.Colors[ 'Main' ],
     Copied = Coffee.Colors[ 'Main' ],
@@ -23,6 +26,7 @@ Coffee.Menu = {
     
     Tabs    = { },
     Toggles = { },
+    Held    = { },
     Dots    = { },
 
     Held = false
@@ -81,18 +85,15 @@ function Coffee.Menu:Init( Tabs )
     Bottom:MakePopup( )
 
     Bottom.Paint = function( self, W, H )
-        surface.SetMaterial( Coffee.Menu.Gradients.Up )
-        surface.SetDrawColor( 12, 12, 12 )
-        surface.DrawTexturedRect( 0, 0, W, H )
-    
-        surface.SetMaterial( Coffee.Menu.Gradients.Down )
-        surface.SetDrawColor( 24, 24, 24 )
-        surface.DrawTexturedRect( 0, 0, W, H )
-
-        surface.SetDrawColor( 0, 0, 0, 150 )
-        surface.DrawRect( 0, 0, W, H )
-
         surface.SetMaterial( Coffee.Menu.Gradients.Left )
+        surface.SetDrawColor( 17, 17, 17 )
+        surface.DrawTexturedRect( 0, 0, W, H )
+
+        surface.SetMaterial( Coffee.Menu.Gradients.Right )
+        surface.SetDrawColor( 17, 17, 17 )
+        surface.DrawTexturedRect( 0, 0, W, H )
+
+        surface.SetMaterial( Coffee.Menu.Gradients.Center )
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawTexturedRect( 0, 0, W, 2 )
     end
@@ -114,14 +115,29 @@ function Coffee.Menu:Init( Tabs )
         TabButton:DockMargin( 0, -self:Scale( 50 ), self:Scale( 5 ), 0 )
         
         TabButton.Paint = function( self, W, H ) 
-            self:SetColor( Coffee.Menu.Color )    
+            if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
+                self:SetColor( Coffee.Menu.Color )
+            else
+                self:SetColor( Coffee.Colors[ 'White' ] )
+            end
         end
 
         TabButton.DoClick = function( self, W, H )
             local Frame = Coffee.Menu.Tabs[ Index.Title ].Parent
 
-            Frame:ToggleVisible( )
             Frame:MakePopup( )
+
+            local Speed = Coffee.Config[ 'miscellaneous_menu_fade' ]
+
+            if ( Frame:IsVisible( ) ) then 
+                Frame:AlphaTo( 0, Speed, 0, function( Data, Panel ) 
+                    Panel:ToggleVisible( )
+                end )
+            else
+                Frame:ToggleVisible( )
+                Frame:SetAlpha( 0 )
+                Frame:AlphaTo( 255, Speed, 0 )
+            end
         end
     end
 
@@ -138,7 +154,11 @@ function Coffee.Menu:Init( Tabs )
     end
 
     Timestamp.Paint = function( self, W, H ) 
-        self:SetColor( Coffee.Menu.Color )    
+        if ( Coffee.Config[ 'miscellaneous_menu_labels' ] ) then 
+            self:SetColor( Coffee.Menu.Color )
+        else
+            self:SetColor( Coffee.Colors[ 'White' ] )
+        end
     end
     
     Timestamp.Think = function( self )

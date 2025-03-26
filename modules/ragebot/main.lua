@@ -52,7 +52,11 @@ Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/targeter.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/grenades.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/hitbox_parser.lua' )
 
-function Coffee.Ragebot:Update( CUserCMD )
+function Coffee.Ragebot:PrePredicted( Stage, CUserCMD )
+    if ( Stage != MOVE_PRE_PREDICTED ) then 
+        return
+    end
+
     if ( not self.Client.Local ) then 
         return
     end
@@ -69,30 +73,33 @@ function Coffee.Ragebot:Update( CUserCMD )
     self.Packet = true
     self.isManipulating = false
     self.currentAngle = false
+end
 
-    -- Note that something needs to be done about this big prediction block.
-    -- I have functions from other modules that require the movement fixes assistance.
+function Coffee.Ragebot:Predicted( Stage, CUserCMD )
+    if ( Stage != MOVE_PREDICTED ) then 
+        return
+    end
 
-    self.Require:StartPrediction( CUserCMD )
-        self:Speedhack( CUserCMD )
-        self:Lagswitch( CUserCMD )
-        self:Networking( CUserCMD )
+    if ( CUserCMD:CommandNumber( ) == 0 ) then 
+        return
+    end
 
-        self:AntiAim( CUserCMD )
+    self:Speedhack( CUserCMD )
+    self:Lagswitch( CUserCMD )
+    self:Networking( CUserCMD )
 
-        self:Fakelag( CUserCMD )
+    self:AntiAim( CUserCMD )
 
-        self:Aimbot( CUserCMD )
+    self:Fakelag( CUserCMD )
 
-        self:AdjustGrenades( CUserCMD )
+    self:Aimbot( CUserCMD )
 
-        self:SetupMovement( CUserCMD )
+    self:AdjustGrenades( CUserCMD )
 
-        self.Bots:Update( CUserCMD )
+    self:SetupMovement( CUserCMD )
 
-        self:BreakAnimations( CUserCMD )
-    self.Require:EndPrediction( )
-
+    self:BreakAnimations( CUserCMD )
+    
     if ( not self.Packet ) then 
         self.Choked = self.Choked + 1
     else
@@ -102,4 +109,5 @@ function Coffee.Ragebot:Update( CUserCMD )
     self.Require:BSendPacket( self.Packet )
 end
 
-Coffee.Hooks:New( 'CreateMove', Coffee.Ragebot.Update, Coffee.Ragebot )
+Coffee.Hooks:New( 'CreateMoveEx', Coffee.Ragebot.Predicted, Coffee.Ragebot )
+Coffee.Hooks:New( 'CreateMoveEx', Coffee.Ragebot.PrePredicted, Coffee.Ragebot )

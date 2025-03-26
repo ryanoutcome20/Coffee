@@ -15,14 +15,15 @@ function Coffee.Ragebot:GetHitboxConditions( Record, Group )
 end
 
 function Coffee.Ragebot:GetHitboxInfo( Record )
-    local Info = { }
+    local Info   = { }
 
     if ( not istable( Record.Bones ) ) then 
         return 
     end
 
-    local Autowall = self.Config[ 'aimbot_autowall' ]
-    local Damage   = self.Config[ 'aimbot_autowall_damage' ]
+    local Autowall  = self.Config[ 'aimbot_autowall' ]
+    local Damage    = self.Config[ 'aimbot_autowall_damage' ]
+    local IgnoreLOS = self.Config[ 'aimbot_ignore_los' ]
 
     for i = 0, HITGROUP_RIGHTLEG do 
         local Data, Group = Record.Bones[ i ], self.Hitboxes[ i ]
@@ -39,12 +40,19 @@ function Coffee.Ragebot:GetHitboxInfo( Record )
             continue
         end 
 
-        for i = 1, #Data do 
-            if ( not self:RunTrace( Record, Data[ i ], Autowall, Damage ) ) then 
+        for k = 1, #Data do 
+            if ( not IgnoreLOS and not self:RunTrace( Record, Data[ k ], Autowall, Damage ) ) then 
                 continue
             end
 
-            table.insert( Info, Data[ i ] )
+            if ( not self:Damage( Record, i ) ) then 
+                continue
+            end
+
+            table.insert( Info, {
+                Hitbox = Data[ k ],
+                Group  = i
+            } )
         end
     end
 

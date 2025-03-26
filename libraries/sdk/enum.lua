@@ -14,3 +14,5 @@ function Coffee.Enum:Launch( Name )
 end
 
 Coffee.Enum:Launch( 'framestage' )
+Coffee.Enum:Launch( 'ttt' )
+Coffee.Enum:Launch( 'createstage' )

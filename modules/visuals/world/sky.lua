@@ -105,9 +105,16 @@ function Coffee.Visuals.Sky:Handler( )
 	ENT:SetDrawStars( self.Config[ 'world_sky_stars' ] )
     ENT:SetStarLayers( self.Config[ 'world_sky_stars_density' ] )
 	ENT:SetStarTexture( self.Config[ 'world_sky_stars_texture' ] )
-	ENT:SetStarSpeed( self.Config[ 'world_sky_stars_speed' ] / 60 )
 	ENT:SetStarFade( self.Config[ 'world_sky_stars_fade' ] )
 	ENT:SetStarScale( self.Config[ 'world_sky_stars_scale' ] )
+
+    local Speed = self.Config[ 'world_sky_stars_speed' ] / 60 
+
+    if ( self.Config[ 'world_sky_stars_speed_sine' ] ) then 
+        Speed = Speed * math.sin( CurTime( ) * ( self.Config[ 'world_sky_stars_speed_sine_amount' ] / 500 ) )
+    end
+
+	ENT:SetStarSpeed( Speed )
 
     if ( self.Config[ 'world_sky_dusk' ] ) then 
         ENT:SetDuskIntensity( self.Config[ 'world_sky_dusk_intensity' ] / 10 )

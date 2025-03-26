@@ -94,13 +94,28 @@ function Coffee.Visuals:ImpactEffects( Data )
     local Lethal = Data.health <= 0
 
     -- Add hitsound.
-    if ( self.Config[ 'world_hitsound' ] ) then
-        for i = 1, self.Config[ 'world_hitsound_passes' ] do
+    if ( Lethal and self.Config[ 'world_killsound' ] ) then 
+        local Sound, Volume = self.Config[ 'world_killsound_sound' ], self.Config[ 'world_killsound_volume' ] / 100
+
+        for i = 1, self.Config[ 'world_killsound_passes' ] do
             self.Client.Local:EmitSound(
-                self.Config[ 'world_hitsound_sound' ],
+                Sound,
                 511,
                 100,
-                self.Config[ 'world_hitsound_volume' ] / 100,
+                Volume,
+                CHAN_STATIC,
+                SND_NOFLAGS
+            )
+        end
+    elseif ( self.Config[ 'world_hitsound' ] ) then
+        local Sound, Volume = self.Config[ 'world_hitsound_sound' ], self.Config[ 'world_hitsound_volume' ] / 100
+
+        for i = 1, self.Config[ 'world_hitsound_passes' ] do
+            self.Client.Local:EmitSound(
+                Sound,
+                511,
+                100,
+                Volume,
                 CHAN_STATIC,
                 SND_NOFLAGS
             )

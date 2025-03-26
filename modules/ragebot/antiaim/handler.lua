@@ -37,19 +37,20 @@ function Coffee.Ragebot:GetDistortion( Base )
         return Base
     end
 
-    local Time = self:GetTiming( self.Config[ 'hvh_yaw_distortion_timer' ] )
+    local Time          = self:GetTiming( self.Config[ 'hvh_yaw_distortion_timer' ] )
     local Trigonometric = self:GetTrigonometric( self.Config[ 'hvh_yaw_distortion_trigonometric' ] )
-    local Divisor = self.Config[ 'hvh_yaw_distortion_divisor' ]
+    local Divisor       = self.Config[ 'hvh_yaw_distortion_divisor' ]
+    local Scale         = self.Config[ 'hvh_yaw_distortion_scale' ]
 
     -- Calculate distortion.
-    local Distortion = Trigonometric( Time * self.Config[ 'hvh_yaw_distortion_speed' ] / Divisor ) * Base
+    local Distortion = Trigonometric( Time * self.Config[ 'hvh_yaw_distortion_speed' ] / Divisor ) * Scale
     
     -- Calculate forced distortion.
     if ( self.Config[ 'hvh_yaw_distortion_force' ] ) then 
         Distortion = Distortion + ( 360 * ( math.abs( Divisor ) / Divisor ) )
     end
 
-    return Distortion
+    return Base + math.NormalizeAngle( Distortion )
 end
 
 function Coffee.Ragebot:GetFakeFlick( Base )
@@ -130,6 +131,13 @@ function Coffee.Ragebot:GetPitch( )
     return Angles[ self.Config[ 'hvh_pitch_mode' ] ]
 end
 
+function Coffee.Ragebot:UpdateFakeYaw( )
+    -- Update the rendering portion of the fake yaw to align with the desynced effect you get
+    -- with fast moving angles. The poses and layers are desynced.
+
+    self.Fake.y = self.Client.Local:GetRenderAngles( ).y
+end
+
 function Coffee.Ragebot:AntiAim( CUserCMD )
     if ( not self.Config[ 'hvh_enabled' ] ) then 
         return
@@ -145,7 +153,7 @@ function Coffee.Ragebot:AntiAim( CUserCMD )
     
     -- Get current angles.
     self.Fake = Angle( 0, self.Real.y, 0 )
-    self.Real = CUserCMD:GetViewAngles( )
+    self.Real = self:ShouldSilent( ) and self.Silent or CUserCMD:GetViewAngles( )
 
     -- Get pitch.
     local Pitch = self.Config[ 'hvh_pitch' ] and self:GetPitch( ) or self.Real.x
@@ -168,8 +176,7 @@ function Coffee.Ragebot:AntiAim( CUserCMD )
         end
     end
 
-    -- Generate our true fake angle.
-    -- Our fake angle won't show desync for some reason, fix later?
+    -- Generate our true fake pitch.
     self.Fake.x = self.Real.x
 
     if ( self.Real.x == -180 ) then
@@ -205,7 +212,7 @@ function Coffee.Ragebot:Speedhack( CUserCMD )
     if ( self.Config[ 'hvh_speedhack_airstuck' ] ) then 
         -- This only works if sv_maxusrcmdprocessticks is set to a number other than zero since
         -- it relies entirely on the server holding you in place.
-        Ticks = Ticks * 10
+        Ticks = Ticks * 100
     end
 
     self.Require:SetOutSequence( self.Require:GetOutSequence( ) + Ticks )
@@ -234,7 +241,7 @@ function Coffee.Ragebot:Networking( CUserCMD )
     local Loss   = self.Config[ 'hvh_networking_loss' ]
     local Jitter = self.Config[ 'hvh_networking_jitter' ]
 
-    if ( not self.Config[ 'hvh_networking' ] ) then 
+    if ( not self.Config[ 'hvh_networking' ] or not self.Menu:Keydown( 'hvh_networking_keybind' ) ) then 
         Lag    = 0
         Loss   = 0
         Jitter = 0

@@ -14,20 +14,21 @@ function Coffee.Ragebot.HL2:RunTrace( Record, Matrix, Autowall, Minimum )
         mask = MASK_SHOT 
     } )
 
-    if ( self.Config[ 'aimbot_engine_entity' ] and not Trace.HitWorld ) then
-        if ( IsValid( Trace.Entity ) and Trace.Entity:GetMaxHealth( ) >= self.Config[ 'aimbot_engine_entity_damage' ] ) then 
-            local Secondary = util.TraceLine( { 
-                start = Trace.HitPos, 
-                endpos = Matrix, 
-                filter = { self.Client.Local, Record.Target, Trace.Entity }, 
-                mask = MASK_SHOT 
-            } )
-
-            return Secondary.Fraction == 1
-        end
+    if ( self.Config[ 'aimbot_engine_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
+        return true
     end
 
     return Trace.Fraction == 1
+end
+
+function Coffee.Ragebot.HL2:Damage( Record, Group )
+    local Damage, ID = self:GetWeaponDamage( self.Client.Weapon, Group )
+
+    Damage = self:GetWeaponDamageScale( Damage, ID, Group )
+
+    if ( self.Config[ 'aimbot_minimum_damage_damage' ] <= Damage ) then 
+        return true
+    end
 end
 
 function Coffee.Ragebot.HL2:CalculateSpread( CUserCMD, Spot, Cone, Seed )
@@ -35,6 +36,10 @@ function Coffee.Ragebot.HL2:CalculateSpread( CUserCMD, Spot, Cone, Seed )
 
     if ( self.Config[ 'aimbot_nospread_engine' ] ) then 
         return Spot + ded.PredictSpread( CUserCMD, Spot, Cone ):Angle( )
+    end
+
+    if ( self.Config[ 'aimbot_nospread_offset' ] ) then 
+        Seed = Seed + self.Config[ 'aimbot_nospread_offset_seed' ]
     end
 
     self.UniformRandomStream:SetSeed( Seed )

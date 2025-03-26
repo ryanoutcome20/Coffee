@@ -4,6 +4,8 @@ Coffee.Shots = {
     Config    = Coffee.Config,
     Hooks     = Coffee.Hooks,
     Require   = Coffee.Require,
+    Overlay   = Coffee.Overlay,
+    Hitboxes  = Coffee.Hitboxes,
     Hitmarker = Coffee.Hitmarker,
 
     Cache = { }
@@ -62,6 +64,24 @@ function Coffee.Shots:Clean( Cache, Time )
     return Rebuilt
 end
 
+function Coffee.Shots:PushMatrix( Record )
+    if ( not Record.Group or not self.Config[ 'aimbot_shot_matrix' ] ) then 
+        return
+    end
+
+    local Group = self.Config[ 'aimbot_shot_matrix_singular' ] and Record.Group
+
+    -- This won't align with backtrack but since its a rarely used feature they
+    -- don't need to be put inside of the records like the regular matrixes do.
+
+    self.Overlay:Hitboxes( 
+        self.Hitboxes:GetSimpleBones( Record.Target, Group ), 
+        self.Config[ 'aimbot_shot_matrix_time' ], 
+        self.Config[ 'aimbot_shot_matrix_color' ], 
+        true 
+    )
+end
+
 function Coffee.Shots:Landed( Data )
     if ( not self.Client.Local or not self.Client.Weapon ) then 
         return
@@ -83,6 +103,8 @@ function Coffee.Shots:Landed( Data )
         if ( Slot.Record.Target != Hit ) then 
             continue
         end
+
+        self:PushMatrix( Slot.Record )
 
         Slot.Landed = true 
     end

@@ -12,33 +12,50 @@ Coffee.Draggables = {
     Panels = { }
 }
 
-function Coffee.Draggables:New( Name )
-    self.Panels[ Name ] = self.Menu:GenerateDraggable( nil, Name, 125 * table.Count( self.Panels ), 5 )
+Coffee:LoadFile( 'lua/coffee/modules/visuals/draggables/bars.lua' )
+
+function Coffee.Draggables:New( Name, Bar )
+    self.Panels[ Name ] = self.Menu:GenerateDraggable( 
+        nil, 
+        Name, 
+        Bar and 0 or 125 * table.Count( self.Panels ), 
+        Bar and 45 * table.Count( self.Panels ) or 5 
+    )
 
     return self.Panels[ Name ]
 end
 
-function Coffee.Draggables:Get( Name )
+function Coffee.Draggables:Get( Name, Bar )
     if ( self.Panels[ Name ] ) then 
         return self.Panels[ Name ]
     end
 
-    return self:New( Name )
+    return self:New( Name, Bar )
 end
 
-function Coffee.Draggables:Update(  )
+function Coffee.Draggables:Update( )
+    -- Get panels.
+    local Spectators = self:Get( 'Spectators', false )
+    local Admins     = self:Get( 'Admins', false )
+
+    Spectators:SetVisible( self.Config[ 'miscellaneous_spectator_list' ] )
+    Admins:SetVisible( self.Config[ 'miscellaneous_admin_list' ] )
+    
+    -- Update bars.
+    self.Bars:Update( Choke )
+
+    -- Check lists.
+    if ( not self.Config[ 'miscellaneous_spectator_list' ] and not self.Config[ 'miscellaneous_admin_list' ] ) then
+        return
+    end
+
     local Active = { }
 
-    -- Get panels.
-    local Spectators = self:Get( 'Spectators' )
-    local Admins     = self:Get( 'Admins' )
-
+    -- Clear indexes.
     Spectators:ClearIndexes( )
     Admins:ClearIndexes( )
 
     -- Update spectators.
-    Spectators:SetVisible( self.Config[ 'miscellaneous_spectator_list' ] )
-
     for k, Target in pairs( self.Records.Players ) do 
         if ( Target:GetObserverTarget( ) == self.Client.Local ) then 
             local Mode = self.Observers[ Target:GetObserverMode( ) ] or 'Other'
@@ -54,8 +71,6 @@ function Coffee.Draggables:Update(  )
     Active = { }
 
     -- Update admins. 
-    Admins:SetVisible( self.Config[ 'miscellaneous_admin_list' ] )
-
     for k, Target in pairs( self.Records.Players ) do 
         if ( Target:IsAdmin( ) or Target:IsSuperAdmin( ) ) then 
             local Distance = 'Dormant'

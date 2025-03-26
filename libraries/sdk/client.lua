@@ -25,7 +25,7 @@ function Coffee.Client:Update( )
     end
 
     if ( self.Origin ) then 
-        self.LC = self.Origin:DistToSqr( Origin ) > 4096
+        self.Distance = self.Origin:DistToSqr( Origin )
     end
 
     self.Health = self.Local:Health( )
@@ -53,6 +53,10 @@ function Coffee.Client:Update( )
     self.Ping = self.Local:Ping( )
 
     self.Weapon = self.Local:GetActiveWeapon( )
+
+    if ( Coffee.Ragebot ) then 
+        Coffee.Ragebot:UpdateFakeYaw( )
+    end
 end
 
 function Coffee.Client:GetPredictionTime( )

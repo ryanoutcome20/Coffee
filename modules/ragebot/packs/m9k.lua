@@ -5,6 +5,8 @@ Coffee.Ragebot.M9K = {
     ai_shot_bias_min = GetConVar( 'ai_shot_bias_min' ),
     ai_shot_bias_max = GetConVar( 'ai_shot_bias_max' ),
 
+    M9KDamageMultiplier = GetConVar( 'M9KDamageMultiplier' ),
+
     Scale = {
         [ 'SniperPenetratedRound' ] = 20,
         [ 'pistol' ]                = 9,
@@ -38,6 +40,10 @@ function Coffee.Ragebot.M9K:RunTrace( Record, Matrix, Autowall, Minimum )
     end
 
     if ( not Autowall ) then 
+        if ( self.Config[ 'aimbot_engine_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
+            return true
+        end
+
         return false
     end
 
@@ -93,11 +99,25 @@ function Coffee.Ragebot.M9K:RunTrace( Record, Matrix, Autowall, Minimum )
     return self.Client.Weapon.Primary.Damage * Damage > Minimum
 end
 
+function Coffee.Ragebot.M9K:Damage( Record, Group )
+    local Damage, ID = self:GetWeaponDamage( self.Client.Weapon, Group )
+
+    Damage = self:GetWeaponDamageScale( Damage, ID, Group )
+
+    if ( self.Config[ 'aimbot_minimum_damage_damage' ] <= Damage ) then 
+        return true
+    end
+end
+
 function Coffee.Ragebot.M9K:CalculateSpread( CUserCMD, Spot, Cone, Seed )
     -- https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/mp/src/game/shared/shot_manipulator.h#L59
 
     if ( self.Config[ 'aimbot_nospread_engine' ] ) then 
         return Spot + ded.PredictSpread( CUserCMD, Spot, Cone ):Angle( )
+    end
+
+    if ( self.Config[ 'aimbot_nospread_offset' ] ) then 
+        Seed = Seed + self.Config[ 'aimbot_nospread_offset_seed' ]
     end
 
     self.UniformRandomStream:SetSeed( Seed )

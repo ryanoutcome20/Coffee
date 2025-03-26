@@ -48,6 +48,10 @@ Coffee.Require = {
                 return ded.NetSetConVar( ConVar, Value )
             end,
 
+            [ 'SetConVarFlags' ] = function( self, ConVar, Flags )
+                return ded.ConVarSetFlags( ConVar, Flags )
+            end,
+
             [ 'ForceConVar' ] = function( self, ConVar, Value )
                 return ded.ConVarSetValue( ConVar, Value )
             end,

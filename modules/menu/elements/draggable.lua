@@ -48,8 +48,7 @@ function Coffee.Menu:GenerateDraggable( Panel, Title, X, Y, W, H )
         local W, H = 0, 0
 
         for k, v in ipairs( self.Indexes ) do 
-            local Wide = v:GetTextSize( )
-            local Tall = v:GetTall( )
+            local Wide, Tall = v:GetSize( )
 
             if ( Wide > W ) then 
                 W = Wide
@@ -89,6 +88,12 @@ function Coffee.Menu:GenerateDraggable( Panel, Title, X, Y, W, H )
         end
 
         table.insert( self.Indexes, Label )
+
+        self:Update( )
+    end
+
+    Draggable.AddPanel = function( self, Panel )
+        table.insert( self.Indexes, Panel )
 
         self:Update( )
     end

@@ -13,6 +13,10 @@ function Coffee.Visuals:GetChamsRagdoll( Target )
 end
 
 function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
+    if ( not IsValid( ENT ) ) then 
+        return
+    end
+
     -- Get constants from menu.
     local Color          = self.Config[ Assignment .. '_color' ]
     local secondaryColor = self.Config[ Assignment .. '_secondary_color' ]
@@ -64,7 +68,7 @@ function Coffee.Visuals:PlayerChams( )
             continue
         end
 
-        if ( ( not Target:IsPlayer( ) or not Target:Alive( ) ) and not Target:IsRagdoll( ) ) then
+        if ( not Target:IsPlayer( ) and not Target:IsRagdoll( ) ) then
             continue 
         end
 
@@ -82,16 +86,24 @@ function Coffee.Visuals:PlayerChams( )
             if ( not ENT ) then 
                 continue
             end
-        end
+        else
+            self.CSEntity:Remove( ENT:EntIndex( ) + 128 )
 
-        self.CSEntity:Remove( ENT:EntIndex( ) + 128 )
+            if ( not Target:Alive( ) ) then 
+                continue
+            end    
+        end
         
-        local isLocal = ENT == self.Client.Local
+        local isLocal    = ENT == self.Client.Local
         local isFriendly = ENT:Team( ) == self.Client.Team
 
         if ( isLocal ) then
             if ( self.Config[ 'esp_chams_local' ] ) then  
                 self:RenderChams( Target, 'esp_chams_local' )
+
+                if ( self.Config[ 'esp_chams_local_attachments' ] ) then 
+                    self:RenderChams( ENT:GetActiveWeapon( ), 'esp_chams_local', false )
+                end
             end
         elseif ( isFriendly ) then 
             if ( self.Config[ 'esp_chams_friendly_visible' ] ) then 
@@ -100,6 +112,10 @@ function Coffee.Visuals:PlayerChams( )
                 end
     
                 self:RenderChams( Target, 'esp_chams_friendly_visible', false )
+
+                if ( self.Config[ 'esp_chams_friendly_visible_attachments' ] ) then 
+                    self:RenderChams( ENT:GetActiveWeapon( ), 'esp_chams_friendly_visible', false )
+                end
             end
 
             if ( self.Config[ 'esp_chams_friendly_backtrack' ] ) then 
@@ -110,8 +126,12 @@ function Coffee.Visuals:PlayerChams( )
                 if ( self.Config[ 'esp_chams_enemy_invisible' ] ) then 
                     self:RenderChams( Target, 'esp_chams_enemy_invisible', true )
                 end
-        
+    
                 self:RenderChams( Target, 'esp_chams_enemy_visible', false )
+    
+                if ( self.Config[ 'esp_chams_enemy_visible_attachments' ] ) then 
+                    self:RenderChams( ENT:GetActiveWeapon( ), 'esp_chams_enemy_visible', false )
+                end
             end
             
             if ( self.Config[ 'esp_chams_enemy_backtrack' ] ) then 
@@ -122,13 +142,7 @@ function Coffee.Visuals:PlayerChams( )
 end
 
 function Coffee.Visuals:BacktrackChams( Target, Assignment )
-    local Records = self.Records.Cache[ Target ]
-
-    if ( not Records ) then 
-        return
-    end
-    
-    local Record = Records[ #Records ]
+    local Record = self.Records:GetLast( Target )
 
     if ( not Record ) then 
         return

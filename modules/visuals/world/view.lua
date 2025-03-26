@@ -63,11 +63,15 @@ function Coffee.Visuals:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle,
 
     if ( self.Config[ 'world_viewmodel' ] ) then 
         if ( self.Config[ 'world_viewmodel_sway' ] ) then 
-            Origin = oldOrigin
+            local Delta = ( Origin - oldOrigin ) * ( self.Config[ 'world_viewmodel_sway_scale' ] / 100 )
+            
+            Origin = oldOrigin + Delta
         end
         
         if ( self.Config[ 'world_viewmodel_bob' ] ) then 
-            Angle = oldAngle
+            local Delta = ( Angle - oldAngle ) * ( self.Config[ 'world_viewmodel_bob_scale' ] / 100 )
+            
+            Angle = oldAngle + Delta
         end
 
         if ( self.Config[ 'world_viewmodel_gamemode_view' ] ) then 
@@ -85,6 +89,14 @@ function Coffee.Visuals:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle,
         Angle:RotateAroundAxis( Angle:Forward( ), self.Config[ 'world_offsets_roll' ] )
         Angle:RotateAroundAxis( Angle:Right( ), self.Config[ 'world_offsets_pitch' ] )
         Angle:RotateAroundAxis( Angle:Up( ), self.Config[ 'world_offsets_yaw' ] )
+
+        local Base = self.Config[ 'world_offsets_base' ]
+
+        if ( Base == 'Floor' ) then 
+            Origin = self.Client.Position
+        elseif ( Base == 'Eye' ) then 
+            Origin = self.Client.Local:EyePos( )
+        end
 
         Origin = Origin + self.Config[ 'world_offsets_x' ] * Angle:Right( ) * 1
         Origin = Origin + self.Config[ 'world_offsets_y' ] * Angle:Forward( ) * 1

@@ -21,6 +21,10 @@ function Coffee.Menu:GenerateMiniCheckbox( Panel, Tooltip, Assignment )
     Checkbox.Paint = function( self, W, H )
         surface.SetDrawColor( Coffee.Config[ Assignment ] and Coffee.Menu.Color or Coffee.Menu.Colors[ 'Dark Gray' ] )
         surface.DrawRect( 0, 0, W, H )
+
+        surface.SetDrawColor( Coffee.Menu.Color )
+        surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+
         if ( self:IsHovered( ) or self:IsChildHovered( ) ) then 
             if ( self.Timer + 0.3 < CurTime( ) ) then 
                 self.Hover:SetVisible( true )

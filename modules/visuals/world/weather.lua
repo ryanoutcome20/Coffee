@@ -5,12 +5,13 @@ Coffee.Weather = {
     Client = Coffee.Client,
     Config = Coffee.Config,
 
+    World = game.GetWorld( ),
+
     Particle = {
         [ 'Rain' ] = 'particle/rain_streak',
         [ 'Snow' ] = 'particle/snow'
     },
 
-    Sample = -1,
     Samples = {
         [ 'Rain' ] = 'ambient/weather/rumble_rain_nowind.wav',
         [ 'Snow' ] = 'ambient/wind/wind1.wav',
@@ -18,16 +19,40 @@ Coffee.Weather = {
     }
 }
 
-function Coffee.Weather:Audio( Enabled, Value )
-    if ( self.Sample != -1 ) then 
-        self.Client.Local:StopLoopingSound( self.Sample )
+function Coffee.Weather:ResetAudio( )
+    if ( self.Object ) then 
+        self.Object:Stop( )
     end
 
-    if ( not Enabled ) then 
+    self.Object = nil
+end
+
+function Coffee.Weather:Audio( )
+    if ( not self.Config[ 'world_weather_audio' ] ) then 
+        self:ResetAudio( )
         return
     end
 
-    self.Sample = self.Client.Local:StartLoopingSound( self.Samples[ Value ] )
+    local Mode = self.Samples[ self.Config[ 'world_weather_audio_mode' ] ]
+
+    if ( self.Current != Mode ) then 
+        self:ResetAudio( )
+    end
+
+    if ( not self.Object ) then 
+        self.Object = CreateSound( self.World, Mode )
+    end
+
+    self.Object:SetSoundLevel( 0 )
+
+    -- Don't just check if its running and then play it here since it adds easily identifiable tick
+    -- noises when it switches between two objects.
+    self.Object:PlayEx( 
+        self.Config[ 'world_weather_audio_volume' ] / 100, 
+        self.Config[ 'world_weather_audio_pitch' ] 
+    )    
+
+    self.Current = Mode
 end
 
 function Coffee.Weather:GetEmitter( )
@@ -40,7 +65,7 @@ function Coffee.Weather:GetEmitter( )
     return self.Emitter
 end
 
-function Coffee.Weather:Indoors( Position, t )
+function Coffee.Weather:Indoors( Position )
     -- Check trace to see if we are indoors.
     if ( not self.Config[ 'world_weather_indoors' ] ) then
         -- Particles may still pull themselves indoors through velocity but this
@@ -64,6 +89,40 @@ function Coffee.Weather:Indoors( Position, t )
     end
 
     return false
+end
+
+function Coffee.Weather:Wind( Velocity, Height )
+    self.windDirection = self.windDirection or vector_origin
+
+    if ( not self.Config[ 'world_weather_wind' ] ) then 
+        return Velocity    
+    end
+
+    local Time = CurTime( ) 
+  
+    self.windDirection.x = Lerp( 
+        0.1, 
+        self.windDirection.x, 
+        math.sin( Time * self.Config[ 'world_weather_wind_timescale_x' ] ) * self.Config[ 'world_weather_wind_x' ] 
+    )
+
+    self.windDirection.y = Lerp( 
+        0.1, 
+        self.windDirection.y, 
+        math.cos( Time * self.Config[ 'world_weather_wind_timescale_y' ] ) * self.Config[ 'world_weather_wind_y' ] 
+    )
+
+    self.windDirection.z = Lerp( 
+        0.1, 
+        self.windDirection.z, 
+        math.sin( Time * self.Config[ 'world_weather_wind_timescale_z' ] ) * self.Config[ 'world_weather_wind_z' ] 
+    )
+
+    if ( self.Config[ 'world_weather_wind_turbulence' ] ) then 
+        self.windDirection = self.windDirection + VectorRand( ) * self.Config[ 'world_weather_wind_turbulence_scale' ]
+    end
+
+    return self.windDirection * Velocity
 end
 
 function Coffee.Weather:Particles( )
@@ -113,16 +172,22 @@ function Coffee.Weather:Particles( )
 
     Particle:SetGravity( vector_up * -self.Config[ 'world_weather_gravity' ] )
 
+    -- Setup color.
+    local Color = self.Config[ 'world_weather_color' ]
+
+    Particle:SetColor( Color.r, Color.g, Color.b )
+
     -- Setup velocity.
-    local Velocity = VectorRand( )
+    Particle:SetVelocity( self:Wind( VectorRand( ), Height ) * self.Config[ 'world_weather_velocity' ] )
 
-    if ( self.Config[ 'world_weather_wind' ] ) then 
-        Velocity.x = Velocity.x * math.Clamp( self.Config[ 'world_weather_wind_x' ] / 50, 0, 1000 )
-        Velocity.y = Velocity.y * math.Clamp( self.Config[ 'world_weather_wind_y' ] / 50, 0, 1000 )
-        Velocity.z = Velocity.z * math.Clamp( self.Config[ 'world_weather_wind_z' ] / 50, 0, 1000 )
+    -- Setup roll.
+    if ( self.Config[ 'world_weather_roll' ] ) then 
+        local Target = self.Config[ 'world_weather_roll_target' ]
+        local Delta  = self.Config[ 'world_weather_roll_delta' ]
+        
+        Particle:SetRoll( math.random( -Target, Target ) )
+        Particle:SetRollDelta( math.Rand( -Delta, Delta ) )
     end
-
-    Particle:SetVelocity( Velocity * self.Config[ 'world_weather_velocity' ] )
 
     -- Setup per particle traces.
     if ( self.Config[ 'world_weather_per_particle' ] ) then 
@@ -145,3 +210,4 @@ function Coffee.Weather:Particles( )
 end
 
 Coffee.Hooks:New( 'Think', Coffee.Weather.Particles, Coffee.Weather )
+Coffee.Hooks:New( 'Tick', Coffee.Weather.Audio, Coffee.Weather )

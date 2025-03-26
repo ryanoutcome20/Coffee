@@ -161,20 +161,6 @@ Coffee.Materials = {
             }
         },
 
-        [ 'Refracted' ] = {
-            'Refract',
-            {
-                [ '$basetexture' ] = 'models/shadertest/shader4',
-                [ '$normalmap' ] = 'gm_construct/water_13_normal',
-                [ '$refracttexture' ] = '_rt_WaterRefraction',
-                [ '$reflecttexture' ] = '_rt_WaterReflection',
-                [ '$dudvmap' ] = 'gm_construct/water_13_dudv',
-                [ '$refracttint' ] = '[ 0 0 0 ]',
-                [ '$envmap' ] = 'env_cubemap',
-                [ '$model' ] = 1,
-            }
-        },
-
         [ 'Animated Portal' ] = {
             'UnlitTwoTexture',
             {
@@ -193,6 +179,54 @@ Coffee.Materials = {
                         [ 'texturescrollvar' ] = '$basetexturetransform',
                         [ 'texturescrollrate' ] = 0.2,
                         [ 'texturescrollangle' ] = 60,
+                    }
+                }
+            }
+        },
+
+        [ 'Animated Shield' ] = {
+            'Refract',
+            {
+                [ '$model' ] = 1,
+                [ '$refractamount' ] = 0.05,
+                [ '$bumpframe' ] = 0,
+                [ '$nocull' ] = 1,
+                [ '$scrollangle' ] = 90,
+                [ '$refracttint' ] = '[ 0 0 0 ]',
+                [ '$dudvmap' ] = 'models/effects/com_shield001a_dudv',
+                [ '$normalmap' ] = 'models/effects/com_shield001a_normal',
+
+                [ 'Proxies' ] = {
+                    [ 'TextureScroll' ] = {
+                        [ 'texturescrollvar' ] = '$bumptransform',
+                        [ 'texturescrollrate' ] = 0.05,
+                        [ 'texturescrollangle' ] = '$scrollangle'
+                    },
+
+                    [ 'Sine' ] = {
+                        [ 'sinePeriod' ] = 25,
+                        [ 'sineMin' ] = 85,
+                        [ 'sineMax' ] = 90,
+                        [ 'resultVar' ] = '$scrollangle'
+                    }
+                }
+            }
+        },
+
+        [ 'Animated Fenceglow' ] = {
+            'UnlitTwoTexture',
+            {
+                [ '$nocull' ] = 1,
+                [ '$nodecal' ] = 1,
+                [ '$additive' ] = 1,
+                [ '$basetexture' ] = 'models/props_combine/combine_fenceglow',
+                [ '$texture2' ] = 'sprites/smoke',
+
+                [ 'Proxies' ] = {
+                    [ 'TextureScroll' ] = {
+                        [ 'texturescrollvar' ] = '$texture2transform',
+                        [ 'texturescrollrate' ] = -0.5,
+                        [ 'texturescrollangle' ] = 0
                     }
                 }
             }
@@ -225,29 +259,6 @@ Coffee.Materials = {
                         [ 'resultVar' ] = '$refractamount'
                     }
                 }
-            }
-        },
-
-        [ 'Animated Metal' ] = {
-            'VertexLitGeneric',
-            {
-                [ '$basetexture' ] = 'models/XQM/Deg360_diffuse',
-                [ '$surfaceprop' ] = 'metal',
-                [ '$bumpmap' ] = 'models/XQM/Deg360_normal',
-                [ '$model' ] = 1,       
-                [ '$phong' ] = 1,
-                [ '$phongexponent' ] = 80,
-                [ '$phongboost' ] = 4,
-                [ '$phongfresnelranges' ] = '[ 1 1 1 ]',
-                [ '$halflambert' ] = 1,
-
-                [ 'Proxies' ] = {
-                    [ 'TextureScroll' ] = {
-                        [ 'textureScrollVar' ] = '$basetexturetransform',
-                        [ 'textureScrollRate' ] = 0.25,
-                        [ 'textureScrollAngle' ] = 90,
-                    },
-                }                
             }
         },
 
@@ -286,48 +297,6 @@ Coffee.Materials = {
             }
         },
 
-        [ 'Animated Highlight Wireframe' ] = {
-            'VertexLitGeneric',	
-            {
-                [ '$basetexture' ] = 'shadertest/cloud',
-                [ '$alpha' ] = 1,
-                [ '$additive' ] = 1,
-                [ '$selfillum' ] = 1,
-                [ '$wireframe' ] = 1,
-                [ '$angle' ] = 90,
-                [ '$texturescrollrate' ] = 0.25,
-                [ '$texturescrollangle' ] = 180,
-                [ '$texturescrollinput' ] = 25,
-                [ '$devidebyonehundred' ] = 100,
-                [ '$color' ] = '[ 1 1 1]',
-                [ '$translate' ] = '[ 0.0 0.0 ]',
-                [ '$centervar' ] = '[ -0.5 -0.5 ]',
-                [ '$scalevar' ] = '[ 1.0 1.0 ]',
-
-                [ 'Proxies' ] = {
-                    [ 'Divide' ] = {
-                        [ 'srcVar1' ] = '$texturescrollinput',
-                        [ 'srcVar2' ] = '$devidebyonehundred',
-                        [ 'resultVar' ] = '$texturescrollrate',
-                    },
-                    
-                    [ 'TextureScroll' ] = {
-                        [ 'textureScrollVar' ] = '$translate',
-                        [ 'textureScrollRate' ] = '$texturescrollrate',
-                        [ 'textureScrollAngle' ] = '$texturescrollangle',
-                    },
-                    
-                    [ 'TextureTransform' ] = {
-                        [ 'translateVar' ] = '$translate',
-                        [ 'scalevar' ] = '$scalevar',
-                        [ 'rotateVar' ] = '$angle',
-                        [ 'centerVar' ] = '$centervar',
-                        [ 'resultVar' ] = '$basetexturetransform',
-                    },
-                }
-            }
-        },
-
         [ 'Animated Spawn Effect' ] = {
             'VertexLitGeneric',	
             {
@@ -336,34 +305,31 @@ Coffee.Materials = {
                 [ '$additive' ] = 1,
                 [ '$selfillum' ] = 1,
                 [ '$wireframe' ] = 1,
-                [ '$angle' ] = 90,
-                [ '$scaleinput' ] = 100,
-                [ '$texturescrollrate' ] = 0.25,
-                [ '$texturescrollangle' ] = 180,
-                [ '$texturescrollinput' ] = 25,
-                [ '$devidebyonehundred' ] = 100,
                 [ '$color' ] = '[ 1 1 1 ]',
+
+                [ '$texturescrollrate' ] = 0.45,
+
                 [ '$translate' ] = '[ 0.0 0.0 ]',
                 [ '$centervar' ] = '[ -0.5 -0.5 ]',
-                [ '$scalevar' ] = '[ 1.0 1.0 ]',
+                [ '$scalevar' ] = '[ 5 5 ]',
 
                 [ 'Proxies' ] = {
                     [ 'Divide' ] = {
-                        [ 'srcVar1' ] = '$texturescrollinput',
-                        [ 'srcVar2' ] = '$devidebyonehundred',
+                        [ 'srcVar1' ] = 25,
+                        [ 'srcVar2' ] = 100,
                         [ 'resultVar' ] = '$texturescrollrate',
                     },
                     
                     [ 'TextureScroll' ] = {
                         [ 'textureScrollVar' ] = '$translate',
                         [ 'textureScrollRate' ] = '$texturescrollrate',
-                        [ 'textureScrollAngle' ] = '$texturescrollangle',
+                        [ 'textureScrollAngle' ] = 80,
                     },
                     
                     [ 'TextureTransform' ] = {
                         [ 'translateVar' ] = '$translate',
                         [ 'scalevar' ] = '$scalevar',
-                        [ 'rotateVar' ] = '$angle',
+                        [ 'rotateVar' ] = 90,
                         [ 'centerVar' ] = '$centervar',
                         [ 'resultVar' ] = '$basetexturetransform',
                     },
@@ -427,7 +393,8 @@ Coffee.Materials = {
         [ 'Lightning' ]       = 'trails/electric',
         [ 'Plasma' ]          = 'trails/plasma',
         [ 'LOL!' ]            = 'trails/lol',
-        [ 'Smoke' ]           = 'trails/smoke'
+        [ 'Smoke' ]           = 'trails/smoke',
+        [ 'Beam' ]            = 'sprites/tp_beam001'
     },
 
     Cache = { }
@@ -440,6 +407,7 @@ function Coffee.Materials:Get( Name, IgnoreZ, Color, secondaryColor )
         local Tint = self:GetColoredVector( Color )
 
         Material:SetVector( '$refracttint', Tint )
+        Material:SetVector( '$color', Tint )
     end
 
     if ( secondaryColor ) then 
@@ -447,6 +415,7 @@ function Coffee.Materials:Get( Name, IgnoreZ, Color, secondaryColor )
         
         Material:SetVector( '$envmaptint', Tint )
         Material:SetVector( '$selfillumtint', Tint )
+        Material:SetVector( '$color2', Tint )
 
         local Ranges = Material:GetVector( '$selfIllumFresnelMinMaxExp' ) 
 

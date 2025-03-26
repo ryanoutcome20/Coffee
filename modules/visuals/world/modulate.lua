@@ -1,9 +1,9 @@
 Coffee.Modulate = {
     Resolution = Coffee.Resolution,
-    Materials = Coffee.Materials,
-    Client = Coffee.Client,
-    Config = Coffee.Config,
-    Colors = Coffee.Colors,
+    Materials  = Coffee.Materials,
+    Client     = Coffee.Client,
+    Config     = Coffee.Config,
+    Colors     = Coffee.Colors,
 
     World = game.GetWorld( )
 }
@@ -196,6 +196,28 @@ function Coffee.Modulate:SetupSkyboxFog( Scale )
     return true
 end
 
+function Coffee.Modulate:AdjustHands( )
+    local Hands = self.Client.Local:GetHands( )
+
+    if ( not IsValid( Hands ) ) then 
+        return
+    end
+    
+    if ( not self.Config[ 'world_hands' ] ) then
+        if ( player_manager and player_manager.TranslatePlayerHands ) then 
+            local Name = string.GetFileFromFilename( self.Client.Model )
+            local Info = player_manager.TranslatePlayerHands( string.sub( Name, 1, -5 ) )
+
+            Hands:SetModel( Info.model )
+        end
+        
+        return
+    end
+
+    Hands:SetModel( self.Config[ 'world_hands_model' ] )
+end
+
+Coffee.Hooks:New( 'Tick', Coffee.Modulate.AdjustHands, Coffee.Modulate )
 Coffee.Hooks:New( 'SetupSkyboxFog', Coffee.Modulate.SetupSkyboxFog, Coffee.Modulate )
 Coffee.Hooks:New( 'SetupWorldFog', Coffee.Modulate.SetupWorldFog, Coffee.Modulate )
 Coffee.Hooks:New( 'PreDrawEffects', Coffee.Modulate.PostUpdateWorldMaterial, Coffee.Modulate )

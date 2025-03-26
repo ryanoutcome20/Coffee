@@ -135,14 +135,30 @@ function Coffee.Menu:Keydown( Assignment )
     return false
 end
 
-function Coffee.Menu:HandleToggles( ENT, Key )   
-    self.Toggles[ Key ] = self.Toggles[ Key ] or false 
+function Coffee.Menu:HandleToggles( )
+    -- This is stupid but all predicted hooks and inputs get frozen 
+    -- when you sequence shift.
 
-    if ( self.Toggles[ Key ] ) then 
-        self.Toggles[ Key ] = false 
-    else 
-        self.Toggles[ Key ] = true 
-    end 
+    for Key = 1, BUTTON_CODE_LAST do
+        self.Toggles[ Key ] = self.Toggles[ Key ] or false 
+
+        if ( not input.IsButtonDown( Key ) ) then 
+            self.Held[ Key ] = false
+            continue
+        end
+
+        if ( self.Held[ Key ] ) then 
+            continue
+        end
+
+        if ( self.Toggles[ Key ] ) then 
+            self.Toggles[ Key ] = false 
+        else 
+            self.Toggles[ Key ] = true 
+        end
+
+        self.Held[ Key ] = true
+    end
 end
 
-Coffee.Hooks:New( 'PlayerButtonUp', Coffee.Menu.HandleToggles, Coffee.Menu )
+Coffee.Hooks:New( 'Tick', Coffee.Menu.HandleToggles, Coffee.Menu )

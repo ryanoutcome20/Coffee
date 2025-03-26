@@ -8,8 +8,16 @@ Coffee:LoadFile( 'lua/coffee/modules/bots/other/handler.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/bots/walkbots/point/handler.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/bots/walkbots/simple/handler.lua' )
 
-function Coffee.Bots:Update( CUserCMD )
+function Coffee.Bots:Update( Stage, CUserCMD )
+    if ( Stage != MOVE_LATE_PREDICTED ) then 
+        return
+    end
+
     if ( not self.Client.Local or not self.Client.Alive ) then 
+        return
+    end
+    
+    if ( CUserCMD:CommandNumber( ) == 0 ) then 
         return
     end
 
@@ -27,3 +35,5 @@ function Coffee.Bots:Update( CUserCMD )
     self.Simple:Handler( CUserCMD )
     self.Point:Handler( CUserCMD )
 end
+
+Coffee.Hooks:New( 'CreateMoveEx', Coffee.Bots.Update, Coffee.Bots )

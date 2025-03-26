@@ -21,7 +21,7 @@ function Coffee.Records:GetFront( Target )
     return Records[ 1 ]
 end
 
-function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse, Break )
+function Coffee.Records:GetIdeal( Target, Inverse, Break )
     local Records = table.Copy( self.Cache[ Target ] ) or { }
     local Best;
 
@@ -32,7 +32,7 @@ function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse, Break )
     end
 
     for k, Record in pairs( Records ) do 
-        if ( not self:Valid( CUserCMD, Record ) ) then 
+        if ( not self:Valid( Record ) ) then 
             continue
         end
 
@@ -50,7 +50,7 @@ function Coffee.Records:GetIdeal( CUserCMD, Target, Inverse, Break )
     return Best
 end
 
-function Coffee.Records:GetLast( CUserCMD, Target )
+function Coffee.Records:GetLast( Target )
     local Records = table.Copy( self.Cache[ Target ] ) or { }
     local Last;
 
@@ -59,7 +59,7 @@ function Coffee.Records:GetLast( CUserCMD, Target )
     Records = table.Reverse( Records )
 
     for k, Record in pairs( Records ) do 
-        if ( not self:Valid( CUserCMD, Record ) or k == 1 ) then 
+        if ( not self:Valid( Record ) ) then 
             continue
         end
 
@@ -71,16 +71,34 @@ function Coffee.Records:GetLast( CUserCMD, Target )
     end
 end
 
-function Coffee.Records:GetTickDelta( CUserCMD, Time )
-    return ( self.Require:Servertime( CUserCMD ) + self.Require:Latency( 0 ) + self.Require:Latency( 1 ) ) - Time
+function Coffee.Records:GetExtendedAmount( )
+    if ( not self.Config[ 'aimbot_extended' ] ) then 
+        return 0
+    end
+
+    return ( self.Config[ 'aimbot_extended_time' ] - 200 ) / 1000
 end
 
-function Coffee.Records:Valid( CUserCMD, Record )
+function Coffee.Records:GetTickDelta( Time )
+    local Correction = 0
+    local Lerp       = GetLerpTime( )
+    local Server     = self.Client.Local:GetInternalVariable( 'm_nTickBase' )
+
+    Time = Time + TICKS_TO_TIME( 1 )
+    
+    Correction = Correction + self.Require:Latency( 0 ) + self.Require:Latency( 1 )
+    Correction = Correction + TICKS_TO_TIME( Lerp )
+    Correction = math.Clamp( Correction, 0, 1 )
+    
+    return math.abs( Correction - TICKS_TO_TIME( Server - TIME_TO_TICKS( Time ) ) )
+end
+
+function Coffee.Records:Valid( Record )
     if ( Record.LC ) then 
         return false
     end
 
-    return self:GetTickDelta( CUserCMD, Record.Simtime ) < 1
+    return self:GetTickDelta( Record.Simtime ) < ( 0.2 + self:GetExtendedAmount( ) )
 end
 
 function Coffee.Records:MatchCompensation( Target, Current )
@@ -255,13 +273,13 @@ function Coffee.Records:Update( Stage )
 
         if ( istable( newRecord ) ) then 
             table.insert( self.Cache[ Target ], 1, newRecord )
+            
+            -- Update all records in the context with the compensation information.
+            if ( newRecord.Player ) then 
+                self:MatchCompensation( Target, newRecord )
+            end
         end
-
-        -- Update all records in the context with the compensation information.
-        if ( newRecord.Player ) then 
-            self:MatchCompensation( Target, newRecord )
-        end
-
+        
         -- No need to keep this many records.
         while ( #self.Cache[ Target ] > Maximum ) do 
             table.remove( self.Cache[ Target ] )

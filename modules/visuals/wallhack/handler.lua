@@ -164,7 +164,7 @@ function Coffee.Visuals:Wallhack( )
         self:RenderText( Target.GetUserGroup and Target:GetUserGroup( ) or 'None', 'esp_usergroup' )
         
         if ( team ) then 
-            local Team = team.GetName( Target.Team )
+            local Team = team.GetName( Target:Team( ) )
 
             if ( Team ) then
                 self:RenderText( Team != '' and Team or 'None', 'esp_team_name' )
@@ -185,6 +185,15 @@ function Coffee.Visuals:Wallhack( )
         -- If the player is dormant and we're visualizing lets add a custom flag.
         if ( Target:IsDormant( ) ) then 
             self:RenderText( 'Dormant', 'esp_dormant' )
+        end
+
+        -- If we are playing TTT and this player is a terrorist then lets add a custom flag.
+        if ( self.Gamemode == 'terrortown' ) then 
+            if ( self.Gamemodes:IsDetective( Target ) ) then 
+                self:RenderText( 'Detective', 'esp_ttt', self.Config[ 'esp_ttt_detective' ] )
+            elseif ( self.Gamemodes:IsTraitor( Target ) ) then
+                self:RenderText( 'Traitor', 'esp_ttt', self.Config[ 'esp_ttt_traitor' ] )
+            end
         end
 
         -- Fix our LOD.
@@ -314,23 +323,35 @@ function Coffee.Visuals:Wallhack( )
                 render.SetColorMaterial( )
             end
 
-            for k, Record in pairs( Records ) do                
-                if ( Mode == 'Line' and Last ) then
-                    render.DrawLine(
-                        Record.EyePos,
-                        Last.EyePos,
-                        Color,
-                        true
-                    )
-                elseif ( Mode == 'Dots' ) then
-                    local Screen = Record.EyePos:ToScreen( )
-
-                    surface.SetDrawColor( 18, 18, 18 )
-                    surface.DrawRect( Screen.x, Screen.y, 4, 4 )
+            if ( Mode != 'Bounds' ) then 
+                for k, Record in pairs( Records ) do    
+                    if ( not self.Records:Valid( Record ) ) then 
+                        continue
+                    end
                     
-                    surface.SetDrawColor( Color )
-                    surface.DrawRect( Screen.x + 1, Screen.y + 1, 2, 2 )
-                elseif ( Mode == 'Bounds' ) then 
+                    if ( Mode == 'Line' and Last ) then
+                        render.DrawLine(
+                            Record.EyePos,
+                            Last.EyePos,
+                            Color,
+                            true
+                        )
+                    elseif ( Mode == 'Dots' ) then
+                        local Screen = Record.EyePos:ToScreen( )
+
+                        surface.SetDrawColor( 17, 17, 17 )
+                        surface.DrawRect( Screen.x, Screen.y, 4, 4 )
+                        
+                        surface.SetDrawColor( Color )
+                        surface.DrawRect( Screen.x + 1, Screen.y + 1, 2, 2 )
+                    end
+                    
+                    Last = Record
+                end
+            else
+                local Record = self.Records:GetLast( Target )
+
+                if ( Record ) then 
                     render.DrawWireframeBox( 
                         Record.Position, 
                         angle_zero, 
@@ -340,8 +361,6 @@ function Coffee.Visuals:Wallhack( )
                         true 
                     )
                 end
-                
-                Last = Record
             end
 
             if ( Mode != 'Dots' ) then 
