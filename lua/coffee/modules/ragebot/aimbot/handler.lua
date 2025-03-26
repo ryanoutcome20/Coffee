@@ -1,10 +1,5 @@
 function Coffee.Ragebot:Aimbot( CUserCMD )
-    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then        
-        if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
-            local c = self:CalculateCompensation( CUserCMD, CUserCMD:GetViewAngles(), true, true )
-            self:SetAngles( CUserCMD, c )
-        end
-
+    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then
         return
     end
 
