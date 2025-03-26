@@ -4,5 +4,8 @@ return {
     [ 'MOVE_PREDICTED' ]       = 2,
     [ 'MOVE_LATE_PREDICTED' ]  = 3,
     [ 'MOVE_POST_PREDICTED' ]  = 4,
-	[ 'MOVE_END' ]             = 5
+	[ 'MOVE_END' ]             = 5,
+
+    [ 'MOVE_PRE_MOVEMENT' ]    = 6,
+    [ 'MOVE_POST_MOVEMENT' ]   = 7
 }

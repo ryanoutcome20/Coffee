@@ -5,6 +5,7 @@ Coffee.Ragebot = {
     Overlay       = Coffee.Overlay,
     Config        = Coffee.Config,
     Client        = Coffee.Client,
+    Hooks         = Coffee.Hooks,
     Shots         = Coffee.Shots,
     Menu          = Coffee.Menu,
     
@@ -96,7 +97,11 @@ function Coffee.Ragebot:Predicted( Stage, CUserCMD )
 
     self:AdjustGrenades( CUserCMD )
 
+    self.Hooks:Call( 'CreateMoveEx', MOVE_PRE_MOVEMENT, CUserCMD )
+
     self:SetupMovement( CUserCMD )
+
+    self.Hooks:Call( 'CreateMoveEx', MOVE_POST_MOVEMENT, CUserCMD )
 
     self:BreakAnimations( CUserCMD )
     

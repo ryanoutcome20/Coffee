@@ -140,11 +140,11 @@ Coffee:Print( false, 'Loading modules...' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/menu.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/form.lua' )
 
-Coffee:LoadFile( 'lua/coffee/modules/bots/main.lua' )
-
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/main.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/visuals/main.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/main.lua' )
 
 -- =============================================================================
 -- Gather dynamic files.

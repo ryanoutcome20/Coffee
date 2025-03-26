@@ -1454,6 +1454,15 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Admin List', 'miscellaneous_admin_list'  )
     
+    self:GenerateCheckbox( Panel, 'Bunnyhop', 'miscellaneous_bunnyhop'  )
+
+    self:GenerateCheckbox( Panel, 'Autostrafe', 'miscellaneous_autostrafe'  )
+    self:GenerateDropdown( nil, 1, 'miscellaneous_autostrafe_style', {
+        'Classic',
+        'Assistive'
+    } )
+    self:GenerateMiniCheckbox( nil, 'Unlock Landing', 'miscellaneous_autostrafe_unlock'  )
+    self:GenerateMiniCheckbox( nil, 'Clamp Sidemove', 'miscellaneous_autostrafe_clamp'  )
 end )
 
 Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
