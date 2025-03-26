@@ -95,7 +95,6 @@ function Coffee.Visuals:Update( )
     
     self:Watermark( )
     self:Notifications( )
-    self:Indicators( )
     self:Wallhack( )
     self:Entities( )
 end

@@ -24,19 +24,11 @@ Coffee.Require = {
                 return ded.GetLatency( Mode )
             end,
 
-            [ 'StartPrediction' ] = function( self, CUserCMD )
-                if ( not self.Config[ 'aimbot_engine' ] ) then 
-                    return
-                end
-                
+            [ 'StartPrediction' ] = function( self, CUserCMD )                
                 return ded.StartPrediction( CUserCMD )
             end,
 
-            [ 'EndPrediction' ] = function( self, CUserCMD )
-                if ( not self.Config[ 'aimbot_engine' ] ) then 
-                    return
-                end
-                
+            [ 'EndPrediction' ] = function( self, CUserCMD )                
                 return ded.FinishPrediction( CUserCMD )
             end,
 

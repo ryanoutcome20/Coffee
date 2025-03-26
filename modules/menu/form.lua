@@ -80,12 +80,7 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Avoid Multiple Records', 'aimbot_optimizations_small_records' )
     self:GenerateMiniCheckbox( nil, 'Limit Aimbot Scan', 'aimbot_optimizations_targets' )
     self:GenerateMiniCheckbox( nil, 'Avoid Ideal Record Scan', 'aimbot_optimizations_ideal_records' )
-    -- 3D Damage
-    -- 2D Damage
-    -- Fog
-    -- Render Lock
-    -- Ambient Modulatio
-    -- Look into porting some stuff from honocheat (backtrack)
+
     self:GenerateLabel( Panel, 'Optimize Scan' )
     self:GenerateSlider( nil, 'aimbot_optimizations_targets_amount', 1, 3, 2, 0 )
 
@@ -144,13 +139,6 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Deathmatch', 'aimbot_avoid_deathmatch' )
 
     self:GenerateCheckbox( Panel, 'Invert Blacklist', 'aimbot_avoid_invert' )
-
-    -- Playerlist
-    -- Colored Chat
-    -- OOF Arrows
-    -- Console Color?
-    -- Coffee Cup Right Side
-    -- Anti-Aim Lines
 end, true )
 
 -- Anti-Aim Tab
@@ -582,11 +570,6 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Optimized Visual Culling', 'esp_culled'  )
 
     self:GenerateCheckbox( Panel, 'Draw Local Firstperson', 'esp_first_person'  )
-
-    self:GenerateCheckbox( Panel, 'Localplayer Indicators', 'esp_indicators'  )
-    self:GenerateMiniCheckbox( nil, 'Lag Compensation', 'esp_indicators_lc'  )
-    self:GenerateMiniCheckbox( nil, 'Choke', 'esp_indicators_choke'  )
-    self:GenerateMiniCheckbox( nil, 'Anti-Aim Inversion', 'esp_indicators_invert'  )
 end )
 
 Coffee.Menu:Handle( 'Players', function( self, Panel )
@@ -949,10 +932,7 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateSlider( nil, 'world_weather_size', 1, 10, 5, 0 )
 
     self:GenerateCheckbox( Panel, 'Adjust Particle Roll', 'world_weather_roll' )
-    -- models/props_c17/fisheyelens
-    -- models/props_combine/tpballglow
-    -- models/shadertest/predator
-    -- models/weapons/v_slam/new light1
+    
     self:GenerateLabel( Panel, 'Target' )
     self:GenerateSlider( nil, 'world_weather_roll_target', 0, 10, 5, 0 )
 

@@ -80,17 +80,15 @@ function Coffee.Records:GetExtendedAmount( )
 end
 
 function Coffee.Records:GetTickDelta( Time )
-    local Correction = 0
-    local Lerp       = GetLerpTime( )
-    local Server     = self.Client.Local:GetInternalVariable( 'm_nTickBase' )
-
     Time = Time + TICKS_TO_TIME( 1 )
     
-    Correction = Correction + self.Require:Latency( 0 ) + self.Require:Latency( 1 )
-    Correction = Correction + TICKS_TO_TIME( Lerp )
+    local Correction = self.Require:Latency( 0 ) + self.Require:Latency( 1 )
+    Correction = Correction + TICKS_TO_TIME( GetLerpTime( ) )
     Correction = math.Clamp( Correction, 0, 1 )
+
+    local Servertime = self.Client.Local:GetInternalVariable( 'm_nTickBase' )
     
-    return math.abs( Correction - TICKS_TO_TIME( Server - TIME_TO_TICKS( Time ) ) )
+    return math.abs( Correction - TICKS_TO_TIME( Servertime - TIME_TO_TICKS( Time ) ) )
 end
 
 function Coffee.Records:Valid( Record )
