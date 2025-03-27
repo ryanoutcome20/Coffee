@@ -22,6 +22,8 @@ function Coffee.Miscellaneous:Update( Stage, CUserCMD )
 
     self:Autostrafe( CUserCMD )
     self:Bunnyhop( CUserCMD )
+
+    self:QuickMovement( CUserCMD )
 end
 
 Coffee.Hooks:New( 'CreateMoveEx', Coffee.Miscellaneous.Update, Coffee.Miscellaneous )

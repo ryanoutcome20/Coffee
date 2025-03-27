@@ -57,3 +57,34 @@ function Coffee.Miscellaneous:Autostrafe( CUserCMD )
         end
     end
 end
+
+function Coffee.Miscellaneous:QuickMovement( CUserCMD )
+    if ( not self.Config[ 'miscellaneous_quick_acceleration' ] ) then 
+        return
+    end
+
+    if ( not self.Client.Local:IsFlagSet( FL_ONGROUND ) ) then 
+        return
+    end
+
+    local Forward = CUserCMD:GetForwardMove( )
+    
+    if ( Forward > 0 ) then 
+        CUserCMD:SetForwardMove( 10000 )
+    elseif ( Forward < 0 ) then
+        CUserCMD:SetForwardMove( -10000 )
+    end
+
+    local Side = CUserCMD:GetSideMove( )
+    
+    if ( Side > 0 ) then 
+        CUserCMD:SetSideMove( 10000 )
+    elseif ( Side < 0 ) then
+        CUserCMD:SetSideMove( -10000 )
+    end
+
+
+    if ( self.Config[ 'miscellaneous_quick_acceleration_sprint' ] ) then 
+        CUserCMD:AddKey( IN_SPEED )
+    end
+end

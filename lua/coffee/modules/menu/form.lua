@@ -1463,6 +1463,10 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     } )
     self:GenerateMiniCheckbox( nil, 'Unlock Landing', 'miscellaneous_autostrafe_unlock'  )
     self:GenerateMiniCheckbox( nil, 'Clamp Sidemove', 'miscellaneous_autostrafe_clamp'  )
+
+    self:GenerateCheckbox( Panel, 'Quick Acceleration', 'miscellaneous_quick_acceleration'  )
+    self:GenerateMiniCheckbox( nil, 'Always Sprint', 'miscellaneous_quick_acceleration_sprint'  )
+
 end )
 
 Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
