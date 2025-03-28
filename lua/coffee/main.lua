@@ -62,7 +62,7 @@ Coffee.Environment = setmetatable( {
 } )
 
 function Coffee:Load( Code, Environment, ... )
-    local Function = __G.CompileString( Code, 'Coffee' )   
+    local Function = CompileString( Code, 'Coffee' )   
 
     if ( not Function ) then 
         return self:Print( true, 'Failed to compile code! (%s, %s)', string.NiceSize( #Code ), util.CRC( Code ) )
@@ -76,7 +76,7 @@ function Coffee:Load( Code, Environment, ... )
 end
 
 function Coffee:LoadFile( Directory, Insecure )
-    local Handle = __G.file.Open( Directory, 'rb', 'GAME' )
+    local Handle = file.Open( Directory, 'rb', 'GAME' )
 
     if ( not Handle ) then 
         return self:Print( true, 'Failed to open handle to file %s!', string.GetFileFromFilename( Directory ) )
