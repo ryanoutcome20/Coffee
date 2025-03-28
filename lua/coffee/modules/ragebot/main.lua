@@ -43,8 +43,6 @@ Coffee:LoadFile( 'lua/coffee/modules/ragebot/antiaim/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/hl2.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/m9k.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/swcs.lua' )
-Coffee:LoadFile( 'lua/coffee/modules/ragebot/packs/tfa.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/pack.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/helpers/silent.lua' )

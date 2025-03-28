@@ -75,14 +75,14 @@ function Coffee:Load( Code, Environment, ... )
     return true, Function( ... )
 end
 
-function Coffee:LoadFile( Directory )
+function Coffee:LoadFile( Directory, Insecure )
     local Handle = __G.file.Open( Directory, 'rb', 'GAME' )
 
     if ( not Handle ) then 
         return self:Print( true, 'Failed to open handle to file %s!', string.GetFileFromFilename( Directory ) )
     end
 
-    local Valid, Data = self:Load( Handle:Read( Handle:Size( ) ), self.Environment )
+    local Valid, Data = self:Load( Handle:Read( Handle:Size( ) ), not Insecure and self.Environment or nil )
 
     if ( Valid ) then 
         Coffee:Print( false, 'Successfully loaded file %s!', Directory )
@@ -93,6 +93,14 @@ function Coffee:LoadFile( Directory )
     Handle:Close( )
 
     return Data
+end
+
+function Coffee:LoadDirectory( Directory, Insecure )
+    local Files = file.Find( Directory .. '*.lua', 'GAME' )
+
+    for i = 1, #Files do
+        self:LoadFile( Directory .. Files[ i ], Insecure )
+    end
 end
 
 -- =============================================================================
@@ -151,3 +159,6 @@ Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/main.lua' )
 -- =============================================================================
 
 Coffee:Print( false, 'Gathering dynamic files...' )
+
+Coffee:LoadDirectory( 'coffee/safe/', false )
+Coffee:LoadDirectory( 'coffee/unsafe/', true )

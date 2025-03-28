@@ -121,9 +121,9 @@ Coffee.Materials = {
 
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
-                        [ 'texturescrollvar' ] = '$basetexturetransform',
-                        [ 'texturescrollrate' ] = 0.65,
-                        [ 'texturescrollangle' ] = 90,
+                        [ 'textureScrollVar' ] = '$basetexturetransform',
+                        [ 'textureScrollRate' ] = 0.65,
+                        [ 'textureScrollAngle' ] = 90,
                     }
                 },
             }
@@ -176,9 +176,9 @@ Coffee.Materials = {
 
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
-                        [ 'texturescrollvar' ] = '$basetexturetransform',
-                        [ 'texturescrollrate' ] = 0.2,
-                        [ 'texturescrollangle' ] = 60,
+                        [ 'textureScrollVar' ] = '$basetexturetransform',
+                        [ 'textureScrollRate' ] = 0.2,
+                        [ 'textureScrollAngle' ] = 60,
                     }
                 }
             }
@@ -198,9 +198,9 @@ Coffee.Materials = {
 
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
-                        [ 'texturescrollvar' ] = '$bumptransform',
-                        [ 'texturescrollrate' ] = 0.05,
-                        [ 'texturescrollangle' ] = '$scrollangle'
+                        [ 'textureScrollVar' ] = '$bumptransform',
+                        [ 'textureScrollRate' ] = 0.05,
+                        [ 'textureScrollAngle' ] = '$scrollangle'
                     },
 
                     [ 'Sine' ] = {
@@ -224,9 +224,9 @@ Coffee.Materials = {
 
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
-                        [ 'texturescrollvar' ] = '$texture2transform',
-                        [ 'texturescrollrate' ] = -0.5,
-                        [ 'texturescrollangle' ] = 0
+                        [ 'textureScrollVar' ] = '$texture2transform',
+                        [ 'textureScrollRate' ] = -0.5,
+                        [ 'textureScrollAngle' ] = 0
                     }
                 }
             }
@@ -246,16 +246,15 @@ Coffee.Materials = {
 
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
-                        [ 'texturescrollvar' ] = '$bumptransform',
-                        [ 'texturescrollrate' ] = 0.05,
-                        [ 'texturescrollangle' ] = 90,
+                        [ 'textureScrollVar' ] = '$bumptransform',
+                        [ 'textureScrollRate' ] = 0.05,
+                        [ 'textureScrollAngle' ] = 90,
                     },
 
                     [ 'Sine' ] = {
                         [ 'sinePeriod' ] = 2,
                         [ 'sineMin' ] = 0,
                         [ 'sineMax' ] = 4,
-                        [ 'timeOffset' ] = 0,
                         [ 'resultVar' ] = '$refractamount'
                     }
                 }
@@ -307,7 +306,7 @@ Coffee.Materials = {
                 [ '$wireframe' ] = 1,
                 [ '$color' ] = '[ 1 1 1 ]',
 
-                [ '$texturescrollrate' ] = 0.45,
+                [ '$textureScrollRate' ] = 0.45,
 
                 [ '$translate' ] = '[ 0.0 0.0 ]',
                 [ '$centervar' ] = '[ -0.5 -0.5 ]',
@@ -317,12 +316,12 @@ Coffee.Materials = {
                     [ 'Divide' ] = {
                         [ 'srcVar1' ] = 25,
                         [ 'srcVar2' ] = 100,
-                        [ 'resultVar' ] = '$texturescrollrate',
+                        [ 'resultVar' ] = '$textureScrollRate',
                     },
                     
                     [ 'TextureScroll' ] = {
                         [ 'textureScrollVar' ] = '$translate',
-                        [ 'textureScrollRate' ] = '$texturescrollrate',
+                        [ 'textureScrollRate' ] = '$textureScrollRate',
                         [ 'textureScrollAngle' ] = 80,
                     },
                     
@@ -366,13 +365,13 @@ Coffee.Materials = {
             'VertexLitGeneric',
             {
                 [ '$basetexture' ] = 'effects/tp_eyefx/tpeyefx_',
-                [ '$texturescrollrate' ] = 0.60,
+                [ '$textureScrollRate' ] = 0.60,
                 [ '$additive' ] = 1,
 
                 [ 'Proxies' ] = {
                     [ 'TextureScroll' ] = {
                         [ 'textureScrollVar' ] = '$basetexturetransform',
-                        [ 'textureScrollRate' ] = '$texturescrollrate',
+                        [ 'textureScrollRate' ] = '$textureScrollRate',
                         [ 'textureScrollAngle' ] = 55
                     },
 
@@ -380,8 +379,7 @@ Coffee.Materials = {
                         [ 'sinePeriod' ] = 1000,
                         [ 'sineMin' ] = 0.75,
                         [ 'sineMax' ] = 0.90,
-                        [ 'timeOffset' ] = 0,
-                        [ 'resultVar' ] = '$texturescrollrate'
+                        [ 'resultVar' ] = '$textureScrollRate'
                     }
                 }
             }
