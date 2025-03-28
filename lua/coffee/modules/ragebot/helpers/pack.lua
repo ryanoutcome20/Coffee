@@ -1,13 +1,4 @@
 Coffee.Ragebot.Packs = {
-    [ 'weapon_swcs_base' ] = Coffee.Ragebot.SWCS,
-
-    [ 'tfa_gun_base' ]        = Coffee.Ragebot.TFA,
-    [ 'tfa_csgo_base' ]       = Coffee.Ragebot.TFA,
-    [ 'tfa_cso_crow_base' ]   = Coffee.Ragebot.TFA,
-    [ 'tfa_3dscoped_base' ]   = Coffee.Ragebot.TFA,
-    [ 'tfa_bash_base' ]       = Coffee.Ragebot.TFA,
-    [ 'tfa_rust_recoilbase' ] = Coffee.Ragebot.TFA,
-
     [ 'bobs_gun_base' ]    = Coffee.Ragebot.M9K,
     [ 'bobs_scoped_base' ] = Coffee.Ragebot.M9K,
     [ 'bobs_shotty_base' ] = Coffee.Ragebot.M9K,

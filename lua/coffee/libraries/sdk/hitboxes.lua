@@ -101,6 +101,17 @@ function Coffee.Hitboxes:HandleMultipoint( ENT, Matrix, Offset, Info )
     return Final
 end
 
+function Coffee.Hitboxes:AddCenter( ENT, Internal )
+    Internal[ HITGROUP_STOMACH ] = Internal[ HITGROUP_STOMACH ] or { }
+
+    table.insert( 
+        Internal[ HITGROUP_STOMACH ], 
+        ENT:LocalToWorld( ENT:OBBCenter( ) ) 
+    )
+
+    return Internal
+end
+
 function Coffee.Hitboxes:ParseInformation( ENT )
     -- Get our model and start our cache.
     local Model = ENT:GetModel( )
@@ -110,16 +121,16 @@ function Coffee.Hitboxes:ParseInformation( ENT )
     -- Get our sets.
     local Temp, Sets = { }, ENT:GetHitboxSetCount( )
 
-    if ( Sets == 0 ) then 
+    if ( not Sets or Sets == 0 ) then 
         return Temp 
     end 
     
     -- Loop through sets and count to get bone information.
-    for i = 0, Sets - 1 do
-        local Count = ENT:GetHitBoxCount( i )
+    for Set = 0, Sets - 1 do
+        local Count = ENT:GetHitBoxCount( Set )
 
-        for c = 0, Count do 
-            local Group, Bone = ENT:GetHitBoxHitGroup( c, i ), ENT:GetHitBoxBone( c, i )
+        for Hitbox = 0, Count do 
+            local Group, Bone = ENT:GetHitBoxHitGroup( Hitbox, Set ), ENT:GetHitBoxBone( Hitbox, Set )
 
             if ( not Group or not Bone ) then 
                 continue 
@@ -138,7 +149,12 @@ function Coffee.Hitboxes:ParseInformation( ENT )
 
             Temp[ Group ] = Temp[ Group ] or { }
 
-            table.insert( Temp[ Group ], { Name = Name, Hitbox = c, Set = i, Group = Group } )
+            table.insert( Temp[ Group ], { 
+                Name   = Name, 
+                Hitbox = Hitbox, 
+                Set    = Set, 
+                Group  = Group 
+            } )
         end
     end
 
@@ -208,9 +224,5 @@ function Coffee.Hitboxes:GetMatrixInformation( ENT )
         Temp[ k ] = Internal
     end
 
-    Temp[ HITGROUP_STOMACH ] = Temp[ HITGROUP_STOMACH ] or { }
-
-    table.insert( Temp[ HITGROUP_STOMACH ], ENT:LocalToWorld( ENT:OBBCenter( ) ) )
-
-    return Temp
+    return self:AddCenter( ENT, Temp )
 end

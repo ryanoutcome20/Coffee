@@ -4,8 +4,8 @@ Coffee.Fullupdate = {
 
 function Coffee.Fullupdate:Update( )
     -- This is a simple fix to an issue caused by primarly zxcmodule but may
-    -- also popup in other modules aswell. It will crash you if you lag too
-    -- hard or if you force full update manually.
+    -- also popup in other modules aswell. It will crash you when you full update
+    -- and attempt to get client information the same tick.
 
     self.Updating = true 
 

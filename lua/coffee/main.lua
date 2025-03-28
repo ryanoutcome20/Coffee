@@ -19,7 +19,7 @@ Coffee.Colors = {
 
     [ 'Red' ]   = Color( 255, 0, 0 ),
     [ 'Green' ] = Color( 0, 255, 0 ),
-    [ 'Blue' ]  = Color( 0, 0, 255 ),
+    [ 'Blue' ]  = Color( 0, 0, 255 )
 }
 
 Coffee.Localplayer = LocalPlayer( )
@@ -62,7 +62,7 @@ Coffee.Environment = setmetatable( {
 } )
 
 function Coffee:Load( Code, Environment, ... )
-    local Function = CompileString( Code, 'Coffee' )   
+    local Function = __G.CompileString( Code, 'Coffee' )   
 
     if ( not Function ) then 
         return self:Print( true, 'Failed to compile code! (%s, %s)', string.NiceSize( #Code ), util.CRC( Code ) )
@@ -76,7 +76,7 @@ function Coffee:Load( Code, Environment, ... )
 end
 
 function Coffee:LoadFile( Directory )
-    local Handle = file.Open( Directory, 'rb', 'GAME' )
+    local Handle = __G.file.Open( Directory, 'rb', 'GAME' )
 
     if ( not Handle ) then 
         return self:Print( true, 'Failed to open handle to file %s!', string.GetFileFromFilename( Directory ) )

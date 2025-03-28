@@ -83,7 +83,6 @@ function Coffee.Miscellaneous:QuickMovement( CUserCMD )
         CUserCMD:SetSideMove( -10000 )
     end
 
-
     if ( self.Config[ 'miscellaneous_quick_acceleration_sprint' ] ) then 
         CUserCMD:AddKey( IN_SPEED )
     end
