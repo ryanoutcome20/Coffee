@@ -86,6 +86,10 @@ function Coffee.Visuals:ImpactEffects( Data )
     local Victim = Player( Data.userid )
     local Inflictor = Player( Data.attacker )
         
+    if ( not IsValid( Victim ) or not IsValid( Inflictor ) ) then 
+        return
+    end
+
     if ( Victim == Inflictor or Inflictor != self.Client.Local ) then 
         return
     end

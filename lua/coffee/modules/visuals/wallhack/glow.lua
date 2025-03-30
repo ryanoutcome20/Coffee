@@ -132,19 +132,15 @@ function Coffee.Visuals:Glow( )
             continue
         end
 
-        -- Get front record.
-        local Front = self.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target, true )
-
-        if ( not Front ) then 
-            continue
-        end
+        -- Get weapon.
+        local SWEP = Target:GetActiveWeapon( ) 
 
         -- Get the targets.
         local Targets = {
             Target
         }
 
-        if ( self.Config[ 'esp_glow_weapon' ] ) then 
+        if ( self.Config[ 'esp_glow_weapon' ] and SWEP and SWEP:IsValid( ) ) then 
             table.insert( Targets, Front.Weapon )
         end
 

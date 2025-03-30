@@ -89,7 +89,7 @@ function Coffee.Shots:Landed( Data )
 
     local Inflictor = Player( Data.attacker )
 
-    if ( not Inflictor or Inflictor != self.Client.Local ) then 
+    if ( not IsValid( Inflictor ) or Inflictor != self.Client.Local ) then 
         return
     end
     

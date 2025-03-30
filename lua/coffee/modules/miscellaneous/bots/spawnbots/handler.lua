@@ -32,7 +32,7 @@ end
 function Coffee.Bots.Spawnbot:Activate( Data )
     local ENT = Player( Data.userid )
 
-    if ( not ENT or ENT != self.Client.Local ) then 
+    if ( not IsValid( ENT ) or ENT != self.Client.Local ) then 
         return
     end
 

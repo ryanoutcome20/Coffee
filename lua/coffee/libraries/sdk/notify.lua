@@ -33,6 +33,10 @@ function Coffee.Notify:Hurt( Data )
     local Victim = Player( Data.userid )
     local Inflictor = Player( Data.attacker )
 
+    if ( not IsValid( Victim ) or not IsValid( Inflictor ) ) then 
+        return
+    end
+
     local Damage = Victim:Health( ) - Data.health
         
     if ( Victim == Inflictor ) then 
