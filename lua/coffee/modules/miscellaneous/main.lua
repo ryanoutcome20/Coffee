@@ -6,7 +6,7 @@ Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/bots/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/movement/handler.lua' )
 
---Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/config/handler.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/config/handler.lua' )
 
 function Coffee.Miscellaneous:Update( Stage, CUserCMD )
     if ( Stage != MOVE_PREDICTED ) then 
