@@ -1,6 +1,5 @@
 Coffee.Visuals.Sky = {
     Materials = Coffee.Materials,
-    Config = Coffee.Config,
 
     Directions = { 'bk', 'dn', 'ft', 'lf', 'rt', 'up' },
 
@@ -84,12 +83,12 @@ function Coffee.Visuals.Sky:Handler( )
         end
     end
 
-    if ( not self.Config[ 'world_sky' ] ) then 
+    if ( not Coffee.Config[ 'world_sky' ] ) then 
         return self:Restore( self.Sky )
     end
 
     if ( isstring( self.Sky ) ) then 
-        return self:SetBasicSkybox( self.Config[ 'world_sky_basic' ] )
+        return self:SetBasicSkybox( Coffee.Config[ 'world_sky_basic' ] )
     end
 
     self:Grab( self.Sky )
@@ -97,37 +96,37 @@ function Coffee.Visuals.Sky:Handler( )
 
     local ENT = self.Sky
 
-	ENT:SetTopColor( self.Materials:GetColoredVector( self.Config[ 'world_sky_top' ] ) )
-	ENT:SetBottomColor( self.Materials:GetColoredVector( self.Config[ 'world_sky_bottom' ] ) )
-	ENT:SetFadeBias( self.Config[ 'world_sky_fade_bias' ] )
-	ENT:SetHDRScale( self.Config[ 'world_sky_hdr' ] )
+	ENT:SetTopColor( self.Materials:GetColoredVector( Coffee.Config[ 'world_sky_top' ] ) )
+	ENT:SetBottomColor( self.Materials:GetColoredVector( Coffee.Config[ 'world_sky_bottom' ] ) )
+	ENT:SetFadeBias( Coffee.Config[ 'world_sky_fade_bias' ] )
+	ENT:SetHDRScale( Coffee.Config[ 'world_sky_hdr' ] )
 
-	ENT:SetDrawStars( self.Config[ 'world_sky_stars' ] )
-    ENT:SetStarLayers( self.Config[ 'world_sky_stars_density' ] )
-	ENT:SetStarTexture( self.Config[ 'world_sky_stars_texture' ] )
-	ENT:SetStarFade( self.Config[ 'world_sky_stars_fade' ] )
-	ENT:SetStarScale( self.Config[ 'world_sky_stars_scale' ] )
+	ENT:SetDrawStars( Coffee.Config[ 'world_sky_stars' ] )
+    ENT:SetStarLayers( Coffee.Config[ 'world_sky_stars_density' ] )
+	ENT:SetStarTexture( Coffee.Config[ 'world_sky_stars_texture' ] )
+	ENT:SetStarFade( Coffee.Config[ 'world_sky_stars_fade' ] )
+	ENT:SetStarScale( Coffee.Config[ 'world_sky_stars_scale' ] )
 
-    local Speed = self.Config[ 'world_sky_stars_speed' ] / 60 
+    local Speed = Coffee.Config[ 'world_sky_stars_speed' ] / 60 
 
-    if ( self.Config[ 'world_sky_stars_speed_sine' ] ) then 
-        Speed = Speed * math.sin( CurTime( ) * ( self.Config[ 'world_sky_stars_speed_sine_amount' ] / 500 ) )
+    if ( Coffee.Config[ 'world_sky_stars_speed_sine' ] ) then 
+        Speed = Speed * math.sin( CurTime( ) * ( Coffee.Config[ 'world_sky_stars_speed_sine_amount' ] / 500 ) )
     end
 
 	ENT:SetStarSpeed( Speed )
 
-    if ( self.Config[ 'world_sky_dusk' ] ) then 
-        ENT:SetDuskIntensity( self.Config[ 'world_sky_dusk_intensity' ] / 10 )
-        ENT:SetDuskScale( self.Config[ 'world_sky_dusk_scale' ] )
-        ENT:SetDuskColor( self.Materials:GetColoredVector( self.Config[ 'world_sky_dusk_color' ] ) )
+    if ( Coffee.Config[ 'world_sky_dusk' ] ) then 
+        ENT:SetDuskIntensity( Coffee.Config[ 'world_sky_dusk_intensity' ] / 10 )
+        ENT:SetDuskScale( Coffee.Config[ 'world_sky_dusk_scale' ] )
+        ENT:SetDuskColor( self.Materials:GetColoredVector( Coffee.Config[ 'world_sky_dusk_color' ] ) )
     else
         ENT:SetDuskIntensity( 0 )
         ENT:SetDuskScale( 0 )
     end
 
-    if ( self.Config[ 'world_sky_sun' ] ) then 
-        ENT:SetSunSize( self.Config[ 'world_sky_sun_size' ] / 10 )
-        ENT:SetSunColor( self.Materials:GetColoredVector( self.Config[ 'world_sky_sun_color' ] ) )
+    if ( Coffee.Config[ 'world_sky_sun' ] ) then 
+        ENT:SetSunSize( Coffee.Config[ 'world_sky_sun_size' ] / 10 )
+        ENT:SetSunColor( self.Materials:GetColoredVector( Coffee.Config[ 'world_sky_sun_color' ] ) )
     else
         ENT:SetSunSize( 0 )
     end

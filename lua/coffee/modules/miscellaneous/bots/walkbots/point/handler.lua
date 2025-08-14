@@ -1,7 +1,6 @@
 Coffee.Bots.Point = { 
     Overlay = Coffee.Overlay,
     Client = Coffee.Client,
-    Config = Coffee.Config,
     Colors = Coffee.Colors,
     Menu   = Coffee.Menu,
     
@@ -33,7 +32,7 @@ function Coffee.Bots.Point:FindPoint( )
     if ( Target:Length2D( ) < 5 ) then 
         self.Active = ( self.Active + 1 )
 
-        if ( self.Config[ 'miscellaneous_point_bot_invert' ] and self.Active >= #self.Points ) then 
+        if ( Coffee.Config[ 'miscellaneous_point_bot_invert' ] and self.Active >= #self.Points ) then 
             self.Points = table.Reverse( self.Points )
         end
 
@@ -44,12 +43,12 @@ function Coffee.Bots.Point:FindPoint( )
 end
 
 function Coffee.Bots.Point:RenderPoints( )
-    if ( not self.Config[ 'miscellaneous_point_bot_render' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_point_bot_render' ] ) then 
         return
     end
 
-    local Color  = self.Config[ 'miscellaneous_point_bot_render_color' ]
-    local Number = self.Config[ 'miscellaneous_point_bot_render_number' ]
+    local Color  = Coffee.Config[ 'miscellaneous_point_bot_render_color' ]
+    local Number = Coffee.Config[ 'miscellaneous_point_bot_render_number' ]
 
     for i = 1, #self.Points do 
         local Point = self.Points[ i ]
@@ -65,7 +64,7 @@ function Coffee.Bots.Point:RenderPoints( )
 end
 
 function Coffee.Bots.Point:Handler( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_point_bot' ] or not self.Menu:Keydown( 'miscellaneous_point_bot_keybind' ) ) then 
+    if ( not Coffee.Config[ 'miscellaneous_point_bot' ] or not self.Menu:Keydown( 'miscellaneous_point_bot_keybind' ) ) then 
         return
     end
 

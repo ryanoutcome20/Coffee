@@ -32,7 +32,7 @@ function Coffee.Modulate:UpdateWorld( Enabled, Color )
 end
 
 function Coffee.Modulate:UpdateEffects( )
-    if ( self.Config[ 'world_color_overlay' ] ) then 
+    if ( Coffee.Config[ 'world_color_overlay' ] ) then 
         local Modification = {
             [ '$pp_colour_addr' ] = 0,
             [ '$pp_colour_addg' ] = 0,
@@ -42,23 +42,23 @@ function Coffee.Modulate:UpdateEffects( )
             [ '$pp_colour_mulg' ] = 0,
             [ '$pp_colour_mulb' ] = 0,
             
-            [ '$pp_colour_brightness' ] = self.Config[ 'world_color_overlay_brightness' ] / 255,
-            [ '$pp_colour_contrast' ]   = self.Config[ 'world_color_overlay_contrast' ],
-            [ '$pp_colour_colour' ]     = self.Config[ 'world_color_overlay_saturation' ],
+            [ '$pp_colour_brightness' ] = Coffee.Config[ 'world_color_overlay_brightness' ] / 255,
+            [ '$pp_colour_contrast' ]   = Coffee.Config[ 'world_color_overlay_contrast' ],
+            [ '$pp_colour_colour' ]     = Coffee.Config[ 'world_color_overlay_saturation' ],
             
-            [ '$pp_colour_inv' ]        = self.Config[ 'world_color_overlay_invert' ] and 1 or 0,
+            [ '$pp_colour_inv' ]        = Coffee.Config[ 'world_color_overlay_invert' ] and 1 or 0,
         }
 
-        if ( self.Config[ 'world_color_overlay_multiply' ] ) then 
-            local Color = self.Config[ 'world_color_overlay_multiply_color' ]
+        if ( Coffee.Config[ 'world_color_overlay_multiply' ] ) then 
+            local Color = Coffee.Config[ 'world_color_overlay_multiply_color' ]
 
             Modification[ '$pp_colour_mulr' ] = Color.r
             Modification[ '$pp_colour_mulg' ] = Color.g
             Modification[ '$pp_colour_mulb' ] = Color.b
         end
 
-        if ( self.Config[ 'world_color_overlay_add' ] ) then 
-            local Color = self.Config[ 'world_color_overlay_add_color' ]
+        if ( Coffee.Config[ 'world_color_overlay_add' ] ) then 
+            local Color = Coffee.Config[ 'world_color_overlay_add_color' ]
 
             Modification[ '$pp_colour_addr' ] = Color.r / 255
             Modification[ '$pp_colour_addg' ] = Color.g / 255
@@ -68,58 +68,58 @@ function Coffee.Modulate:UpdateEffects( )
         DrawColorModify( Modification )
     end
 
-    if ( self.Config[ 'world_material_overlay' ] ) then 
+    if ( Coffee.Config[ 'world_material_overlay' ] ) then 
         DrawMaterialOverlay( 
-            self.Config[ 'world_material_overlay_material' ], 
-            self.Config[ 'world_material_overlay_refract' ] 
+            Coffee.Config[ 'world_material_overlay_material' ], 
+            Coffee.Config[ 'world_material_overlay_refract' ] 
         )
     end
 
-    if ( self.Config[ 'world_bloom' ] ) then 
-        local Color = self.Config[ 'world_bloom_color' ]
+    if ( Coffee.Config[ 'world_bloom' ] ) then 
+        local Color = Coffee.Config[ 'world_bloom_color' ]
 
         DrawBloom( 
-            self.Config[ 'world_bloom_light' ], 
-            self.Config[ 'world_bloom_multiply' ], 
-            self.Config[ 'world_bloom_size_x' ], 
-            self.Config[ 'world_bloom_size_y' ], 
-            self.Config[ 'world_bloom_passes' ], 
-            self.Config[ 'world_bloom_vivid' ], 
+            Coffee.Config[ 'world_bloom_light' ], 
+            Coffee.Config[ 'world_bloom_multiply' ], 
+            Coffee.Config[ 'world_bloom_size_x' ], 
+            Coffee.Config[ 'world_bloom_size_y' ], 
+            Coffee.Config[ 'world_bloom_passes' ], 
+            Coffee.Config[ 'world_bloom_vivid' ], 
             Color.r / 255, 
             Color.g / 255, 
             Color.b / 255 
         )
     end
 
-    if ( self.Config[ 'world_motion_blur' ] ) then 
+    if ( Coffee.Config[ 'world_motion_blur' ] ) then 
         DrawMotionBlur( 
-            self.Config[ 'world_motion_blur_alpha' ], 
-            self.Config[ 'world_motion_blur_alpha_frames' ], 
-            self.Config[ 'world_motion_blur_delay' ]
+            Coffee.Config[ 'world_motion_blur_alpha' ], 
+            Coffee.Config[ 'world_motion_blur_alpha_frames' ], 
+            Coffee.Config[ 'world_motion_blur_delay' ]
         )
     end
 
-    if ( self.Config[ 'world_sharpen' ] ) then 
-        local Contrast = self.Config[ 'world_sharpen_contrast' ]
+    if ( Coffee.Config[ 'world_sharpen' ] ) then 
+        local Contrast = Coffee.Config[ 'world_sharpen_contrast' ]
 
-        if ( self.Config[ 'world_sharpen_exponent' ] ) then 
+        if ( Coffee.Config[ 'world_sharpen_exponent' ] ) then 
             -- This is mostly here to just play around with.
             Contrast = Contrast ^ 2
         end
         
         DrawSharpen( 
             Contrast, 
-            self.Config[ 'world_sharpen_distance' ] 
+            Coffee.Config[ 'world_sharpen_distance' ] 
         )
     end
 
-    if ( self.Config[ 'world_sobel' ] ) then 
+    if ( Coffee.Config[ 'world_sobel' ] ) then 
         DrawSobel( 
-            self.Config[ 'world_sobel_threshold' ] 
+            Coffee.Config[ 'world_sobel_threshold' ] 
         ) 
     end
 
-    if ( self.Config[ 'world_sunbeams' ] ) then 
+    if ( Coffee.Config[ 'world_sunbeams' ] ) then 
         -- https://github.com/Facepunch/garrysmod/blob/7324e6e6b2ea1671750bd101043ba05d0ddc2c7e/garrysmod/lua/postprocess/sunbeams.lua#L31
         local Info = util.GetSunInfo( )
 
@@ -128,9 +128,9 @@ function Coffee.Modulate:UpdateEffects( )
         
             if ( ( Info.direction:Dot( EyeVector( ) ) - 0.8 ) * 5 > 0 ) then 
                 DrawSunbeams( 
-                    self.Config[ 'world_sunbeams_multiply' ], 
-                    self.Config[ 'world_sunbeams_darkness' ],
-                    self.Config[ 'world_sunbeams_size' ],
+                    Coffee.Config[ 'world_sunbeams_multiply' ], 
+                    Coffee.Config[ 'world_sunbeams_darkness' ],
+                    Coffee.Config[ 'world_sunbeams_size' ],
                     Adjusted.x / self.Resolution.Width,
                     Adjusted.y / self.Resolution.Height
                 )
@@ -138,42 +138,42 @@ function Coffee.Modulate:UpdateEffects( )
         end
     end
 
-    if ( self.Config[ 'world_texturized' ] ) then 
+    if ( Coffee.Config[ 'world_texturized' ] ) then 
         DrawTexturize( 
-            self.Config[ 'world_texturized_scale_random' ] and math.random( ) or self.Config[ 'world_texturized_scale' ],
-            Material( self.Config[ 'world_texturized_material' ] )
+            Coffee.Config[ 'world_texturized_scale_random' ] and math.random( ) or Coffee.Config[ 'world_texturized_scale' ],
+            Material( Coffee.Config[ 'world_texturized_material' ] )
         )
     end
 end
 
 function Coffee.Modulate:UpdateWorldMaterial( )
-   if ( self.Config[ 'world_material' ] ) then 
+   if ( Coffee.Config[ 'world_material' ] ) then 
         render.WorldMaterialOverride( 
-            Material( self.Config[ 'world_material_material' ] )
+            Material( Coffee.Config[ 'world_material_material' ] )
         ) 
    end
 
-    if ( self.Config[ 'world_fullbright' ] ) then 
-        render.SetLightingMode( self.Config[ 'world_fullbright_mode' ] == 'Total' and 1 or 2 )
+    if ( Coffee.Config[ 'world_fullbright' ] ) then 
+        render.SetLightingMode( Coffee.Config[ 'world_fullbright_mode' ] == 'Total' and 1 or 2 )
     end
 end
 
 function Coffee.Modulate:PostUpdateWorldMaterial( )
-    if ( self.Config[ 'world_fullbright' ] ) then 
+    if ( Coffee.Config[ 'world_fullbright' ] ) then 
         render.SetLightingMode( 0 )
     end
 end
 
 function Coffee.Modulate:SetupWorldFog( )
-    if ( not self.Config[ 'world_fog' ] ) then 
+    if ( not Coffee.Config[ 'world_fog' ] ) then 
         return
     end
 
-    local Color = self.Config[ 'world_fog_color' ]
+    local Color = Coffee.Config[ 'world_fog_color' ]
 
     render.FogMode( MATERIAL_FOG_LINEAR )
-    render.FogStart( self.Config[ 'world_fog_start' ] )
-    render.FogEnd( self.Config[ 'world_fog_end' ] )
+    render.FogStart( Coffee.Config[ 'world_fog_start' ] )
+    render.FogEnd( Coffee.Config[ 'world_fog_end' ] )
     render.FogMaxDensity( Color.a / 255 )
     render.FogColor( Color.r, Color.g, Color.b )
 
@@ -181,15 +181,15 @@ function Coffee.Modulate:SetupWorldFog( )
 end
 
 function Coffee.Modulate:SetupSkyboxFog( Scale )
-    if ( not self.Config[ 'world_fog' ] ) then 
+    if ( not Coffee.Config[ 'world_fog' ] ) then 
         return
     end
 
-    local Color = self.Config[ 'world_fog_color' ]
+    local Color = Coffee.Config[ 'world_fog_color' ]
 
     render.FogMode( MATERIAL_FOG_LINEAR )
-    render.FogStart( self.Config[ 'world_fog_start' ] * Scale )
-    render.FogEnd( self.Config[ 'world_fog_end' ] * Scale )
+    render.FogStart( Coffee.Config[ 'world_fog_start' ] * Scale )
+    render.FogEnd( Coffee.Config[ 'world_fog_end' ] * Scale )
     render.FogMaxDensity( Color.a / 255 )
     render.FogColor( Color.r, Color.g, Color.b )
 
@@ -197,13 +197,17 @@ function Coffee.Modulate:SetupSkyboxFog( Scale )
 end
 
 function Coffee.Modulate:AdjustHands( )
+	if ( not self.Client.Local ) then
+		return
+	end
+
     local Hands = self.Client.Local:GetHands( )
 
     if ( not IsValid( Hands ) ) then 
         return
     end
     
-    if ( not self.Config[ 'world_hands' ] ) then
+    if ( not Coffee.Config[ 'world_hands' ] ) then
         if ( player_manager and player_manager.TranslatePlayerHands ) then 
             local Name = string.GetFileFromFilename( self.Client.Model )
             local Info = player_manager.TranslatePlayerHands( string.sub( Name, 1, -5 ) )
@@ -214,7 +218,7 @@ function Coffee.Modulate:AdjustHands( )
         return
     end
 
-    Hands:SetModel( self.Config[ 'world_hands_model' ] )
+    Hands:SetModel( Coffee.Config[ 'world_hands_model' ] )
 end
 
 Coffee.Hooks:New( 'Tick', Coffee.Modulate.AdjustHands, Coffee.Modulate )

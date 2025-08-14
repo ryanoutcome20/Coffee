@@ -1,17 +1,17 @@
 function Coffee.Visuals:Thirdperson( Origin, Angles )
-    local Distance = self.Config[ 'world_thirdperson_distance' ]
+    local Distance = Coffee.Config[ 'world_thirdperson_distance' ]
 
-    if ( self.Config[ 'world_thirdperson_interpolation' ] ) then 
+    if ( Coffee.Config[ 'world_thirdperson_interpolation' ] ) then 
         Distance = Lerp( ( CurTime( ) - self.prevTime ) / 4, self.prevDistance, Distance )
     end
 
     local Adjusted = Origin
 
     Adjusted = Adjusted - ( Angles:Forward( ) * Distance )
-    Adjusted = Adjusted + ( Angles:Right( ) * self.Config[ 'world_thirdperson_distance_right' ] )
-    Adjusted = Adjusted + ( Angles:Up( ) * self.Config[ 'world_thirdperson_distance_up' ] )
+    Adjusted = Adjusted + ( Angles:Right( ) * Coffee.Config[ 'world_thirdperson_distance_right' ] )
+    Adjusted = Adjusted + ( Angles:Up( ) * Coffee.Config[ 'world_thirdperson_distance_up' ] )
 
-    if ( self.Config[ 'world_thirdperson_collisions' ] ) then 
+    if ( Coffee.Config[ 'world_thirdperson_collisions' ] ) then 
         local Trace = util.TraceLine( {
             start  = Origin,
             endpos = Adjusted,
@@ -37,7 +37,7 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
     View.fov    = FOV
     View.angles = Angles
     
-    if ( self.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
+    if ( Coffee.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
         View.origin = self:Thirdperson( Origin, Angles )
         View.drawviewer = true
     else 
@@ -45,13 +45,13 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
         self.prevDistance = 0
     end
     
-    if ( self.Config[ 'world_fov' ] ) then 
-        View.fov = self.Config[ 'world_fov_amount' ]
+    if ( Coffee.Config[ 'world_fov' ] ) then 
+        View.fov = Coffee.Config[ 'world_fov_amount' ]
     end
 
     if ( self.Ragebot:ShouldSilent( ) ) then 
         View.angles = self.Ragebot.Silent
-    elseif ( self.Config[ 'world_viewmodel' ] and self.Config[ 'world_viewmodel_recoil' ] ) then 
+    elseif ( Coffee.Config[ 'world_viewmodel' ] and Coffee.Config[ 'world_viewmodel_recoil' ] ) then 
         View.angles = View.angles - self.Client.Local:GetViewPunchAngles( )
     end
 
@@ -61,20 +61,20 @@ end
 function Coffee.Visuals:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle, Origin, Angle )
     local Update = false
 
-    if ( self.Config[ 'world_viewmodel' ] ) then 
-        if ( self.Config[ 'world_viewmodel_sway' ] ) then 
-            local Delta = ( Origin - oldOrigin ) * ( self.Config[ 'world_viewmodel_sway_scale' ] / 100 )
+    if ( Coffee.Config[ 'world_viewmodel' ] ) then 
+        if ( Coffee.Config[ 'world_viewmodel_sway' ] ) then 
+            local Delta = ( Origin - oldOrigin ) * ( Coffee.Config[ 'world_viewmodel_sway_scale' ] / 100 )
             
             Origin = oldOrigin + Delta
         end
         
-        if ( self.Config[ 'world_viewmodel_bob' ] ) then 
-            local Delta = ( Angle - oldAngle ) * ( self.Config[ 'world_viewmodel_bob_scale' ] / 100 )
+        if ( Coffee.Config[ 'world_viewmodel_bob' ] ) then 
+            local Delta = ( Angle - oldAngle ) * ( Coffee.Config[ 'world_viewmodel_bob_scale' ] / 100 )
             
             Angle = oldAngle + Delta
         end
 
-        if ( self.Config[ 'world_viewmodel_gamemode_view' ] ) then 
+        if ( Coffee.Config[ 'world_viewmodel_gamemode_view' ] ) then 
             Origin, Angle = GAMEMODE:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle, Origin, Angle )
         end
 
@@ -85,12 +85,12 @@ function Coffee.Visuals:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle,
         return
     end
 
-    if ( self.Config[ 'world_offsets' ] ) then 
-        Angle:RotateAroundAxis( Angle:Forward( ), self.Config[ 'world_offsets_roll' ] )
-        Angle:RotateAroundAxis( Angle:Right( ), self.Config[ 'world_offsets_pitch' ] )
-        Angle:RotateAroundAxis( Angle:Up( ), self.Config[ 'world_offsets_yaw' ] )
+    if ( Coffee.Config[ 'world_offsets' ] ) then 
+        Angle:RotateAroundAxis( Angle:Forward( ), Coffee.Config[ 'world_offsets_roll' ] )
+        Angle:RotateAroundAxis( Angle:Right( ), Coffee.Config[ 'world_offsets_pitch' ] )
+        Angle:RotateAroundAxis( Angle:Up( ), Coffee.Config[ 'world_offsets_yaw' ] )
 
-        local Base = self.Config[ 'world_offsets_base' ]
+        local Base = Coffee.Config[ 'world_offsets_base' ]
 
         if ( Base == 'Floor' ) then 
             Origin = self.Client.Position
@@ -98,14 +98,14 @@ function Coffee.Visuals:CalcViewModelView( SWEP, Viewmodel, oldOrigin, oldAngle,
             Origin = self.Client.Local:EyePos( )
         end
 
-        Origin = Origin + self.Config[ 'world_offsets_x' ] * Angle:Right( ) * 1
-        Origin = Origin + self.Config[ 'world_offsets_y' ] * Angle:Forward( ) * 1
-        Origin = Origin + self.Config[ 'world_offsets_z' ] * Angle:Up( ) * 1
+        Origin = Origin + Coffee.Config[ 'world_offsets_x' ] * Angle:Right( ) * 1
+        Origin = Origin + Coffee.Config[ 'world_offsets_y' ] * Angle:Forward( ) * 1
+        Origin = Origin + Coffee.Config[ 'world_offsets_z' ] * Angle:Up( ) * 1
         
         Update = true
     end
 
-    if ( self.Config[ 'world_viewmodel_visualize_aimbot' ] and self.Ragebot.currentAngle ) then 
+    if ( Coffee.Config[ 'world_viewmodel_visualize_aimbot' ] and self.Ragebot.currentAngle ) then 
         Angle  = self.Ragebot.currentAngle
         
         Update = true

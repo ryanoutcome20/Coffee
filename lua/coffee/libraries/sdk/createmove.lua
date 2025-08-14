@@ -10,7 +10,7 @@ function Coffee.CreateMove:CreateMove( CUserCMD )
         return
     end
 
-    local usingPrediction = self.Config[ 'aimbot_engine' ]
+    local usingPrediction = Coffee.Config[ 'aimbot_engine' ]
 
     for Stage = 0, MOVE_END do 
         if ( usingPrediction and Stage == MOVE_POST_PREDICTED ) then 

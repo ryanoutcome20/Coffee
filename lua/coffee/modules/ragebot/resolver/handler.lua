@@ -3,7 +3,7 @@ function Coffee.Ragebot:OnMissedShot( wasResolver, Record )
         return
     end
 
-    if ( not self.Config[ 'aimbot_resolver' ] ) then 
+    if ( not Coffee.Config[ 'aimbot_resolver' ] ) then 
         return
     end
 
@@ -16,7 +16,7 @@ end
 
 function Coffee.Ragebot:Resolve( Record )
     -- Check if they're using a fake.
-    if ( not Record.Fake and self.Config[ 'aimbot_resolver_only_detect' ] ) then 
+    if ( not Record.Fake and Coffee.Config[ 'aimbot_resolver_only_detect' ] ) then 
         return
     end
 
@@ -26,7 +26,7 @@ function Coffee.Ragebot:Resolve( Record )
     local Misses = self.Indexes[ Record.Index ] or 0
 
     -- Check if we'll be using an extended mode.
-    local Extended = self.Config[ 'aimbot_resolver_mode' ] == 'Extended'
+    local Extended = Coffee.Config[ 'aimbot_resolver_mode' ] == 'Extended'
 
     -- Adjust the yaw portion of the angles.
     Angles.y = math.NormalizeAngle( Record.Angles.y )
@@ -70,7 +70,7 @@ function Coffee.Ragebot:UpdateResolver( ENT, Record )
         return
     end
 
-    if ( not self.Config[ 'aimbot_resolver' ] ) then 
+    if ( not Coffee.Config[ 'aimbot_resolver' ] ) then 
         return
     end
 
@@ -89,7 +89,7 @@ function Coffee.Ragebot:UpdateResolver( ENT, Record )
     -- Get our angle.
     local Angle = self:Resolve( Front ) or Front.Angles
 
-    if ( self.Config[ 'aimbot_resolver_serverside' ] ) then 
+    if ( Coffee.Config[ 'aimbot_resolver_serverside' ] ) then 
         Angle = ENT:GetNW2Angle( 'SVR' ) or Angle
     end
 

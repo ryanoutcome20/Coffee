@@ -34,18 +34,22 @@ function Coffee.Draggables:Get( Name, Bar )
 end
 
 function Coffee.Draggables:Update( )
+    if (not IsValid(self.Client.Local)) then
+        return
+    end
+
     -- Get panels.
     local Spectators = self:Get( 'Spectators', false )
     local Admins     = self:Get( 'Admins', false )
 
-    Spectators:SetVisible( self.Config[ 'miscellaneous_spectator_list' ] )
-    Admins:SetVisible( self.Config[ 'miscellaneous_admin_list' ] )
+    Spectators:SetVisible( Coffee.Config[ 'miscellaneous_spectator_list' ] )
+    Admins:SetVisible( Coffee.Config[ 'miscellaneous_admin_list' ] )
     
     -- Update bars.
     self.Bars:Update( Choke )
 
     -- Check lists.
-    if ( not self.Config[ 'miscellaneous_spectator_list' ] and not self.Config[ 'miscellaneous_admin_list' ] ) then
+    if ( not Coffee.Config[ 'miscellaneous_spectator_list' ] and not Coffee.Config[ 'miscellaneous_admin_list' ] ) then
         return
     end
 
@@ -57,6 +61,10 @@ function Coffee.Draggables:Update( )
 
     -- Update spectators.
     for k, Target in pairs( self.Records.Players ) do 
+        if (not IsValid(Target)) then
+            continue
+        end
+
         if ( Target:GetObserverTarget( ) == self.Client.Local ) then 
             local Mode = self.Observers[ Target:GetObserverMode( ) ] or 'Other'
             

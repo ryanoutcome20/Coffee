@@ -18,12 +18,12 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     end
 
     -- Get constants from menu.
-    local Color          = self.Config[ Assignment .. '_color' ]
-    local secondaryColor = self.Config[ Assignment .. '_secondary_color' ]
-    local Material       = self.Config[ Assignment .. '_material' ]
+    local Color          = Coffee.Config[ Assignment .. '_color' ]
+    local secondaryColor = Coffee.Config[ Assignment .. '_secondary_color' ]
+    local Material       = Coffee.Config[ Assignment .. '_material' ]
 
     -- Check if we need to remove the orignal model.
-    if ( not isOverlay and not Occluded and not self.Config[ Assignment .. '_original' ] ) then 
+    if ( not isOverlay and not Occluded and not Coffee.Config[ Assignment .. '_original' ] ) then 
         ENT:SetRenderMode( RENDERMODE_NONE )
     end
 
@@ -54,7 +54,7 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     if ( not isOverlay ) then
         local Overlay = Assignment .. '_overlay'
 
-        if ( self.Config[ Overlay ] ) then 
+        if ( Coffee.Config[ Overlay ] ) then 
             self:RenderChams( ENT, Overlay, Occluded, true )
         end
     end
@@ -98,43 +98,43 @@ function Coffee.Visuals:PlayerChams( )
         local isFriendly = ENT:Team( ) == self.Client.Team
 
         if ( isLocal ) then
-            if ( self.Config[ 'esp_chams_local' ] ) then  
+            if ( Coffee.Config[ 'esp_chams_local' ] ) then  
                 self:RenderChams( Target, 'esp_chams_local' )
 
-                if ( self.Config[ 'esp_chams_local_attachments' ] ) then 
+                if ( Coffee.Config[ 'esp_chams_local_attachments' ] ) then 
                     self:RenderChams( ENT:GetActiveWeapon( ), 'esp_chams_local', false )
                 end
             end
         elseif ( isFriendly ) then 
-            if ( self.Config[ 'esp_chams_friendly_visible' ] ) then 
-                if ( self.Config[ 'esp_chams_friendly_invisible' ] ) then 
+            if ( Coffee.Config[ 'esp_chams_friendly_visible' ] ) then 
+                if ( Coffee.Config[ 'esp_chams_friendly_invisible' ] ) then 
                     self:RenderChams( Target, 'esp_chams_friendly_invisible', true )
                 end
     
                 self:RenderChams( Target, 'esp_chams_friendly_visible', false )
 
-                if ( self.Config[ 'esp_chams_friendly_visible_attachments' ] ) then 
+                if ( Coffee.Config[ 'esp_chams_friendly_visible_attachments' ] ) then 
                     self:RenderChams( ENT:GetActiveWeapon( ), 'esp_chams_friendly_visible', false )
                 end
             end
 
-            if ( self.Config[ 'esp_chams_friendly_backtrack' ] ) then 
+            if ( Coffee.Config[ 'esp_chams_friendly_backtrack' ] ) then 
                 self:BacktrackChams( ENT, 'esp_chams_friendly_backtrack' )
             end
         else 
-            if ( self.Config[ 'esp_chams_enemy_visible' ] ) then 
-                if ( self.Config[ 'esp_chams_enemy_invisible' ] ) then 
+            if ( Coffee.Config[ 'esp_chams_enemy_visible' ] ) then 
+                if ( Coffee.Config[ 'esp_chams_enemy_invisible' ] ) then 
                     self:RenderChams( Target, 'esp_chams_enemy_invisible', true )
                 end
     
                 self:RenderChams( Target, 'esp_chams_enemy_visible', false )
     
-                if ( self.Config[ 'esp_chams_enemy_visible_attachments' ] ) then 
+                if ( Coffee.Config[ 'esp_chams_enemy_visible_attachments' ] ) then 
                     self:RenderChams( ENT:GetActiveWeapon( ), 'esp_chams_enemy_visible', false )
                 end
             end
             
-            if ( self.Config[ 'esp_chams_enemy_backtrack' ] ) then 
+            if ( Coffee.Config[ 'esp_chams_enemy_backtrack' ] ) then 
                 self:BacktrackChams( ENT, 'esp_chams_enemy_backtrack' )
             end
         end
@@ -166,11 +166,11 @@ function Coffee.Visuals:FakeChams( )
         return
     end
 
-    if ( not self.Config[ 'esp_chams_local_fake' ] or not self.Config[ 'hvh_enabled' ] ) then 
+    if ( not Coffee.Config[ 'esp_chams_local_fake' ] or not Coffee.Config[ 'hvh_enabled' ] ) then 
         return self.CSEntity:Remove( 'Fake', ENT )
     end
 
-    if ( not self.Config[ 'world_thirdperson' ] or not self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
+    if ( not Coffee.Config[ 'world_thirdperson' ] or not self.Menu:Keydown( 'world_thirdperson_keybind' ) ) then 
         return self.CSEntity:Remove( 'Fake', ENT )
     end
 
@@ -194,7 +194,7 @@ function Coffee.Visuals:FakeChams( )
 end
 
 function Coffee.Visuals:PreDrawEffects( )
-    if ( not self.Config[ 'esp_chams_viewmodel' ] ) then 
+    if ( not Coffee.Config[ 'esp_chams_viewmodel' ] ) then 
         return 
     end
 
@@ -209,7 +209,7 @@ function Coffee.Visuals:PreDrawEffects( )
 end
 
 function Coffee.Visuals:PostDrawViewModel( )
-    if ( not self.Config[ 'esp_chams_viewmodel' ] ) then 
+    if ( not Coffee.Config[ 'esp_chams_viewmodel' ] ) then 
         return 
     end
 
@@ -224,13 +224,13 @@ function Coffee.Visuals:PostDrawViewModel( )
     local Color, secondaryColor, Material = nil, nil, nil
 
     if ( self.Viewmodel ) then 
-        Color          = self.Config[ 'esp_chams_viewmodel_color' ]
-        secondaryColor = self.Config[ 'esp_chams_viewmodel_secondary_color' ]
-        Material       = self.Config[ 'esp_chams_viewmodel_material' ]
+        Color          = Coffee.Config[ 'esp_chams_viewmodel_color' ]
+        secondaryColor = Coffee.Config[ 'esp_chams_viewmodel_secondary_color' ]
+        Material       = Coffee.Config[ 'esp_chams_viewmodel_material' ]
     elseif ( self.ViewmodelOverlay ) then 
-        Color          = self.Config[ 'esp_chams_viewmodel_overlay_color' ]
-        secondaryColor = self.Config[ 'esp_chams_viewmodel_overlay_secondary_color' ]
-        Material       = self.Config[ 'esp_chams_viewmodel_overlay_material' ]
+        Color          = Coffee.Config[ 'esp_chams_viewmodel_overlay_color' ]
+        secondaryColor = Coffee.Config[ 'esp_chams_viewmodel_overlay_secondary_color' ]
+        Material       = Coffee.Config[ 'esp_chams_viewmodel_overlay_material' ]
     end
 
     if ( Color and secondaryColor and Material ) then
@@ -244,11 +244,11 @@ function Coffee.Visuals:PostDrawViewModel( )
 end
 
 function Coffee.Visuals:PreDrawViewModel( Viewmodel, Local )
-    if ( self.Config[ 'esp_chams_viewmodel' ] ) then 
+    if ( Coffee.Config[ 'esp_chams_viewmodel' ] ) then 
         render.SetColorModulation( 1, 1, 1 )
         render.MaterialOverride( nil ) 
 
-        if ( self.Config[ 'esp_chams_viewmodel_original' ] ) then 
+        if ( Coffee.Config[ 'esp_chams_viewmodel_original' ] ) then 
             render.SetBlend( 1 )
             render.SuppressEngineLighting( false )
         else 
@@ -262,13 +262,13 @@ function Coffee.Visuals:PreDrawViewModel( Viewmodel, Local )
             self.Viewmodel = false 
         end
     
-        if ( not self.ViewmodelOverlay and self.Config[ 'esp_chams_viewmodel_overlay' ] ) then 
+        if ( not self.ViewmodelOverlay and Coffee.Config[ 'esp_chams_viewmodel_overlay' ] ) then 
             self.ViewmodelOverlay = true 
                 Viewmodel:DrawModel( )
             self.ViewmodelOverlay = false 
         end
 
-        if ( self.Config[ 'esp_chams_viewmodel_original' ] and not self.Config[ 'esp_chams_viewmodel_original_no_hands' ] ) then 
+        if ( Coffee.Config[ 'esp_chams_viewmodel_original' ] and not Coffee.Config[ 'esp_chams_viewmodel_original_no_hands' ] ) then 
             Local:GetHands( ):DrawModel( )
         end    
     end

@@ -6,10 +6,10 @@ function Coffee.Visuals:PreImpacts( ENT, Data )
         mask = MASK_SHOT
     } )
 
-    if ( self.Config[ 'world_impacts' ] ) then 
-        local Time = 3 * ( self.Config[ 'world_impacts_time' ] / 100 )
+    if ( Coffee.Config[ 'world_impacts' ] ) then 
+        local Time = 3 * ( Coffee.Config[ 'world_impacts_time' ] / 100 )
 
-        self.Overlay:Box( Trace.HitPos, nil, nil, Time, self.Config[ 'world_impacts_client' ] )
+        self.Overlay:Box( Trace.HitPos, nil, nil, Time, Coffee.Config[ 'world_impacts_client' ] )
     end
 end
 
@@ -27,40 +27,40 @@ function Coffee.Visuals:PostImpacts( ENT, Data )
     end
 
     -- Render our impact boxes.
-    if ( self.Config[ 'world_impacts' ] ) then 
-        local Time = 3 * ( self.Config[ 'world_impacts_time' ] / 100 )
+    if ( Coffee.Config[ 'world_impacts' ] ) then 
+        local Time = 3 * ( Coffee.Config[ 'world_impacts_time' ] / 100 )
     
-        self.Overlay:Box( Data.Trace.HitPos, nil, nil, Time, self.Config[ 'world_impacts_server' ] )
+        self.Overlay:Box( Data.Trace.HitPos, nil, nil, Time, Coffee.Config[ 'world_impacts_server' ] )
 
-        if ( self.Config[ 'world_impacts_spreadless' ] ) then 
+        if ( Coffee.Config[ 'world_impacts_spreadless' ] ) then 
             local Trace = self.Client.Local:GetEyeTrace( )
 
-            self.Overlay:Box( Trace.HitPos, nil, nil, Time, self.Config[ 'world_impacts_spreadless_color' ] )
+            self.Overlay:Box( Trace.HitPos, nil, nil, Time, Coffee.Config[ 'world_impacts_spreadless_color' ] )
         end
     end
 
     -- Check if we are rendering a beam.
-    if ( not self.Config[ 'world_beams' ] ) then 
+    if ( not Coffee.Config[ 'world_beams' ] ) then 
         return
     end
     
     -- Check if we're using a traced line.
     local Trace = Data.Trace 
 
-    if ( self.Config[ 'world_beams_traced' ] ) then 
+    if ( Coffee.Config[ 'world_beams_traced' ] ) then 
         Trace = self.Client.Local:GetEyeTrace( )
     end
 
     -- Get our render color.
     local Colors = {
-        Main      = self.Config[ 'world_beams_normal_main' ],
-        Secondary = self.Config[ 'world_beams_normal_secondary' ]
+        Main      = Coffee.Config[ 'world_beams_normal_main' ],
+        Secondary = Coffee.Config[ 'world_beams_normal_secondary' ]
     }
 
     if ( Trace.Entity:IsPlayer( ) or Trace.Entity:IsNPC( ) ) then 
         Colors = {
-            Main      = self.Config[ 'world_beams_hurt_main' ],
-            Secondary = self.Config[ 'world_beams_hurt_secondary' ]
+            Main      = Coffee.Config[ 'world_beams_hurt_main' ],
+            Secondary = Coffee.Config[ 'world_beams_hurt_secondary' ]
         }
     end
 
@@ -68,14 +68,14 @@ function Coffee.Visuals:PostImpacts( ENT, Data )
     self.Overlay:Beam( 
         Trace.StartPos,
         Trace.HitPos,
-        3 * ( self.Config[ 'world_beams_time' ] / 100 ),
-        self.Config[ 'world_beams_width' ],
-        self.Config[ 'world_beams_speed' ] / 100,
-        self.Config[ 'world_beams_amplitude' ] / 100,
-        self.Config[ 'world_beams_twist' ] * 10,
-        self.Config[ 'world_beams_cone' ] / 100,
-        self.Config[ 'world_beams_segments' ],
-        self.Materials:Get( self.Config[ 'world_beams_material' ] ),
+        3 * ( Coffee.Config[ 'world_beams_time' ] / 100 ),
+        Coffee.Config[ 'world_beams_width' ],
+        Coffee.Config[ 'world_beams_speed' ] / 100,
+        Coffee.Config[ 'world_beams_amplitude' ] / 100,
+        Coffee.Config[ 'world_beams_twist' ] * 10,
+        Coffee.Config[ 'world_beams_cone' ] / 100,
+        Coffee.Config[ 'world_beams_segments' ],
+        self.Materials:Get( Coffee.Config[ 'world_beams_material' ] ),
         Colors.Main,
         Colors.Secondary,
         false
@@ -98,10 +98,10 @@ function Coffee.Visuals:ImpactEffects( Data )
     local Lethal = Data.health <= 0
 
     -- Add hitsound.
-    if ( Lethal and self.Config[ 'world_killsound' ] ) then 
-        local Sound, Volume = self.Config[ 'world_killsound_sound' ], self.Config[ 'world_killsound_volume' ] / 100
+    if ( Lethal and Coffee.Config[ 'world_killsound' ] ) then 
+        local Sound, Volume = Coffee.Config[ 'world_killsound_sound' ], Coffee.Config[ 'world_killsound_volume' ] / 100
 
-        for i = 1, self.Config[ 'world_killsound_passes' ] do
+        for i = 1, Coffee.Config[ 'world_killsound_passes' ] do
             self.Client.Local:EmitSound(
                 Sound,
                 511,
@@ -111,10 +111,10 @@ function Coffee.Visuals:ImpactEffects( Data )
                 SND_NOFLAGS
             )
         end
-    elseif ( self.Config[ 'world_hitsound' ] ) then
-        local Sound, Volume = self.Config[ 'world_hitsound_sound' ], self.Config[ 'world_hitsound_volume' ] / 100
+    elseif ( Coffee.Config[ 'world_hitsound' ] ) then
+        local Sound, Volume = Coffee.Config[ 'world_hitsound_sound' ], Coffee.Config[ 'world_hitsound_volume' ] / 100
 
-        for i = 1, self.Config[ 'world_hitsound_passes' ] do
+        for i = 1, Coffee.Config[ 'world_hitsound_passes' ] do
             self.Client.Local:EmitSound(
                 Sound,
                 511,
@@ -127,10 +127,10 @@ function Coffee.Visuals:ImpactEffects( Data )
     end
 
     -- Add hitmarker.
-    self.Hitmarker:New( self.Config[ 'world_hitmarker_time' ] )
+    self.Hitmarker:New( Coffee.Config[ 'world_hitmarker_time' ] )
 
     -- Add our hit effect.
-    if ( not self.Config[ 'world_effects' ] ) then 
+    if ( not Coffee.Config[ 'world_effects' ] ) then 
         return
     end
 
@@ -140,17 +140,17 @@ function Coffee.Visuals:ImpactEffects( Data )
     Effect:SetOrigin( Victim:GetPos( ) + Victim:OBBCenter( ) )
     Effect:SetEntity( Victim )
     
-    Effect:SetMagnitude( self.Config[ 'world_effects_magnitude' ] )
-    Effect:SetRadius( self.Config[ 'world_effects_radius' ] )
-    Effect:SetScale( self.Config[ 'world_effects_scale' ] )
+    Effect:SetMagnitude( Coffee.Config[ 'world_effects_magnitude' ] )
+    Effect:SetRadius( Coffee.Config[ 'world_effects_radius' ] )
+    Effect:SetScale( Coffee.Config[ 'world_effects_scale' ] )
 
     -- Check if we need to remove the sound and smoke.
-    Effect:SetFlags( self.Config[ 'world_effects_no_flags' ] and 0x0 or 0x84 )
+    Effect:SetFlags( Coffee.Config[ 'world_effects_no_flags' ] and 0x0 or 0x84 )
 
     -- Setup our style.
-    local Style = Lethal and self.Config[ 'world_effects_kill' ] or self.Config[ 'world_effects_hurt' ]
+    local Style = Lethal and Coffee.Config[ 'world_effects_kill' ] or Coffee.Config[ 'world_effects_hurt' ]
     
-    self.Effects[ 'Custom' ] = Lethal and self.Config[ 'world_effects_kill_custom' ] or self.Config[ 'world_effects_hurt_custom' ]
+    self.Effects[ 'Custom' ] = Lethal and Coffee.Config[ 'world_effects_kill_custom' ] or Coffee.Config[ 'world_effects_hurt_custom' ]
 
     -- Load our effect.
     util.Effect( self.Effects[ Style ], Effect )

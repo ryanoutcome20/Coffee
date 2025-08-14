@@ -1,20 +1,19 @@
 Coffee.Bots.Simple = { 
     Overlay = Coffee.Overlay,
     Client = Coffee.Client,
-    Config = Coffee.Config,
     Colors = Coffee.Colors,
     Menu   = Coffee.Menu
 }
 
 function Coffee.Bots.Simple:IsSurfaceRamped( Predicted, Direction )
-    if ( not self.Config[ 'miscellaneous_movement_bot_ramps' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_movement_bot_ramps' ] ) then 
         return false
     end
 
-    local Distance = self.Config[ 'miscellaneous_movement_bot_ramps_distance' ] / 100
-    local maxAngle = self.Config[ 'miscellaneous_movement_bot_ramps_angle' ]
+    local Distance = Coffee.Config[ 'miscellaneous_movement_bot_ramps_distance' ] / 100
+    local maxAngle = Coffee.Config[ 'miscellaneous_movement_bot_ramps_angle' ]
 
-    for i = self.Config[ 'miscellaneous_movement_bot_ramps_offset' ], self.Client.Maxs.z do 
+    for i = Coffee.Config[ 'miscellaneous_movement_bot_ramps_offset' ], self.Client.Maxs.z do 
         local Trace = util.TraceLine( {
             start  = Vector( Predicted.x, Predicted.y, Predicted.z + i ),
             endpos = Predicted + ( Direction * Distance ),
@@ -36,11 +35,11 @@ function Coffee.Bots.Simple:IsSurfaceRamped( Predicted, Direction )
 end
 
 function Coffee.Bots.Simple:IsCrossable( Predicted, Direction, Fraction )
-    if ( not self.Config[ 'miscellaneous_movement_bot_step' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_movement_bot_step' ] ) then 
         return false
     end
 
-    local Distance = self.Config[ 'miscellaneous_movement_bot_step_distance' ] / 100
+    local Distance = Coffee.Config[ 'miscellaneous_movement_bot_step_distance' ] / 100
 
     local Slot = Predicted + ( Direction * Distance )
 
@@ -56,7 +55,7 @@ end
 function Coffee.Bots.Simple:FindWalkablePath( Current, Direction )
     local Used = 0
 
-    for i = 1, self.Config[ 'miscellaneous_movement_bot_ticks' ] do
+    for i = 1, Coffee.Config[ 'miscellaneous_movement_bot_ticks' ] do
         Used = Used + 1
 
         local Predicted = Current + ( Direction * engine.TickInterval( ) )
@@ -82,7 +81,7 @@ function Coffee.Bots.Simple:FindWalkablePath( Current, Direction )
 end
 
 function Coffee.Bots.Simple:GenerateWorkableDirections(Direction)
-    local Distance = self.Config[ 'miscellaneous_movement_bot_distance' ]
+    local Distance = Coffee.Config[ 'miscellaneous_movement_bot_distance' ]
     
     if ( Direction:Length2D( ) == 0 ) then
         return {
@@ -111,7 +110,7 @@ end
 function Coffee.Bots.Simple:FindBestPath( Directions, Current )
     local Best;
 
-    local Velocity = self.Config[ 'miscellaneous_movement_bot_velocity' ]
+    local Velocity = Coffee.Config[ 'miscellaneous_movement_bot_velocity' ]
 
     for i = 1, #Directions do 
         local Data = Directions[ i ]
@@ -145,7 +144,7 @@ function Coffee.Bots.Simple:FindBestPath( Directions, Current )
 end
 
 function Coffee.Bots.Simple:Handler( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_movement_bot' ] or not self.Menu:Keydown( 'miscellaneous_movement_bot_keybind' ) ) then 
+    if ( not Coffee.Config[ 'miscellaneous_movement_bot' ] or not self.Menu:Keydown( 'miscellaneous_movement_bot_keybind' ) ) then 
         return
     end
 

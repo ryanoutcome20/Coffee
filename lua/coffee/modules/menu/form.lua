@@ -1014,10 +1014,10 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     self:GenerateSlider( nil, 'world_sky_sun_size', 1, 100, 0, 0, false, '%' )
 
     self:GenerateCheckbox( Panel, 'World Modulation', 'world_modulation', function( Enabled )
-        Coffee.Modulate:UpdateWorld( Enabled, self.Config[ 'world_modulation_color' ] )
+        Coffee.Modulate:UpdateWorld( Enabled, Coffee.Config[ 'world_modulation_color' ] )
     end )
     self:GenerateColorpicker( nil, 'world_modulation_color', self.Colors.Purple, function( Color )
-        Coffee.Modulate:UpdateWorld( self.Config[ 'world_modulation' ], Color )
+        Coffee.Modulate:UpdateWorld( Coffee.Config[ 'world_modulation' ], Color )
     end )
 
     self:GenerateCheckbox( Panel, 'World Fullbright', 'world_fullbright' )
@@ -1467,6 +1467,16 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Quick Acceleration', 'miscellaneous_quick_acceleration'  )
     self:GenerateMiniCheckbox( nil, 'Always Sprint', 'miscellaneous_quick_acceleration_sprint'  )
 
+	self:GenerateLabel( Panel, 'Configuration Name' )
+	self:GenerateInput( nil, 'Rage', 'miscellaneous_config' )
+
+	self:GenerateButton( Panel, 'Save', function( )
+		//Coffee.Miscellaneous:Save( )
+	end )
+	
+	self:GenerateButton( Panel, 'Load', function( )
+		//Coffee.Miscellaneous:Load( )
+	end )
 end )
 
 Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )

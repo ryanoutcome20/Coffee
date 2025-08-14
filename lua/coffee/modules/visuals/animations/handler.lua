@@ -4,7 +4,7 @@ function Coffee.Visuals:UpdateAnimations( ENT, Velocity )
     end
 
     -- Get our angle.
-    local Angle = self.Config[ 'hvh_enabled' ] and self.Ragebot.Real or ENT:EyeAngles( )
+    local Angle = Coffee.Config[ 'hvh_enabled' ] and self.Ragebot.Real or ENT:EyeAngles( )
 
     -- Set our data.
     ENT:SetPoseParameter( 'aim_pitch', Angle.x )
@@ -17,15 +17,15 @@ function Coffee.Visuals:UpdateAnimations( ENT, Velocity )
     local Jiggle = false
 
     -- Check if we need to adjust angles further than normal.
-    if ( self.Config[ 'hvh_animations' ] ) then 
-        if ( self.Config[ 'hvh_animations_force_slide' ] ) then 
+    if ( Coffee.Config[ 'hvh_animations' ] ) then 
+        if ( Coffee.Config[ 'hvh_animations_force_slide' ] ) then 
             self.Client.Local:SetCycle( 0 )
         end
 
-        Jiggle = self.Config[ 'hvh_animations_jelly' ]
+        Jiggle = Coffee.Config[ 'hvh_animations_jelly' ]
 
-        if ( self.Config[ 'hvh_animations_scale' ] ) then 
-            local Scale = self.Config[ 'hvh_animations_scale_amount' ] / 100
+        if ( Coffee.Config[ 'hvh_animations_scale' ] ) then 
+            local Scale = Coffee.Config[ 'hvh_animations_scale_amount' ] / 100
 
             Origin = Vector( Scale, Scale, Scale )
         end

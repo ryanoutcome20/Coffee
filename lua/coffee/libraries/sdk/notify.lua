@@ -1,6 +1,5 @@
 Coffee.Notify = { 
     Client = Coffee.Client,
-    Config = Coffee.Config,
 
     Cache = { }
 }
@@ -16,15 +15,15 @@ function Coffee.Notify:Add( Text, Decay )
         Time  = CurTime( )
     } )
 
-    if ( self.Config[ 'miscellaneous_notifications_hints' ] ) then 
-        notification.AddLegacy( Text, self.Config[ 'miscellaneous_notifications_hints_type' ], 2 )
+    if ( Coffee.Config[ 'miscellaneous_notifications_hints' ] ) then 
+        notification.AddLegacy( Text, Coffee.Config[ 'miscellaneous_notifications_hints_type' ], 2 )
 
-        if ( self.Config[ 'miscellaneous_notifications_hints_noise' ] ) then 
+        if ( Coffee.Config[ 'miscellaneous_notifications_hints_noise' ] ) then 
             surface.PlaySound( 'buttons/button15.wav' )
         end
     end
 
-    if ( self.Config[ 'miscellaneous_notifications_console' ] ) then 
+    if ( Coffee.Config[ 'miscellaneous_notifications_console' ] ) then 
         Coffee:Print( false, Text )
     end
 end
@@ -43,7 +42,7 @@ function Coffee.Notify:Hurt( Data )
         return
     end
 
-    if ( Victim == self.Client.Local and self.Config[ 'miscellaneous_notifications_incoming' ] ) then 
+    if ( Victim == self.Client.Local and Coffee.Config[ 'miscellaneous_notifications_incoming' ] ) then 
         local Name = Inflictor == NULL and 'unknown' or Inflictor:Name( ) 
 
         if ( Data.health > 0 ) then 
@@ -51,7 +50,7 @@ function Coffee.Notify:Hurt( Data )
         else
             self:Add( string.format( 'Killed by %s.', Name ) )
         end
-    elseif ( Inflictor == self.Client.Local and self.Config[ 'miscellaneous_notifications_outgoing' ] ) then
+    elseif ( Inflictor == self.Client.Local and Coffee.Config[ 'miscellaneous_notifications_outgoing' ] ) then
         local Name = Victim == NULL and 'unknown' or Victim:Name( ) 
 
         if ( Data.health > 0 ) then 
@@ -63,13 +62,13 @@ function Coffee.Notify:Hurt( Data )
 end
 
 function Coffee.Notify:Connect( Data )
-    if ( self.Config[ 'miscellaneous_notifications_join' ] ) then 
+    if ( Coffee.Config[ 'miscellaneous_notifications_join' ] ) then 
         self:Add( string.format( '%s joined the session.', Data.name ) )
     end
 end
 
 function Coffee.Notify:Disconnect( Data )
-    if ( self.Config[ 'miscellaneous_notifications_leave' ] ) then 
+    if ( Coffee.Config[ 'miscellaneous_notifications_leave' ] ) then 
         self:Add( string.format( '%s left the session.', Data.name ) )
     end
 end

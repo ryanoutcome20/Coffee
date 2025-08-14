@@ -6,11 +6,11 @@ Coffee.Bots.Spawnbot = {
 }
 
 function Coffee.Bots.Spawnbot:SpawnShield( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_spawnshield' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_spawnshield' ] ) then 
         return
     end
 
-    local Prop = self.Config[ 'miscellaneous_spawnshield_prop' ]
+    local Prop = Coffee.Config[ 'miscellaneous_spawnshield_prop' ]
 
     if ( Prop ) then 
         CUserCMD:SetViewAngles( Angle( 89, 0, 0 ) )

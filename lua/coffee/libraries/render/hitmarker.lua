@@ -27,15 +27,15 @@ function Coffee.Hitmarker:Draw( X, Y, Space, Length, Color, Alpha, useAlpha )
 end
 
 function Coffee.Hitmarker:Render( )
-    if ( not self.Config[ 'world_hitmarker' ] ) then
+    if ( not Coffee.Config[ 'world_hitmarker' ] ) then
         return 
     end
 
     local Finished = { }
     local Time     = CurTime( )
 
-    local Mode     = self.Config[ 'world_hitmarker_mode' ]
-    local useAlpha = self.Config[ 'world_hitmarker_fade' ]
+    local Mode     = Coffee.Config[ 'world_hitmarker_mode' ]
+    local useAlpha = Coffee.Config[ 'world_hitmarker_fade' ]
 
     for k, Data in pairs( self.Cache ) do
         -- Check world hitmarker.
@@ -51,8 +51,8 @@ function Coffee.Hitmarker:Render( )
         end
 
         -- Get configuration options.
-        local Space  = self.Config[ 'world_hitmarker_space' ]
-        local Offset = Space / self.Config[ 'world_hitmarker_length' ] 
+        local Space  = Coffee.Config[ 'world_hitmarker_space' ]
+        local Offset = Space / Coffee.Config[ 'world_hitmarker_length' ] 
 
         -- Get alpha.
         local Alpha = 0
@@ -73,13 +73,13 @@ function Coffee.Hitmarker:Render( )
         end
 
         -- Render secondary overlay.
-        if ( self.Config[ 'world_hitmarker_overlay' ] ) then 
+        if ( Coffee.Config[ 'world_hitmarker_overlay' ] ) then 
             self:Draw( 
                 X, 
                 Y, 
-                self.Config[ 'world_hitmarker_overlay_space' ], 
+                Coffee.Config[ 'world_hitmarker_overlay_space' ], 
                 Offset, 
-                self.Config[ 'world_hitmarker_overlay_color' ],
+                Coffee.Config[ 'world_hitmarker_overlay_color' ],
                 Alpha,
                 useAlpha
             )
@@ -91,7 +91,7 @@ function Coffee.Hitmarker:Render( )
             Y, 
             Space, 
             Offset, 
-            self.Config[ 'world_hitmarker_color' ],
+            Coffee.Config[ 'world_hitmarker_color' ],
             Alpha,
             useAlpha
         )

@@ -1,6 +1,4 @@
 Coffee.Hitboxes = { 
-    Config = Coffee.Config,
-
     Cache = { }
 }
 
@@ -59,14 +57,14 @@ function Coffee.Hitboxes:GetSimpleBones( ENT, Target )
 end
 
 function Coffee.Hitboxes:HandleMultipoint( ENT, Matrix, Offset, Info )
-    if ( not self.Config[ 'aimbot_multipoint' ] ) then 
+    if ( not Coffee.Config[ 'aimbot_multipoint' ] ) then 
         return
     end
 
     local Final = { }
 
     -- Get the scale.
-    local Scale = Info.Group == HITGROUP_HEAD and self.Config[ 'aimbot_multipoint_head_scale' ] or self.Config[ 'aimbot_multipoint_other_scale' ]
+    local Scale = Info.Group == HITGROUP_HEAD and Coffee.Config[ 'aimbot_multipoint_head_scale' ] or Coffee.Config[ 'aimbot_multipoint_other_scale' ]
 
     Scale = Scale / 200
 

@@ -44,4 +44,9 @@ function Coffee.Menu:GenerateInput( Panel, Text, Assignment, Callback )
             Callback( Value )
         end
 	end
+	
+	Input.OnConfigLoad = function( self )
+		self:SetValue(Coffee.Config[ Assignment ])
+		self:OnEnter()
+	end
 end

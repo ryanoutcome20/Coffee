@@ -1,6 +1,4 @@
 Coffee.Require = { 
-    Config = Coffee.Config,
-
     Active = '',
     Data = {
         [ 'zxcmodule' ] = {
@@ -87,6 +85,8 @@ function Coffee.Require:PostInit( Index, Data )
     end
 end
 
+
+--util.IsBinaryModuleInstalled( Index )
 function Coffee.Require:Init( )
     for Index, Data in pairs( self.Data ) do
         if ( util.IsBinaryModuleInstalled( Index ) ) then 

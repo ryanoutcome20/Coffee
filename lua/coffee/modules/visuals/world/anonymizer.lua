@@ -1,6 +1,4 @@
-Coffee.Anonymizer = {    
-    Config = Coffee.Config,
-
+Coffee.Anonymizer = {
     Symbols = {
         '!',
         '#',
@@ -25,7 +23,7 @@ function Coffee.Anonymizer:GenerateName( Length )
 end
 
 function Coffee.Anonymizer:Update( )
-    if ( not self.Config[ 'world_anonymizer' ] ) then 
+    if ( not Coffee.Config[ 'world_anonymizer' ] ) then 
         return 
     end
 
@@ -48,24 +46,24 @@ local Copy = table.Copy( Meta )
 -- As said in the taunt bypass section of the anti-aim, this will need to be streamlined via a true
 -- detour and security library.
 Meta.Name = function( self )
-    if ( Coffee.Anonymizer.Config[ 'world_anonymizer' ] ) then 
-        return Coffee.Anonymizer:GenerateName( Coffee.Anonymizer.Config[ 'world_anonymizer_length' ] )
+    if ( Coffee.Config[ 'world_anonymizer' ] ) then 
+        return Coffee.Anonymizer:GenerateName( Coffee.Config[ 'world_anonymizer_length' ] )
     end
 
     return Copy.Name( self )
 end
 
 Meta.Nick = function( self )
-    if ( Coffee.Anonymizer.Config[ 'world_anonymizer' ] ) then 
-        return Coffee.Anonymizer:GenerateName( Coffee.Anonymizer.Config[ 'world_anonymizer_length' ] )
+    if ( Coffee.Config[ 'world_anonymizer' ] ) then 
+        return Coffee.Anonymizer:GenerateName( Coffee.Config[ 'world_anonymizer_length' ] )
     end
 
     return Copy.Nick( self )
 end
 
 Meta.GetName = function( self )
-    if ( Coffee.Anonymizer.Config[ 'world_anonymizer' ] ) then 
-        return Coffee.Anonymizer:GenerateName( Coffee.Anonymizer.Config[ 'world_anonymizer_length' ] )
+    if ( Coffee.Config[ 'world_anonymizer' ] ) then 
+        return Coffee.Anonymizer:GenerateName( Coffee.Config[ 'world_anonymizer_length' ] )
     end
 
     return Copy.Name( self )

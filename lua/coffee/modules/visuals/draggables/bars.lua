@@ -8,7 +8,7 @@ Coffee.Draggables.Bars = {
 }
 
 function Coffee.Draggables.Bars:Initialize( Panel, Assignment )
-    Panel:SetVisible( self.Config[ Assignment ] )
+    Panel:SetVisible( Coffee.Config[ Assignment ] )
 
     if ( self.Initialized[ Panel ] ) then 
         return self.Initialized[ Panel ]

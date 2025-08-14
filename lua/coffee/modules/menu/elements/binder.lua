@@ -24,7 +24,7 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     end
     
     Binder.UpdateText = function( self )
-        local Name = input.GetKeyName( self:GetSelectedNumber( ) )
+        local Name = input.GetKeyName( self:GetValue( ) )
 
         if ( not Name ) then 
             return
@@ -57,6 +57,11 @@ function Coffee.Menu:GenerateKeybind( Panel, Assignment, alwaysOn )
     Binder.OnChange = function( self, Key )
         Coffee.Config[ Assignment ] = Key
     end
+	
+	Binder.OnConfigLoad = function( self )
+		self:SetValue( Coffee.Config[ Assignment ] )
+		self:UpdateText()
+	end
 
     return Button
 end

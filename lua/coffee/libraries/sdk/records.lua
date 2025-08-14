@@ -1,6 +1,5 @@
 Coffee.Records = { 
     Client = Coffee.Client,
-    Config = Coffee.Config,
     Require = Coffee.Require,
     Hitboxes = Coffee.Hitboxes,
     Fullupdate = Coffee.Fullupdate,
@@ -72,11 +71,11 @@ function Coffee.Records:GetLast( Target )
 end
 
 function Coffee.Records:GetExtendedAmount( )
-    if ( not self.Config[ 'aimbot_extended' ] ) then 
+    if ( not Coffee.Config[ 'aimbot_extended' ] ) then 
         return 0
     end
 
-    return ( self.Config[ 'aimbot_extended_time' ] - 200 ) / 1000
+    return ( Coffee.Config[ 'aimbot_extended_time' ] - 200 ) / 1000
 end
 
 function Coffee.Records:GetTickDelta( Time )

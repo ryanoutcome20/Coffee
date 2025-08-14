@@ -1,12 +1,12 @@
 function Coffee.Ragebot:GetHitboxConditions( Record, Group )
     if ( Group > HITGROUP_STOMACH ) then 
-        if ( self.Config[ 'aimbot_ignore_moving_limbs' ] and Record.Speed > 0 ) then 
+        if ( Coffee.Config[ 'aimbot_ignore_moving_limbs' ] and Record.Speed > 0 ) then 
             return false 
         end
     end
 
     if ( Group == HITGROUP_HEAD ) then 
-        if ( self.Config[ 'aimbot_ignore_airbourne_head' ] and Record.Player and not Record.Target:OnGround( ) ) then 
+        if ( Coffee.Config[ 'aimbot_ignore_airbourne_head' ] and Record.Player and not Record.Target:OnGround( ) ) then 
             return false
         end
     end
@@ -21,14 +21,14 @@ function Coffee.Ragebot:GetHitboxInfo( Record )
         return 
     end
 
-    local Autowall  = self.Config[ 'aimbot_autowall' ]
-    local Damage    = self.Config[ 'aimbot_autowall_damage' ]
-    local IgnoreLOS = self.Config[ 'aimbot_ignore_los' ]
+    local Autowall  = Coffee.Config[ 'aimbot_autowall' ]
+    local Damage    = Coffee.Config[ 'aimbot_autowall_damage' ]
+    local IgnoreLOS = Coffee.Config[ 'aimbot_ignore_los' ]
 
     for i = 0, HITGROUP_RIGHTLEG do 
         local Data, Group = Record.Bones[ i ], self.Hitboxes[ i ]
 
-        if ( not Data or not Group or not self.Config[ Group ] ) then 
+        if ( not Data or not Group or not Coffee.Config[ Group ] ) then 
             continue
         end
 

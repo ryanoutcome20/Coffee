@@ -1,5 +1,5 @@
 function Coffee.Ragebot:GetYawBase( )
-    local Mode = self.Config[ 'hvh_yaw_base' ]
+    local Mode = Coffee.Config[ 'hvh_yaw_base' ]
 
     if ( Mode == 'Crosshair' ) then 
         return self.Silent.y
@@ -33,20 +33,20 @@ function Coffee.Ragebot:GetTrigonometric( Function )
 end
 
 function Coffee.Ragebot:GetDistortion( Base )
-    if ( not self.Config[ 'hvh_yaw_distortion' ] ) then 
+    if ( not Coffee.Config[ 'hvh_yaw_distortion' ] ) then 
         return Base
     end
 
-    local Time          = self:GetTiming( self.Config[ 'hvh_yaw_distortion_timer' ] )
-    local Trigonometric = self:GetTrigonometric( self.Config[ 'hvh_yaw_distortion_trigonometric' ] )
-    local Divisor       = self.Config[ 'hvh_yaw_distortion_divisor' ]
-    local Scale         = self.Config[ 'hvh_yaw_distortion_scale' ]
+    local Time          = self:GetTiming( Coffee.Config[ 'hvh_yaw_distortion_timer' ] )
+    local Trigonometric = self:GetTrigonometric( Coffee.Config[ 'hvh_yaw_distortion_trigonometric' ] )
+    local Divisor       = Coffee.Config[ 'hvh_yaw_distortion_divisor' ]
+    local Scale         = Coffee.Config[ 'hvh_yaw_distortion_scale' ]
 
     -- Calculate distortion.
-    local Distortion = Trigonometric( Time * self.Config[ 'hvh_yaw_distortion_speed' ] / Divisor ) * Scale
+    local Distortion = Trigonometric( Time * Coffee.Config[ 'hvh_yaw_distortion_speed' ] / Divisor ) * Scale
     
     -- Calculate forced distortion.
-    if ( self.Config[ 'hvh_yaw_distortion_force' ] ) then 
+    if ( Coffee.Config[ 'hvh_yaw_distortion_force' ] ) then 
         Distortion = Distortion + ( 360 * ( math.abs( Divisor ) / Divisor ) )
     end
 
@@ -54,20 +54,20 @@ function Coffee.Ragebot:GetDistortion( Base )
 end
 
 function Coffee.Ragebot:GetFakeFlick( Base )
-    if ( not self.Config[ 'hvh_yaw_flick' ] ) then 
+    if ( not Coffee.Config[ 'hvh_yaw_flick' ] ) then 
         return Base
     end
 
-    local Time = self:GetTiming( self.Config[ 'hvh_yaw_flick_timer' ] )
-    local Trigonometric = self:GetTrigonometric( self.Config[ 'hvh_yaw_flick_trigonometric' ] )
+    local Time = self:GetTiming( Coffee.Config[ 'hvh_yaw_flick_timer' ] )
+    local Trigonometric = self:GetTrigonometric( Coffee.Config[ 'hvh_yaw_flick_trigonometric' ] )
 
     -- Get flick speed.
-    local Speed = self.Config[ 'hvh_yaw_flick_speed' ] + 50
+    local Speed = Coffee.Config[ 'hvh_yaw_flick_speed' ] + 50
 
     -- Get flick angle.
-    local Angle = self.Config[ 'hvh_yaw_flick_angle' ]
+    local Angle = Coffee.Config[ 'hvh_yaw_flick_angle' ]
 
-    if ( self.Config[ 'hvh_yaw_flick_desync' ] ) then 
+    if ( Coffee.Config[ 'hvh_yaw_flick_desync' ] ) then 
         Angle = ( Time % 4 ) * Angle
     end
 
@@ -78,13 +78,13 @@ function Coffee.Ragebot:GetFakeFlick( Base )
 end
 
 function Coffee.Ragebot:GetJitter( Base )
-    if ( not self.Config[ 'hvh_jitter' ] ) then 
+    if ( not Coffee.Config[ 'hvh_jitter' ] ) then 
         return Base
     end
 
     self.Jitter = self.Jitter or 0
 
-    local Amount = self.Config[ 'hvh_jitter_angle' ] 
+    local Amount = Coffee.Config[ 'hvh_jitter_angle' ] 
 
     if ( self.Jitter == 0 ) then 
         Base = Base + Amount
@@ -92,13 +92,13 @@ function Coffee.Ragebot:GetJitter( Base )
         Base = Base - Amount
     end
 
-    self.Jitter = ( self.Jitter + 1 ) % ( self.Config[ 'hvh_jitter_center' ] and 3 or 2 )
+    self.Jitter = ( self.Jitter + 1 ) % ( Coffee.Config[ 'hvh_jitter_center' ] and 3 or 2 )
 
     return Base
 end
 
 function Coffee.Ragebot:GetYaw( )
-    local Base = self:GetYawBase( ) + self.Config[ 'hvh_yaw_add' ]
+    local Base = self:GetYawBase( ) + Coffee.Config[ 'hvh_yaw_add' ]
 
     -- Apply jitter.
     Base = self:GetJitter( Base ) 
@@ -128,7 +128,7 @@ function Coffee.Ragebot:GetPitch( )
         [ 'Fake Jitter' ] = math.random( ) >= 0.5 and -180 or 180
     }
 
-    return Angles[ self.Config[ 'hvh_pitch_mode' ] ]
+    return Angles[ Coffee.Config[ 'hvh_pitch_mode' ] ]
 end
 
 function Coffee.Ragebot:UpdateFakeYaw( )
@@ -139,7 +139,7 @@ function Coffee.Ragebot:UpdateFakeYaw( )
 end
 
 function Coffee.Ragebot:AntiAim( CUserCMD )
-    if ( not self.Config[ 'hvh_enabled' ] ) then 
+    if ( not Coffee.Config[ 'hvh_enabled' ] ) then 
         return
     end
 
@@ -156,10 +156,10 @@ function Coffee.Ragebot:AntiAim( CUserCMD )
     self.Real = self:ShouldSilent( ) and self.Silent or CUserCMD:GetViewAngles( )
 
     -- Get pitch.
-    local Pitch = self.Config[ 'hvh_pitch' ] and self:GetPitch( ) or self.Real.x
+    local Pitch = Coffee.Config[ 'hvh_pitch' ] and self:GetPitch( ) or self.Real.x
 
     -- Get yaw.
-    local Yaw = self.Config[ 'hvh_yaw' ] and self:GetYaw( ) or self.Real.y
+    local Yaw = Coffee.Config[ 'hvh_yaw' ] and self:GetYaw( ) or self.Real.y
 
     -- Set our angles.
     self.Real = Angle( Pitch, Yaw, 0 )
@@ -168,7 +168,7 @@ function Coffee.Ragebot:AntiAim( CUserCMD )
     CUserCMD:SetViewAngles( self.Real )
 
     -- Check if we need to flip packets.
-    if ( self.Config[ 'hvh_yaw_flip_packets' ] and not self.isManipulating ) then
+    if ( Coffee.Config[ 'hvh_yaw_flip_packets' ] and not self.isManipulating ) then
         self.Packet = not self.Packet
         
         if ( self.Choked >= 23 ) then 
@@ -189,12 +189,12 @@ function Coffee.Ragebot:Fakelag( CUserCMD )
         return
     end
 
-    if ( self.Config[ 'hvh_fakelag' ] and self.Choked <= self.Config[ 'hvh_fakelag_ticks' ] ) then 
+    if ( Coffee.Config[ 'hvh_fakelag' ] and self.Choked <= Coffee.Config[ 'hvh_fakelag_ticks' ] ) then 
         self.Packet = false
     end
 
     if ( self.Client.Alive ) then 
-        if ( not self.Config[ 'hvh_fakelag_shots' ] and CUserCMD:KeyDown( IN_ATTACK ) ) then 
+        if ( not Coffee.Config[ 'hvh_fakelag_shots' ] and CUserCMD:KeyDown( IN_ATTACK ) ) then 
             self.Packet = true
         end
     else 
@@ -203,13 +203,13 @@ function Coffee.Ragebot:Fakelag( CUserCMD )
 end
 
 function Coffee.Ragebot:Speedhack( CUserCMD )
-    if ( not self.Config[ 'hvh_speedhack' ] or not self.Menu:Keydown( 'hvh_speedhack_keybind' ) ) then 
+    if ( not Coffee.Config[ 'hvh_speedhack' ] or not self.Menu:Keydown( 'hvh_speedhack_keybind' ) ) then 
         return
     end
 
-    local Ticks = self.Config[ 'hvh_speedhack_ticks' ]
+    local Ticks = Coffee.Config[ 'hvh_speedhack_ticks' ]
 
-    if ( self.Config[ 'hvh_speedhack_airstuck' ] ) then 
+    if ( Coffee.Config[ 'hvh_speedhack_airstuck' ] ) then 
         -- This only works if sv_maxusrcmdprocessticks is set to a number other than zero since
         -- it relies entirely on the server holding you in place.
         Ticks = Ticks * 100
@@ -221,7 +221,7 @@ function Coffee.Ragebot:Speedhack( CUserCMD )
 end 
 
 function Coffee.Ragebot:Lagswitch( CUserCMD )
-    if ( not self.Config[ 'hvh_lagswitch' ] or not self.Menu:Keydown( 'hvh_lagswitch_keybind' ) ) then 
+    if ( not Coffee.Config[ 'hvh_lagswitch' ] or not self.Menu:Keydown( 'hvh_lagswitch_keybind' ) ) then 
         return
     end
 
@@ -229,19 +229,19 @@ function Coffee.Ragebot:Lagswitch( CUserCMD )
 
     local Shift = not CUserCMD:KeyDown( IN_ATTACK ) and not self.Client.Local:IsFlagSet( FL_ONGROUND )
 
-    if ( Shift and CUserCMD:TickCount( ) % self.Config[ 'hvh_lagswitch_hold_time' ] != 0 ) then 
+    if ( Shift and CUserCMD:TickCount( ) % Coffee.Config[ 'hvh_lagswitch_hold_time' ] != 0 ) then 
         self.Require:SetOutSequence( self.Require:GetOutSequence( ) - 1 )
     else
-        self.Require:SetOutSequence( self.Require:GetOutSequence( ) + ( self.Config[ 'hvh_lagswitch_ticks' ] ) )
+        self.Require:SetOutSequence( self.Require:GetOutSequence( ) + ( Coffee.Config[ 'hvh_lagswitch_ticks' ] ) )
     end
 end
 
 function Coffee.Ragebot:Networking( CUserCMD )
-    local Lag    = self.Config[ 'hvh_networking_lag' ]
-    local Loss   = self.Config[ 'hvh_networking_loss' ]
-    local Jitter = self.Config[ 'hvh_networking_jitter' ]
+    local Lag    = Coffee.Config[ 'hvh_networking_lag' ]
+    local Loss   = Coffee.Config[ 'hvh_networking_loss' ]
+    local Jitter = Coffee.Config[ 'hvh_networking_jitter' ]
 
-    if ( not self.Config[ 'hvh_networking' ] or not self.Menu:Keydown( 'hvh_networking_keybind' ) ) then 
+    if ( not Coffee.Config[ 'hvh_networking' ] or not self.Menu:Keydown( 'hvh_networking_keybind' ) ) then 
         Lag    = 0
         Loss   = 0
         Jitter = 0
@@ -253,12 +253,12 @@ function Coffee.Ragebot:Networking( CUserCMD )
 end
 
 function Coffee.Ragebot:BreakAnimations( CUserCMD )
-    if ( self.Config[ 'hvh_animations' ] ) then 
-        if ( self.Config[ 'hvh_animations_break_arms' ] ) then 
+    if ( Coffee.Config[ 'hvh_animations' ] ) then 
+        if ( Coffee.Config[ 'hvh_animations_break_arms' ] ) then 
             ded.SetTyping( CUserCMD, CUserCMD:TickCount( ) % 4 != 0 )
         end
 
-        if ( self.Config[ 'hvh_animations_spam_act' ] ) then 
+        if ( Coffee.Config[ 'hvh_animations_spam_act' ] ) then 
             RunConsoleCommand( 'act', 'muscle' )
         end
     end

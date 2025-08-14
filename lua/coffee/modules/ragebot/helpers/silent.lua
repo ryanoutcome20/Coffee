@@ -1,5 +1,5 @@
 function Coffee.Ragebot:ShouldSilent( )
-    if ( self.Config[ 'aimbot_silent' ] and self.Config[ 'aimbot_silent_mode' ] == 'Clientside' ) then 
+    if ( Coffee.Config[ 'aimbot_silent' ] and Coffee.Config[ 'aimbot_silent_mode' ] == 'Clientside' ) then 
         return true 
     end
     

@@ -1,6 +1,10 @@
 function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width, Callback, useIndex )
     -- Have to generate the dropdowns used in the menu.
     
+	if useIndex then
+		MsgN(Assignment)
+	end
+	
     Panel = Panel or self.Last
 
     local Dropdown = vgui.Create( 'DComboBox', Panel )
@@ -22,7 +26,15 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width,
             Callback( Value )
         end
     end
-
+	
+	Dropdown.OnConfigLoad = function( self )		
+		Dropdown:SetValue( useIndex and Options[ Coffee.Config[ Assignment ] - 1 ] or Coffee.Config[ Assignment ] )
+		
+		if ( Callback ) then 
+            Callback( Coffee.Config[ Assignment ] )
+        end
+	end
+	
     Dropdown:SetFont( 'DefaultSmall' )
     
     -- This is terrible but I didn't make the library. You can tell this wasn't made for 

@@ -1,5 +1,5 @@
 function Coffee.Miscellaneous:Bunnyhop( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_bunnyhop' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_bunnyhop' ] ) then 
         return
     end
 
@@ -13,7 +13,7 @@ function Coffee.Miscellaneous:Bunnyhop( CUserCMD )
 end
 
 function Coffee.Miscellaneous:Autostrafe( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_autostrafe' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_autostrafe' ] ) then 
         return
     end
 
@@ -27,12 +27,12 @@ function Coffee.Miscellaneous:Autostrafe( CUserCMD )
     local Switch = CUserCMD:CommandNumber( ) % 2 == 0
     
     -- Check if we're using classic style.
-    if ( self.Config[ 'miscellaneous_autostrafe_style' ] == 'Classic' ) then 
+    if ( Coffee.Config[ 'miscellaneous_autostrafe_style' ] == 'Classic' ) then 
         -- This is what most cheats use and honestly I have no idea where they came to the conclusion with
         -- some of these numbers.
 
         -- Prevent us from countering the movement direction of the mouse.
-        if ( not self.Config[ 'miscellaneous_autostrafe_unlock' ] and self.Client.Local:IsFlagSet( FL_ONGROUND ) ) then
+        if ( not Coffee.Config[ 'miscellaneous_autostrafe_unlock' ] and self.Client.Local:IsFlagSet( FL_ONGROUND ) ) then
             CUserCMD:SetForwardMove( 10000 )
             return
         end
@@ -41,7 +41,7 @@ function Coffee.Miscellaneous:Autostrafe( CUserCMD )
         CUserCMD:SetForwardMove( 5850 / self.Client.Speed )
 
         -- Adjust our sidemove based on switch.
-        local Adjustment = self.Config[ 'miscellaneous_autostrafe_clamp' ] and 2500 or 400
+        local Adjustment = Coffee.Config[ 'miscellaneous_autostrafe_clamp' ] and 2500 or 400
 
         if ( Switch ) then 
             CUserCMD:SetSideMove( Adjustment )
@@ -59,7 +59,7 @@ function Coffee.Miscellaneous:Autostrafe( CUserCMD )
 end
 
 function Coffee.Miscellaneous:QuickMovement( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_quick_acceleration' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_quick_acceleration' ] ) then 
         return
     end
 
@@ -83,7 +83,7 @@ function Coffee.Miscellaneous:QuickMovement( CUserCMD )
         CUserCMD:SetSideMove( -10000 )
     end
 
-    if ( self.Config[ 'miscellaneous_quick_acceleration_sprint' ] ) then 
+    if ( Coffee.Config[ 'miscellaneous_quick_acceleration_sprint' ] ) then 
         CUserCMD:AddKey( IN_SPEED )
     end
 end

@@ -1,5 +1,5 @@
 function Coffee.Visuals:Entities( )
-    if ( not self.Config[ 'items_render' ] ) then 
+    if ( not Coffee.Config[ 'items_render' ] ) then 
         return
     end
 
@@ -12,27 +12,27 @@ function Coffee.Visuals:Entities( )
 
         local Distance = self.Client.Position:Distance2D( Target:GetPos( ) )
 
-        if ( self.Config[ 'items_limit_distance' ] and Distance >= self.Config[ 'items_limit_distance_distance' ] ) then 
+        if ( Coffee.Config[ 'items_limit_distance' ] and Distance >= Coffee.Config[ 'items_limit_distance_distance' ] ) then 
             continue
         end
 
         local isDormant = Target:IsDormant( )
 
-        if ( not self.Config[ 'items_visualize_dormant' ] and isDormant ) then 
+        if ( not Coffee.Config[ 'items_visualize_dormant' ] and isDormant ) then 
             continue 
         end
 
-        local Color = isDormant and self.Config[ 'items_visualize_dormant_color' ] or self.Config[ 'items_render_color' ]
+        local Color = isDormant and Coffee.Config[ 'items_visualize_dormant_color' ] or Coffee.Config[ 'items_render_color' ]
 
         local Position = Target:GetPos( ) + Target:OBBCenter( )
         local Data     = Position:ToScreen( )
 
-        surface.SetFont( self:HandleFont( self.Config[ 'items_render_font' ] ) )
+        surface.SetFont( self:HandleFont( Coffee.Config[ 'items_render_font' ] ) )
         surface.SetTextColor( Color )
         surface.SetTextPos( Data.x, Data.y ) 
         surface.DrawText( Class )
 
-        if ( self.Config[ 'items_render_distance' ] ) then             
+        if ( Coffee.Config[ 'items_render_distance' ] ) then             
             local W, H = surface.GetTextSize( Class )
 
             surface.SetTextPos( Data.x, Data.y + H ) 

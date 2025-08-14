@@ -1,5 +1,5 @@
 function Coffee.Ragebot:Aimbot( CUserCMD )
-    if ( not self.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then
+    if ( not Coffee.Config[ 'aimbot_enabled' ] or not self.Menu:Keydown( 'aimbot_enabled_keybind' ) ) then
         return
     end
 
@@ -9,7 +9,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Don't aim if we are typing.
-    if ( self.Client.Local:IsTyping( ) and not self.Config[ 'hvh_animations_break_arms' ] ) then 
+    if ( self.Client.Local:IsTyping( ) and not Coffee.Config[ 'hvh_animations_break_arms' ] ) then 
         return
     end
 
@@ -24,12 +24,12 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Check if we are aiming at a target already.
-    if ( self.Config[ 'aimbot_ignore_sticky' ] ) then 
+    if ( Coffee.Config[ 'aimbot_ignore_sticky' ] ) then 
         local Trace = self.Client.Local:GetEyeTrace( )
 
         local isPlayer = Trace.Entity and Trace.Entity:IsPlayer( )
 
-        if ( self.Config[ 'aimbot_always_sticky' ] ) then
+        if ( Coffee.Config[ 'aimbot_always_sticky' ] ) then
             if ( not isPlayer ) then 
                 return 
             end
@@ -46,10 +46,10 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
 
     -- Get primary fire time and check if we need to add delay.
-    local Time = self.Config[ 'aimbot_continuous' ] and CurTime( ) or SWEP:GetNextPrimaryFire( )
+    local Time = Coffee.Config[ 'aimbot_continuous' ] and CurTime( ) or SWEP:GetNextPrimaryFire( )
 
-    if ( self.Config[ 'aimbot_delay' ] ) then 
-        Time = Time + math.Round( self.Config[ 'aimbot_delay_time' ] / 1000, 2 )
+    if ( Coffee.Config[ 'aimbot_delay' ] ) then 
+        Time = Time + math.Round( Coffee.Config[ 'aimbot_delay_time' ] / 1000, 2 )
     end
 
     if ( Time >= self.Client.Prediction ) then 
@@ -63,27 +63,27 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     local noBones       = self.Optimizations:Valid( 'aimbot_optimizations_hitboxes' )
 
     -- Check if we are using interpolation.
-    local disableInterpolation = self.Config[ 'aimbot_interpolation' ]
+    local disableInterpolation = Coffee.Config[ 'aimbot_interpolation' ]
 
     -- Check if we are inversing records.
-    local shouldInverse = self.Config[ 'aimbot_inverse' ]
+    local shouldInverse = Coffee.Config[ 'aimbot_inverse' ]
 
     -- Check if we are using backtrack.
-    local usingBacktrack = not disableInterpolation and not noBones and self.Config[ 'aimbot_backtrack' ]
+    local usingBacktrack = not disableInterpolation and not noBones and Coffee.Config[ 'aimbot_backtrack' ]
 
     -- Get targets.
     local Targets = self.Records.Players
 
-    if ( self.Config[ 'aimbot_world_sphere' ] ) then 
+    if ( Coffee.Config[ 'aimbot_world_sphere' ] ) then 
         local Hit    = vector_origin
 
-        if ( self.Config[ 'aimbot_obb_range' ] ) then 
+        if ( Coffee.Config[ 'aimbot_obb_range' ] ) then 
             Hit = self.Client.EyePos
         else
             Hit = self.Client.Local:GetEyeTrace( ).HitPos
         end
 
-        local Radius = self.Config[ 'aimbot_world_sphere_fov' ] 
+        local Radius = Coffee.Config[ 'aimbot_world_sphere_fov' ] 
         
         Targets = { }
 
@@ -93,20 +93,20 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             end
         end
 
-        if ( self.Config[ 'aimbot_world_sphere_visualize' ] ) then 
+        if ( Coffee.Config[ 'aimbot_world_sphere_visualize' ] ) then 
             self.Overlay:Sphere( 
                 Hit, 
                 Radius, 
-                self.Config[ 'aimbot_world_sphere_visualize_step' ], 
+                Coffee.Config[ 'aimbot_world_sphere_visualize_step' ], 
                 0.05, 
-                self.Config[ 'aimbot_world_sphere_visualize_color' ], 
+                Coffee.Config[ 'aimbot_world_sphere_visualize_color' ], 
                 true 
             )
         end
     end
 
     -- Check if we have limit targets.
-    local Limit, Count = self.Config[ 'aimbot_optimizations_targets_amount' ], 0
+    local Limit, Count = Coffee.Config[ 'aimbot_optimizations_targets_amount' ], 0
 
     -- Get our best records from the valid players.
     local Best;
@@ -159,16 +159,16 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     
     -- Stop moving if needed.
     if ( self.Client.Local:OnGround( ) ) then
-        if ( self.Config[ 'aimbot_autostop' ] and self.Menu:Keydown( 'aimbot_autostop_keybind' ) ) then
+        if ( Coffee.Config[ 'aimbot_autostop' ] and self.Menu:Keydown( 'aimbot_autostop_keybind' ) ) then
             CUserCMD:SetForwardMove( 0 )
             CUserCMD:SetSideMove( 0 )
             
-            if ( self.Client.Speed > self.Config[ 'aimbot_autostop_speed' ] ) then 
+            if ( self.Client.Speed > Coffee.Config[ 'aimbot_autostop_speed' ] ) then 
                 return
             end
         end
             
-        if ( self.Config[ 'aimbot_strip_run' ] ) then 
+        if ( Coffee.Config[ 'aimbot_strip_run' ] ) then 
             CUserCMD:RemoveKey( IN_SPEED )
         end
     end
@@ -179,7 +179,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     if ( not disableInterpolation ) then 
         local Extended = self.Records:GetTickDelta( Best.Record.Simtime ) > 0.2
 
-        if ( self.Config[ 'aimbot_extended' ] and Extended ) then 
+        if ( Coffee.Config[ 'aimbot_extended' ] and Extended ) then 
             local Time = self.Require:Servertime( CUserCMD )
 
             self.Require:SetConVar( 'cl_interp', tostring( Time - Best.Record.Simtime ) )
@@ -195,7 +195,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     end
     
     -- Get our hitbox information.
-    local Info = self.Config[ 'aimbot_invert_hitboxes' ] and Best.Info[ #Best.Info ] or Best.Info[ 1 ]
+    local Info = Coffee.Config[ 'aimbot_invert_hitboxes' ] and Best.Info[ #Best.Info ] or Best.Info[ 1 ]
 
     -- Get our ideal hitbox.
     local Spot = Info.Hitbox
@@ -207,15 +207,15 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
     local Angles = self:CalculateCompensation( 
         CUserCMD, 
         Spot, 
-        self.Config[ 'aimbot_norecoil' ], 
-        self.Config[ 'aimbot_nospread' ] 
+        Coffee.Config[ 'aimbot_norecoil' ], 
+        Coffee.Config[ 'aimbot_nospread' ] 
     )
     
     self:SetAngles( CUserCMD, Angles )
 
     -- Shoot if needed.
-    if ( self.Config[ 'aimbot_autofire' ] ) then 
-        local Mode = self.Config[ 'aimbot_autofire_mode' ]
+    if ( Coffee.Config[ 'aimbot_autofire' ] ) then 
+        local Mode = Coffee.Config[ 'aimbot_autofire_mode' ]
 
         if ( Mode == 'Left' ) then 
             CUserCMD:AddKey( IN_ATTACK )

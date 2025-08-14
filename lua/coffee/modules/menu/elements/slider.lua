@@ -39,15 +39,27 @@ function Coffee.Menu:GenerateSlider( Panel, Assignment, Minimum, Maximum, Defaul
     end
 
     Slider.Think = function( self )
-        if ( not self:GetDragging( ) and ( self:IsHovered( ) or self:IsChildHovered( ) ) ) then 
+		local X = ( ( Coffee.Config[ Assignment ] - Minimum ) / ( Maximum - Minimum ) )
+		
+		if ( not self:GetDragging( ) and ( self:IsHovered( ) or self:IsChildHovered( ) ) ) then 
+			local Update = false
+	
             if ( input.IsKeyDown( KEY_LEFT ) ) then 
-                self.m_fSlideX = self.m_fSlideX - math.max( 0.1 / Maximum, 0.0001 )
-            elseif ( input.IsKeyDown( KEY_RIGHT ) ) then
-                self.m_fSlideX = self.m_fSlideX + math.max( 0.1 / Maximum, 0.0001 )
+                X = X - math.max( 1 / Maximum, 0.0001 )
+				Update = not Update
+            end
+			
+			if ( input.IsKeyDown( KEY_RIGHT ) ) then
+                X = X + math.max( 1 / Maximum, 0.0001 )
+				Update = not Update
             end
 
-            self:OnValueChanged( self.m_fSlideX, self.m_fSlideY )
+			if Update then
+				self:OnValueChanged( X, self.m_fSlideY )
+			end
         end
+		
+		self:SetSlideX( X )
     end
 
     Slider.Knob.Paint = function( self, W, H ) end

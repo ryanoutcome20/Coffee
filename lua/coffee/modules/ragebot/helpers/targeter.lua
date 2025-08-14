@@ -1,11 +1,11 @@
 function Coffee.Ragebot:CheckValid( Target, Best )
     local Team = Target:Team( )
 
-    if ( self.Config[ 'aimbot_avoid_teammates' ] and Team == self.Client.Team ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_teammates' ] and Team == self.Client.Team ) then 
         return false
     end
 
-    if ( self.Config[ 'aimbot_avoid_buildmode' ] ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_buildmode' ] ) then 
         if ( Target.buildmode ) then 
             return false 
         end
@@ -15,35 +15,35 @@ function Coffee.Ragebot:CheckValid( Target, Best )
         end
     end
 
-    if ( self.Config[ 'aimbot_avoid_steam_friends' ] and Target:GetFriendStatus( ) == 'friend' ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_steam_friends' ] and Target:GetFriendStatus( ) == 'friend' ) then 
         return false
     end
 
-    if ( self.Config[ 'aimbot_avoid_noclip' ] and Target:GetMoveType( ) == MOVETYPE_NOCLIP ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_noclip' ] and Target:GetMoveType( ) == MOVETYPE_NOCLIP ) then 
         return false
     end
 
-    if ( self.Config[ 'aimbot_avoid_vehicles' ] and Target:InVehicle( ) ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_vehicles' ] and Target:InVehicle( ) ) then 
         return false
     end
     
-    if ( self.Config[ 'aimbot_avoid_invisible' ] and Target:GetColor( ).a == 0 ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_invisible' ] and Target:GetColor( ).a == 0 ) then 
         return false
     end
 
-    if ( self.Config[ 'aimbot_avoid_bots' ] and Target:IsBot( ) ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_bots' ] and Target:IsBot( ) ) then 
         return false
     end
 
-    if ( self.Config[ 'aimbot_avoid_hunters' ] and TEAM_HUNTERS != nil and Team == TEAM_HUNTERS ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_hunters' ] and TEAM_HUNTERS != nil and Team == TEAM_HUNTERS ) then 
         return false
     end
     
-    if ( self.Config[ 'aimbot_avoid_props' ] and TEAM_PROPS != nil and Team == TEAM_PROPS ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_props' ] and TEAM_PROPS != nil and Team == TEAM_PROPS ) then 
         return false
     end
 
-    if ( self.Config[ 'aimbot_avoid_deathmatch' ] and Target.InDM and Target:InDM( ) ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_deathmatch' ] and Target.InDM and Target:InDM( ) ) then 
         return false
     end
 
@@ -65,7 +65,7 @@ function Coffee.Ragebot:Valid( Target, Best )
 
     local Valid = self:CheckValid( Target, Best )
 
-    if ( self.Config[ 'aimbot_avoid_invert' ] ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_invert' ] ) then 
         Valid = not Valid
     end
 

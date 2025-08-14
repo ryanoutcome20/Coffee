@@ -1,29 +1,29 @@
 function Coffee.Visuals:Valid( Target )
-    if ( not self.Config[ 'esp_enabled' ]  ) then 
+    if ( not Coffee.Config[ 'esp_enabled' ]  ) then 
         return false
     end
 
-    if ( not self.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
+    if ( not Coffee.Config[ 'esp_visualize_dead' ] and not Target:Alive( ) ) then 
         return false
     end
 
     local isLocal = Target == self.Client.Local
 
-    if ( isLocal and not self.Config[ 'esp_local' ] ) then 
+    if ( isLocal and not Coffee.Config[ 'esp_local' ] ) then 
         return false
     end
 
     local isFriendly = Target:Team( ) == self.Client.Team
 
-    if ( not isLocal and isFriendly and not self.Config[ 'esp_team' ] ) then 
+    if ( not isLocal and isFriendly and not Coffee.Config[ 'esp_team' ] ) then 
         return false
     end
 
-    if ( not isFriendly and not self.Config[ 'esp_enemy' ] ) then 
+    if ( not isFriendly and not Coffee.Config[ 'esp_enemy' ] ) then 
         return false
     end
 
-    if ( self.Config[ 'esp_culled' ] ) then 
+    if ( Coffee.Config[ 'esp_culled' ] ) then 
         local Position = Target:GetPos( ):ToScreen( )
 
         if ( not Position.visible ) then 
@@ -31,8 +31,8 @@ function Coffee.Visuals:Valid( Target )
         end
     end
 
-    if ( isLocal and not self.Config[ 'esp_first_person' ] ) then 
-        return self.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' )
+    if ( isLocal and not Coffee.Config[ 'esp_first_person' ] ) then 
+        return Coffee.Config[ 'world_thirdperson' ] and self.Menu:Keydown( 'world_thirdperson_keybind' )
     end
 
     return true
@@ -44,11 +44,11 @@ function Coffee.Visuals:Wallhack( )
             continue
         end
 
-        if ( not self.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
+        if ( not Coffee.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
             break
         end
 
-        if ( self.Config[ 'esp_limit_distance' ] and self.Client.Position:Distance2D( Target:GetPos( ) ) >= self.Config[ 'esp_limit_distance_distance' ] ) then 
+        if ( Coffee.Config[ 'esp_limit_distance' ] and self.Client.Position:Distance2D( Target:GetPos( ) ) >= Coffee.Config[ 'esp_limit_distance_distance' ] ) then 
             continue
         end
 
@@ -68,14 +68,14 @@ function Coffee.Visuals:Wallhack( )
         }
 
         -- Get front record.
-        local Front = self.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target, true )
+        local Front = Coffee.Config[ 'esp_server' ] and self.Records:GetFront( Target ) or self.Records:Construct( Target, true )
         
         if ( not Front ) then 
             continue
         end
 
         -- Check dormant.
-        if ( Front.Dormant and not self.Config[ 'esp_visualize_dormant' ] ) then 
+        if ( Front.Dormant and not Coffee.Config[ 'esp_visualize_dormant' ] ) then 
             continue
         end
 
@@ -91,28 +91,28 @@ function Coffee.Visuals:Wallhack( )
         self.Position.W = self.Position.H / 2
 
         -- Run our box ESP.
-        if ( self.Config[ 'esp_box' ] ) then 
-            if ( self.Config[ 'esp_box_type' ] == '2D' ) then 
-                surface.SetDrawColor( self.Config[ 'esp_box_color_outline' ] )
+        if ( Coffee.Config[ 'esp_box' ] ) then 
+            if ( Coffee.Config[ 'esp_box_type' ] == '2D' ) then 
+                surface.SetDrawColor( Coffee.Config[ 'esp_box_color_outline' ] )
                 surface.DrawOutlinedRect( self.Position.X - self.Position.W / 2, self.Position.Y - self.Position.H + 2, self.Position.W, self.Position.H, 2 )
             
-                surface.SetDrawColor( Front.Dormant and self.Config[ 'esp_visualize_dormant_color' ] or self.Config[ 'esp_box_color' ] )
+                surface.SetDrawColor( Front.Dormant and Coffee.Config[ 'esp_visualize_dormant_color' ] or Coffee.Config[ 'esp_box_color' ] )
                 surface.DrawOutlinedRect( self.Position.X - self.Position.W / 2, self.Position.Y - self.Position.H + 2, self.Position.W, self.Position.H, 1 )
             
-                if ( self.Config[ 'esp_box_fill' ] ) then
+                if ( Coffee.Config[ 'esp_box_fill' ] ) then
                     surface.SetMaterial( self.Menu.Gradients.Up ) 
-                    surface.SetDrawColor( self.Config[ 'esp_box_fill_up' ] )
+                    surface.SetDrawColor( Coffee.Config[ 'esp_box_fill_up' ] )
                     surface.DrawTexturedRect( self.Position.X - self.Position.W / 2 + 1, self.Position.Y - self.Position.H + 3, self.Position.W - 2, self.Position.H - 2 )
 
                     surface.SetMaterial( self.Menu.Gradients.Down ) 
-                    surface.SetDrawColor( self.Config[ 'esp_box_fill_down' ] )
+                    surface.SetDrawColor( Coffee.Config[ 'esp_box_fill_down' ] )
                     surface.DrawTexturedRect( self.Position.X - self.Position.W / 2 + 1, self.Position.Y - self.Position.H + 3, self.Position.W - 2, self.Position.H - 2 )
                     
                     draw.NoTexture( )
                 end
             else
                 cam.Start3D( )
-                    render.DrawWireframeBox( Front.Position, angle_zero, Front.Mins, Front.Maxs, self.Config[ 'esp_box_color' ], true )
+                    render.DrawWireframeBox( Front.Position, angle_zero, Front.Mins, Front.Maxs, Coffee.Config[ 'esp_box_color' ], true )
                 cam.End3D( )
             end
         end
@@ -123,7 +123,7 @@ function Coffee.Visuals:Wallhack( )
         self:RenderBar( self:HandleFillament( Front.Health, Front.maxHealth ), Health, 'esp_healthbar' )
 
         -- Run our armor ESP.
-        if ( self.Config[ 'esp_armorbar_always' ] or Front.Armor > 0 ) then 
+        if ( Coffee.Config[ 'esp_armorbar_always' ] or Front.Armor > 0 ) then 
             self:RenderBar( self:HandleFillament( Front.Armor, Front.maxArmor ), self.Colors.Cyan, 'esp_armorbar' )
 
             self:RenderText( Front.Armor, 'esp_armorbar_number' )
@@ -139,7 +139,7 @@ function Coffee.Visuals:Wallhack( )
         if ( Front.Weapon and Front.Weapon != NULL ) then 
             local Name, Class = 'Unknown', Front.Weapon:GetClass( )
 
-            if ( self.Config[ 'esp_weapon_smart' ] ) then 
+            if ( Coffee.Config[ 'esp_weapon_smart' ] ) then 
                 Name = language.GetPhrase( Front.Weapon:GetPrintName( ) )
             else 
                 Name = Class
@@ -174,8 +174,8 @@ function Coffee.Visuals:Wallhack( )
         -- We need to get the current record for these even if server visualization is off.
         local Prediction = self.Records:GetFront( Target ) or Front
 
-        self:RenderText( 'FAKE', 'esp_fake', Prediction.Fake and self.Config[ 'esp_fake_color_bad' ] or self.Config[ 'esp_fake_color_good' ] )
-        self:RenderText( 'LC', 'esp_lc', ( Prediction.Shift or Prediction.LC ) and self.Config[ 'esp_lc_color_bad' ] or self.Config[ 'esp_lc_color_good' ] )
+        self:RenderText( 'FAKE', 'esp_fake', Prediction.Fake and Coffee.Config[ 'esp_fake_color_bad' ] or Coffee.Config[ 'esp_fake_color_good' ] )
+        self:RenderText( 'LC', 'esp_lc', ( Prediction.Shift or Prediction.LC ) and Coffee.Config[ 'esp_lc_color_bad' ] or Coffee.Config[ 'esp_lc_color_good' ] )
 
         -- If the player is dead and we're visualizing lets add a custom flag.
         if ( not Target:Alive( ) ) then 
@@ -190,71 +190,71 @@ function Coffee.Visuals:Wallhack( )
         -- If we are playing TTT and this player is a terrorist then lets add a custom flag.
         if ( self.Gamemode == 'terrortown' ) then 
             if ( self.Gamemodes:IsDetective( Target ) ) then 
-                self:RenderText( 'Detective', 'esp_ttt', self.Config[ 'esp_ttt_detective' ] )
+                self:RenderText( 'Detective', 'esp_ttt', Coffee.Config[ 'esp_ttt_detective' ] )
             elseif ( self.Gamemodes:IsTraitor( Target ) ) then
-                self:RenderText( 'Traitor', 'esp_ttt', self.Config[ 'esp_ttt_traitor' ] )
+                self:RenderText( 'Traitor', 'esp_ttt', Coffee.Config[ 'esp_ttt_traitor' ] )
             end
         end
 
         -- Fix our LOD.
-        if ( self.Config[ 'esp_lod' ] ) then 
-            Target:SetLOD( self.Config[ 'esp_lod_number' ] )
+        if ( Coffee.Config[ 'esp_lod' ] ) then 
+            Target:SetLOD( Coffee.Config[ 'esp_lod_number' ] )
         else
             Target:SetLOD( -1 )
         end
 
         -- Render our light.
-        if ( self.Config[ 'esp_light' ] ) then         
-            local Light = DynamicLight( Front.Index, self.Config[ 'esp_light_elight' ] )
+        if ( Coffee.Config[ 'esp_light' ] ) then         
+            local Light = DynamicLight( Front.Index, Coffee.Config[ 'esp_light_elight' ] )
 
             if ( Light ) then 
                 Light.pos = Front.Position
                 Light.brightness = 2
                 Light.decay = 1000
                 Light.dietime = CurTime( ) + 1
-                Light.style = self.Config[ 'esp_light_flicker' ] and 11 or 0
+                Light.style = Coffee.Config[ 'esp_light_flicker' ] and 11 or 0
 
-                local Color = self.Config[ 'esp_light_color' ]
+                local Color = Coffee.Config[ 'esp_light_color' ]
 
                 Light.r = Color.r
                 Light.g = Color.g
                 Light.b = Color.b
 
-                local Size = ( self.Config[ 'esp_light_size' ] / 100 ) * 4096
+                local Size = ( Coffee.Config[ 'esp_light_size' ] / 100 ) * 4096
 
                 Light.size = Size
             end
         end
 
         -- Render our ring.
-        if ( self.Config[ 'esp_ring' ] ) then 
+        if ( Coffee.Config[ 'esp_ring' ] ) then 
             local Position = Vector( Front.Position.x, Front.Position.y, Front.Position.z ) 
             
             -- Move the position upwards so that it doesn't clip into the floor.
             Position.z = Position.z + 3
             
             -- Get our end radius.
-            local endRadius = self.Config[ 'esp_ring_end_radius' ]
+            local endRadius = Coffee.Config[ 'esp_ring_end_radius' ]
 
-            if ( self.Config[ 'esp_ring_end_radius_pulsate' ] ) then 
+            if ( Coffee.Config[ 'esp_ring_end_radius_pulsate' ] ) then 
                 endRadius = math.random( 1, endRadius )
             end
 
             -- Get our width.
-            local Width = self.Config[ 'esp_ring_width' ]
+            local Width = Coffee.Config[ 'esp_ring_width' ]
 
-            if ( self.Config[ 'esp_ring_width_pulsate' ] ) then 
+            if ( Coffee.Config[ 'esp_ring_width_pulsate' ] ) then 
                 Width = Width + math.sin( CurTime( ) * Width )
             end
 
             effects.BeamRingPoint( 
                 Position,
-                3 * ( self.Config[ 'esp_ring_time' ] / 100 ),
-                self.Config[ 'esp_ring_start_radius' ],
+                3 * ( Coffee.Config[ 'esp_ring_time' ] / 100 ),
+                Coffee.Config[ 'esp_ring_start_radius' ],
                 endRadius,
                 Width,
-                self.Config[ 'esp_ring_amplitude' ] / 100,        
-                self.Config[ 'esp_ring_color' ],
+                Coffee.Config[ 'esp_ring_amplitude' ] / 100,        
+                Coffee.Config[ 'esp_ring_color' ],
                 {
                     material = 'sprites/lgtning.vmt'
                 }
@@ -262,7 +262,7 @@ function Coffee.Visuals:Wallhack( )
         end
 
         -- Render our headbeam.
-        if ( self.Config[ 'esp_headbeam' ] ) then 
+        if ( Coffee.Config[ 'esp_headbeam' ] ) then 
             cam.Start3D( )
 
             cam.IgnoreZ( true )
@@ -275,7 +275,7 @@ function Coffee.Visuals:Wallhack( )
                 filter = Target
             } )
 
-            render.SetMaterial( self.Materials:Get( self.Config[ 'esp_headbeam_material' ] ) )
+            render.SetMaterial( self.Materials:Get( Coffee.Config[ 'esp_headbeam_material' ] ) )
 
             render.DrawBeam( 
                 Trace.StartPos, 
@@ -283,27 +283,27 @@ function Coffee.Visuals:Wallhack( )
                 16, 
                 1, 
                 1, 
-                self.Config[ 'esp_headbeam_color' ] 
+                Coffee.Config[ 'esp_headbeam_color' ] 
             )
 
             cam.End3D( )
         end
 
         -- Render our effects.
-        if ( self.Config[ 'esp_blink' ] ) then 
+        if ( Coffee.Config[ 'esp_blink' ] ) then 
             Target:AddEffects( EF_ITEM_BLINK )
         else 
             Target:RemoveEffects( EF_ITEM_BLINK )
         end
 
-        if ( self.Config[ 'esp_remove_shadows' ] ) then 
+        if ( Coffee.Config[ 'esp_remove_shadows' ] ) then 
             Target:AddEffects( EF_NOSHADOW )
         else 
             Target:RemoveEffects( EF_NOSHADOW )
         end
 
         -- Render our visualized records.
-        if ( self.Config[ 'esp_visualized_records' ] ) then 
+        if ( Coffee.Config[ 'esp_visualized_records' ] ) then 
             -- This aint a very pretty way of doing this...
             local Records = self.Records.Cache[ Target ]
 
@@ -311,8 +311,8 @@ function Coffee.Visuals:Wallhack( )
                 continue
             end
             
-            local Color = self.Config[ 'esp_visualized_records_color' ] 
-            local Mode  = self.Config[ 'esp_visualized_records_mode' ]
+            local Color = Coffee.Config[ 'esp_visualized_records_color' ] 
+            local Mode  = Coffee.Config[ 'esp_visualized_records_mode' ]
             
             local Last;
 

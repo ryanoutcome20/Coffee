@@ -10,14 +10,14 @@ function Coffee.Visuals:Notifications( )
         end
     end
 
-    if ( not self.Config[ 'miscellaneous_notifications' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_notifications' ] ) then 
         return
     end
 
     -- Get coordinates.
     local X, Y = self.Resolution.Width - 10, 5
 
-    if ( self.Config[ 'miscellaneous_watermark' ] ) then 
+    if ( Coffee.Config[ 'miscellaneous_watermark' ] ) then 
         Y = Y + 20
     end
     
@@ -26,7 +26,7 @@ function Coffee.Visuals:Notifications( )
 
     -- Draw notifications.
     local Offset = 0
-    local Target = self.Config[ 'miscellaneous_notifications_color' ]
+    local Target = Coffee.Config[ 'miscellaneous_notifications_color' ]
 
     for k, Index in ipairs( Cache ) do
         if ( not Index.Delta ) then 
@@ -46,7 +46,7 @@ function Coffee.Visuals:Notifications( )
 end
 
 function Coffee.Visuals:Watermark( )
-    if ( not self.Config[ 'miscellaneous_watermark' ] or not self.Client.Local ) then 
+    if ( not Coffee.Config[ 'miscellaneous_watermark' ] or not self.Client.Local ) then 
         return
     end
 
@@ -69,7 +69,7 @@ function Coffee.Visuals:Watermark( )
     local W, H = tW + 8, 15
 
     -- Render glowing outline.
-    local Target  = self.Config[ 'miscellaneous_watermark_color' ]
+    local Target  = Coffee.Config[ 'miscellaneous_watermark_color' ]
     local Outline = Color( Target.r, Target.g, Target.b )
 
     local Intensity = ( 0.25 + math.abs( math.sin( CurTime( ) ) ) )
@@ -83,10 +83,10 @@ function Coffee.Visuals:Watermark( )
     end
 
     -- Render backdrop.
-    draw.RoundedBox( 4, X - tW - 5, Y, W, H, self.Config[ 'miscellaneous_watermark_background_color' ] )
+    draw.RoundedBox( 4, X - tW - 5, Y, W, H, Coffee.Config[ 'miscellaneous_watermark_background_color' ] )
 
     -- Render text.
-    surface.SetTextColor( self.Config[ 'miscellaneous_watermark_text_color' ] )
+    surface.SetTextColor( Coffee.Config[ 'miscellaneous_watermark_text_color' ] )
     surface.SetTextPos( X - tW, Y ) 
     surface.DrawText( Text )
 end

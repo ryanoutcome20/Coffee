@@ -120,11 +120,11 @@ function Coffee.Visuals:Glow( )
             continue
         end
 
-        if ( not self.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
+        if ( not Coffee.Config[ 'esp_enabled' ] or not self.Menu:Keydown( 'esp_enabled_keybind' ) ) then 
             break
         end
 
-        if ( not self.Config[ 'esp_glow' ] ) then 
+        if ( not Coffee.Config[ 'esp_glow' ] ) then 
             break
         end
 
@@ -140,21 +140,21 @@ function Coffee.Visuals:Glow( )
             Target
         }
 
-        if ( self.Config[ 'esp_glow_weapon' ] and SWEP and SWEP:IsValid( ) ) then 
+        if ( Coffee.Config[ 'esp_glow_weapon' ] and SWEP and SWEP:IsValid( ) ) then 
             table.insert( Targets, Front.Weapon )
         end
 
         -- See if we need to add rim blur.
         local blurX, blurY, scaledBlur = 1, 1, false
 
-        if ( self.Config[ 'esp_glow_rim' ] ) then 
-            blurX      = self.Config[ 'esp_glow_rim_x_suppress' ] and 0 or self.Config[ 'esp_glow_rim_x' ]
-            blurY      = self.Config[ 'esp_glow_rim_y_suppress' ] and 0 or self.Config[ 'esp_glow_rim_y' ]
-            scaledBlur = self.Config[ 'esp_glow_rim_scaled' ]
+        if ( Coffee.Config[ 'esp_glow_rim' ] ) then 
+            blurX      = Coffee.Config[ 'esp_glow_rim_x_suppress' ] and 0 or Coffee.Config[ 'esp_glow_rim_x' ]
+            blurY      = Coffee.Config[ 'esp_glow_rim_y_suppress' ] and 0 or Coffee.Config[ 'esp_glow_rim_y' ]
+            scaledBlur = Coffee.Config[ 'esp_glow_rim_scaled' ]
         end
 
-        if ( self.Config[ 'esp_glow_pulsate' ] ) then 
-            local Scale = math.sin( CurTime( ) * ( self.Config[ 'esp_glow_pulsate_scale' ] / 50 ) )
+        if ( Coffee.Config[ 'esp_glow_pulsate' ] ) then 
+            local Scale = math.sin( CurTime( ) * ( Coffee.Config[ 'esp_glow_pulsate_scale' ] / 50 ) )
 
             blurX = blurX + Scale
             blurY = blurY + Scale
@@ -163,37 +163,37 @@ function Coffee.Visuals:Glow( )
         -- See if we need to add a material.
         local Material
 
-        if ( self.Config[ 'esp_glow_material_overlay' ] ) then 
-            Material = self.Materials:Get( self.Config[ 'esp_glow_material_overlay_material' ], false )
+        if ( Coffee.Config[ 'esp_glow_material_overlay' ] ) then 
+            Material = self.Materials:Get( Coffee.Config[ 'esp_glow_material_overlay_material' ], false )
         end
 
         -- Add halo information to the render buffer.
-        if ( self.Config[ 'esp_glow_overlay' ] ) then 
+        if ( Coffee.Config[ 'esp_glow_overlay' ] ) then 
             self:Halo( 
                 Targets, 
-                self.Config[ 'esp_glow_overlay_color' ], 
+                Coffee.Config[ 'esp_glow_overlay_color' ], 
                 blurX / 2, 
                 blurY / 2, 
                 scaledBlur,
-                self.Config[ 'esp_glow_passes' ], 
-                not self.Config[ 'esp_glow_overlay_bloom' ], 
-                not self.Config[ 'esp_glow_overlay_only_visible' ],
-                self.Config[ 'esp_glow_overlay_self_illumination' ]
+                Coffee.Config[ 'esp_glow_passes' ], 
+                not Coffee.Config[ 'esp_glow_overlay_bloom' ], 
+                not Coffee.Config[ 'esp_glow_overlay_only_visible' ],
+                Coffee.Config[ 'esp_glow_overlay_self_illumination' ]
             )
         end
 
         self:Halo( 
             Targets, 
-            self.Config[ 'esp_glow_color' ], 
+            Coffee.Config[ 'esp_glow_color' ], 
             blurX, 
             blurY, 
             scaledBlur,
-            self.Config[ 'esp_glow_passes' ], 
-            not self.Config[ 'esp_glow_bloom' ], 
-            not self.Config[ 'esp_glow_only_visible' ],
-            self.Config[ 'esp_glow_self_illumination' ],
+            Coffee.Config[ 'esp_glow_passes' ], 
+            not Coffee.Config[ 'esp_glow_bloom' ], 
+            not Coffee.Config[ 'esp_glow_only_visible' ],
+            Coffee.Config[ 'esp_glow_self_illumination' ],
             Material,
-            self.Config[ 'esp_glow_material_overlay_color' ]
+            Coffee.Config[ 'esp_glow_material_overlay_color' ]
         )
     end
 end

@@ -39,6 +39,12 @@ function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Default, Callback )
 
         Coffee.Menu:GenerateColorpickerSubPanel( Panel, Assignment, Callback )
     end
+	
+	Button.OnConfigLoad = function( self )
+	    if ( Callback ) then 
+            Callback( Coffee.Config[ Assignment ] )
+        end
+	end
 
     return Button
 end

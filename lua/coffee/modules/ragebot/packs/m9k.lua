@@ -40,7 +40,7 @@ function Coffee.Ragebot.M9K:RunTrace( Record, Matrix, Autowall, Minimum )
     end
 
     if ( not Autowall ) then 
-        if ( self.Config[ 'aimbot_engine_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
+        if ( Coffee.Config[ 'aimbot_engine_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
             return true
         end
 
@@ -104,7 +104,7 @@ function Coffee.Ragebot.M9K:Damage( Record, Group )
 
     Damage = self:GetWeaponDamageScale( Damage, ID, Group )
 
-    if ( self.Config[ 'aimbot_minimum_damage_damage' ] <= Damage ) then 
+    if ( Coffee.Config[ 'aimbot_minimum_damage_damage' ] <= Damage ) then 
         return true
     end
 end
@@ -112,12 +112,12 @@ end
 function Coffee.Ragebot.M9K:CalculateSpread( CUserCMD, Spot, Cone, Seed )
     -- https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/mp/src/game/shared/shot_manipulator.h#L59
 
-    if ( self.Config[ 'aimbot_nospread_engine' ] ) then 
+    if ( Coffee.Config[ 'aimbot_nospread_engine' ] ) then 
         return Spot + ded.PredictSpread( CUserCMD, Spot, Cone ):Angle( )
     end
 
-    if ( self.Config[ 'aimbot_nospread_offset' ] ) then 
-        Seed = Seed + self.Config[ 'aimbot_nospread_offset_seed' ]
+    if ( Coffee.Config[ 'aimbot_nospread_offset' ] ) then 
+        Seed = Seed + Coffee.Config[ 'aimbot_nospread_offset_seed' ]
     end
 
     self.UniformRandomStream:SetSeed( Seed )

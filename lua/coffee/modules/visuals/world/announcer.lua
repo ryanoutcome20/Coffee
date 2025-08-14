@@ -1,12 +1,11 @@
 Coffee.Announcer = { 
     Client = Coffee.Client,
-    Config = Coffee.Config,
 
     Kills = 0
 }
 
 function Coffee.Announcer:Play( Name )
-    local Directory = self.Config[ 'world_announcer_directory' ] .. '/' .. Name .. '.wav'
+    local Directory = Coffee.Config[ 'world_announcer_directory' ] .. '/' .. Name .. '.wav'
 
     if ( not file.Exists( 'sound/' .. Directory, 'GAME' ) ) then 
         return
@@ -16,14 +15,14 @@ function Coffee.Announcer:Play( Name )
         Directory, 
         511,
         100,
-        self.Config[ 'world_announcer_volume' ] / 100,
+        Coffee.Config[ 'world_announcer_volume' ] / 100,
         CHAN_STATIC,
         0
     )
 end
 
 function Coffee.Announcer:Start( Data )
-    if ( not self.Config[ 'world_announcer' ] ) then 
+    if ( not Coffee.Config[ 'world_announcer' ] ) then 
         return
     end
     
@@ -37,7 +36,7 @@ function Coffee.Announcer:Start( Data )
 end
 
 function Coffee.Announcer:Kill( Data )
-    if ( not self.Config[ 'world_announcer' ] ) then 
+    if ( not Coffee.Config[ 'world_announcer' ] ) then 
         return
     end
 
@@ -51,9 +50,9 @@ function Coffee.Announcer:Kill( Data )
     if ( Victim != self.Client.Local and Inflictor == self.Client.Local ) then 
         self.Kills = self.Kills + 1
 
-        if ( self.Config[ 'world_announcer_killstreak' ] and self.Kills % self.Config[ 'world_announcer_killstreak_number' ] == 0 ) then 
+        if ( Coffee.Config[ 'world_announcer_killstreak' ] and self.Kills % Coffee.Config[ 'world_announcer_killstreak_number' ] == 0 ) then 
             self:Play( 'killstreak' )
-        elseif ( self.Config[ 'world_announcer_kill' ] and math.random( ) <= self.Config[ 'world_announcer_kill_chance' ] / 100 ) then
+        elseif ( Coffee.Config[ 'world_announcer_kill' ] and math.random( ) <= Coffee.Config[ 'world_announcer_kill_chance' ] / 100 ) then
             self:Play( 'kill' )
         end
     elseif ( Victim == self.Client.Local and Inflictor != self.Client.Local ) then

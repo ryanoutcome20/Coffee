@@ -33,7 +33,7 @@ function Coffee.Ragebot:GetWeaponDamageScale( Damage, ID, Group )
 end
 
 function Coffee.Ragebot:GetWeaponDamage( Weapon, Group )
-    if ( not self.Config[ 'aimbot_minimum_damage' ] ) then 
+    if ( not Coffee.Config[ 'aimbot_minimum_damage' ] ) then 
         return math.huge
     end
 
@@ -51,7 +51,7 @@ function Coffee.Ragebot:PenetrateEntities( Trace, Record )
         return
     end
 
-    if ( Trace.Entity:GetMaxHealth( ) > ( 100 - self.Config[ 'aimbot_engine_entity_damage' ] ) + 1 ) then 
+    if ( Trace.Entity:GetMaxHealth( ) > ( 100 - Coffee.Config[ 'aimbot_engine_entity_damage' ] ) + 1 ) then 
         return
     end
 

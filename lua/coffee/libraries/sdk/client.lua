@@ -9,19 +9,19 @@ function Coffee.Client:Update( )
     if ( self.Fullupdate:IsUpdating( ) ) then 
         return
     end
-
+	
     self.Local      = self.Local or Coffee.Localplayer
     self.Prediction = self.Prediction or 0
     self.LC         = self.LC or false
 
     local Origin = self.Local:GetNetworkOrigin( )
 
-    if ( self.Config[ 'world_update' ] ) then 
+    if ( Coffee.Config[ 'world_update' ] ) then 
         local Z    = Vector( 0, 0, 3 )
         local Time = engine.TickInterval( )
-
-        self.Overlay:Box( self.Origin + Z, nil, nil, Time, self.Config[ 'world_update_current_color' ] )
-        self.Overlay:Line( Origin + Z, self.Origin + Z, Time, self.Config[ 'world_update_line_color' ] )
+		
+        self.Overlay:Box( Origin + Z, nil, nil, Time, Coffee.Config[ 'world_update_current_color' ] )
+        self.Overlay:Line( Origin + Z, Origin + Z, Time, Coffee.Config[ 'world_update_line_color' ] )
     end
 
     if ( self.Origin ) then 

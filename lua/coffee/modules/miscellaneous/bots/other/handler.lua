@@ -8,15 +8,15 @@ Coffee.Bots.Otherbot = {
 }
 
 function Coffee.Bots.Otherbot:Equipbot( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_equipbot' ] ) then 
+    if ( not Coffee.Config[ 'miscellaneous_equipbot' ] ) then 
         return
     end
 
-    if ( not self.Config[ 'miscellaneous_equipbot_ignore_gamemode' ] and self.Gamemode != 'sandbox' ) then 
+    if ( not Coffee.Config[ 'miscellaneous_equipbot_ignore_gamemode' ] and self.Gamemode != 'sandbox' ) then 
         return
     end
 
-    local Item = self.Config[ 'miscellaneous_equipbot_item' ]
+    local Item = Coffee.Config[ 'miscellaneous_equipbot_item' ]
 
     -- Check if we need to force equip the item.
     local ENT = self.Client.Local:GetWeapon( Item )
@@ -28,13 +28,13 @@ function Coffee.Bots.Otherbot:Equipbot( CUserCMD )
     end
 
     -- Select our entity.
-    if ( self.Config[ 'miscellaneous_equipbot_auto_select' ] ) then 
+    if ( Coffee.Config[ 'miscellaneous_equipbot_auto_select' ] ) then 
         input.SelectWeapon( ENT )
     end
 end
 
 function Coffee.Bots.Otherbot:Coverbot( CUserCMD )
-    if ( not self.Config[ 'miscellaneous_coverbot' ] or not self.Menu:Keydown( 'miscellaneous_coverbot_keybind' ) ) then 
+    if ( not Coffee.Config[ 'miscellaneous_coverbot' ] or not self.Menu:Keydown( 'miscellaneous_coverbot_keybind' ) ) then 
         self.Cover = false
         return
     end
@@ -43,7 +43,7 @@ function Coffee.Bots.Otherbot:Coverbot( CUserCMD )
         return
     end
 
-    local Prop = self.Config[ 'miscellaneous_coverbot_prop' ]
+    local Prop = Coffee.Config[ 'miscellaneous_coverbot_prop' ]
 
     if ( Prop ) then 
         CUserCMD:SetViewAngles( Angle( 89, 0, 0 ) )

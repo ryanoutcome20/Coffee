@@ -13,14 +13,14 @@ Coffee.Shots = {
 
 function Coffee.Shots:OnMissedShot( wasResolver, Record )
     if ( wasResolver ) then
-        if ( self.Config[ 'aimbot_log_desync' ] ) then
+        if ( Coffee.Config[ 'aimbot_log_desync' ] ) then
             if ( Record.Fake ) then 
                 self.Notify:Add( 'Missed shot due to fake angles.' )
             else
                 self.Notify:Add( 'Missed shot due to animation desync.' )
             end
         end
-    elseif ( self.Config[ 'aimbot_log_spread' ] ) then
+    elseif ( Coffee.Config[ 'aimbot_log_spread' ] ) then
         self.Notify:Add( 'Missed shot due to spread.' ) 
     end
 
@@ -65,19 +65,19 @@ function Coffee.Shots:Clean( Cache, Time )
 end
 
 function Coffee.Shots:PushMatrix( Record )
-    if ( not Record.Group or not self.Config[ 'aimbot_shot_matrix' ] ) then 
+    if ( not Record.Group or not Coffee.Config[ 'aimbot_shot_matrix' ] ) then 
         return
     end
 
-    local Group = self.Config[ 'aimbot_shot_matrix_singular' ] and Record.Group
+    local Group = Coffee.Config[ 'aimbot_shot_matrix_singular' ] and Record.Group
 
     -- This won't align with backtrack but since its a rarely used feature they
     -- don't need to be put inside of the records like the regular matrixes do.
 
     self.Overlay:Hitboxes( 
         self.Hitboxes:GetSimpleBones( Record.Target, Group ), 
-        self.Config[ 'aimbot_shot_matrix_time' ], 
-        self.Config[ 'aimbot_shot_matrix_color' ], 
+        Coffee.Config[ 'aimbot_shot_matrix_time' ], 
+        Coffee.Config[ 'aimbot_shot_matrix_color' ], 
         true 
     )
 end
@@ -119,8 +119,8 @@ function Coffee.Shots:Processed( ENT, Data )
         return
     end
 
-    if ( not self.Config[ 'world_hitmarker_check_hit' ] or Data.Trace.Entity:IsPlayer( ) ) then 
-        self.Hitmarker:New( self.Config[ 'world_hitmarker_time' ], Data.Trace.HitPos )
+    if ( not Coffee.Config[ 'world_hitmarker_check_hit' ] or Data.Trace.Entity:IsPlayer( ) ) then 
+        self.Hitmarker:New( Coffee.Config[ 'world_hitmarker_time' ], Data.Trace.HitPos )
     end
 
     for k, Slot in pairs( self.Cache ) do 

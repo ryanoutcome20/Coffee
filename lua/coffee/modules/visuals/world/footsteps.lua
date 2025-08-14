@@ -1,7 +1,7 @@
 function Coffee.Visuals:Footsteps( ENT, Position, Foot, Sound, Volume, Filter )
-    if ( self.Config[ 'esp_footstep_visualize' ] and self:Valid( ENT ) ) then
+    if ( Coffee.Config[ 'esp_footstep_visualize' ] and self:Valid( ENT ) ) then
         -- Get color.
-        local Color = Foot == 0 and self.Config[ 'esp_footstep_visualize_left' ] or self.Config[ 'esp_footstep_visualize_right' ]
+        local Color = Foot == 0 and Coffee.Config[ 'esp_footstep_visualize_left' ] or Coffee.Config[ 'esp_footstep_visualize_right' ]
         
         -- Move the position upwards so that it doesn't clip into the floor.
         Position.z = Position.z + 3
@@ -22,26 +22,26 @@ function Coffee.Visuals:Footsteps( ENT, Position, Foot, Sound, Volume, Filter )
         )
     end
 
-    if ( not self.Config[ 'world_footstep' ] ) then 
+    if ( not Coffee.Config[ 'world_footstep' ] ) then 
         return
     end
 
-    local DSP    = self.Config[ 'world_footstep_dsp' ] and self.Config[ 'world_footstep_dsp_index' ] or 0
-    local Level  = self.Config[ 'world_footstep_range' ] and 511 or 75
+    local DSP    = Coffee.Config[ 'world_footstep_dsp' ] and Coffee.Config[ 'world_footstep_dsp_index' ] or 0
+    local Level  = Coffee.Config[ 'world_footstep_range' ] and 511 or 75
     local Volume = 1
 
     if ( self.Client.Local == ENT ) then 
-        if ( self.Config[ 'world_footstep_local_suppress' ] ) then 
+        if ( Coffee.Config[ 'world_footstep_local_suppress' ] ) then 
             return true
         end
 
-        Volume = self.Config[ 'world_footstep_local_volume' ] / 100
+        Volume = Coffee.Config[ 'world_footstep_local_volume' ] / 100
     else
-        if ( self.Config[ 'world_footstep_other_suppress' ] ) then 
+        if ( Coffee.Config[ 'world_footstep_other_suppress' ] ) then 
             return true
         end
 
-        Volume = self.Config[ 'world_footstep_other_volume' ] / 100
+        Volume = Coffee.Config[ 'world_footstep_other_volume' ] / 100
     end
 
     ENT:EmitSound( Sound, Level, 100, Volume, CHAN_AUTO, SND_NOFLAGS, DSP )
