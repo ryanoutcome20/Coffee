@@ -1471,11 +1471,11 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
 	self:GenerateInput( nil, 'Rage', 'miscellaneous_config' )
 
 	self:GenerateButton( Panel, 'Save', function( )
-		//Coffee.Miscellaneous:Save( )
+		Coffee.Miscellaneous:Save( )
 	end )
 	
 	self:GenerateButton( Panel, 'Load', function( )
-		//Coffee.Miscellaneous:Load( )
+		Coffee.Miscellaneous:Load( )
 	end )
 end )
 
