@@ -45,7 +45,7 @@ You can install Coffee via the [releases](https://github.com/ryanoutcome20/Coffe
    ```
 
 Note that the server must have **sv_allowcslua** enabled for this command to work. Also note that Coffee relies on external modules to extend its functionality, supported modules include:
-  * [zxcmodule](https://github.com/tihomirocrew/zxcmodule)
+  * [zxcmodule](https://github.com/ryanoutcome20/zxcmodule)
 
 ## Opening
 
