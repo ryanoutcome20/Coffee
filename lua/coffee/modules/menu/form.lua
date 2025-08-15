@@ -41,6 +41,8 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Seed Offset', 'aimbot_nospread_offset' )
     self:GenerateSlider( nil, 'aimbot_nospread_offset_seed', -255, 255, 0, 0 )
 
+    self:GenerateCheckbox( Panel, 'Angle Normalization', 'aimbot_normalize' )
+
     self:GenerateCheckbox( Panel, 'Engine Prediction', 'aimbot_engine' )
     
     self:GenerateCheckbox( Panel, 'Autostop', 'aimbot_autostop' )
@@ -125,6 +127,13 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Visualize World Sphere', 'aimbot_world_sphere_visualize' )
     self:GenerateColorpicker( nil, 'aimbot_world_sphere_visualize_color', self.Colors.Gray )
     self:GenerateSlider( nil, 'aimbot_world_sphere_visualize_step', 1, 20, 10, 0 )
+
+    self:GenerateCheckbox( Panel, 'Flat FOV', 'aimbot_fov' )
+    self:GenerateSlider( nil, 'aimbot_fov_amount', 1, 180, 90, 0 )
+    self:GenerateSlider( nil, 'aimbot_fov_amount2', 1, 2, 1, 5 )
+
+    self:GenerateCheckbox( Panel, 'Visualize Flat FOV', 'aimbot_fov_visualize' )
+	self:GenerateColorpicker( nil, 'aimbot_fov_visualize_color', self.Colors.White )
 
     self:GenerateLabel( Panel, 'Blacklist' )
     self:GenerateMiniCheckbox( nil, 'Teammates', 'aimbot_avoid_teammates' )

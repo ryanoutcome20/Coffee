@@ -50,3 +50,33 @@ function GetLerpTime()
     -- Return finished value.
     return math.max( Amount, Ratio / Rate )
 end
+
+local Movement = {
+	0,
+	
+	2500,
+	5000,
+	7500,
+	10000,
+	
+	-2500,
+	-5000,
+	-7500,
+	-10000,
+}
+
+function ClampMovement(In)
+	local Closest = Movement[ 1 ]
+    local Best = math.abs( In - Closest )
+    
+    for i = 2, #Movement do
+        local Value = math.abs( In - Movement[ i ] )
+
+        if Value < Best then
+            Closest = Movement[ i ]
+            Best = Value
+        end
+    end
+    
+    return Closest
+end

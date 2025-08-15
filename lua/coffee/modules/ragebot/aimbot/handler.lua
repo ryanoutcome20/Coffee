@@ -104,7 +104,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             )
         end
     end
-
+	
     -- Check if we have limit targets.
     local Limit, Count = Coffee.Config[ 'aimbot_optimizations_targets_amount' ], 0
 
@@ -121,7 +121,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         if ( First ) then 
             local Info = self:GetHitboxInfo( First )
 
-            if ( Info ) then 
+            if ( Info and self:CheckFOV( Info ) ) then 
                 Best = {
                     Record = First,
                     Info = Info
@@ -135,7 +135,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             if ( Last ) then 
                 local Info = self:GetHitboxInfo( Last )
 
-                if ( Info ) then 
+                if ( Info and self:CheckFOV( Info ) ) then 
                     Best = {
                         Record = Last,
                         Info = Info
@@ -210,6 +210,16 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         Coffee.Config[ 'aimbot_norecoil' ], 
         Coffee.Config[ 'aimbot_nospread' ] 
     )
+	
+	if ( self.Config[ 'aimbot_normalize' ] ) then
+		Angles:Normalize()
+		
+		Angles.x = ( ( Angles.x + 180 ) % 360 ) - 180
+		Angles.x = math.Clamp( Angles.x, -89, 89 )
+		Angles.y = ( ( Angles.y + 180 ) % 360 ) - 180
+		Angles.y = math.Clamp( Angles.y, -180, 180 )
+		Angles.z = 0
+	end
     
     self:SetAngles( CUserCMD, Angles )
 

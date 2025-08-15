@@ -1,3 +1,25 @@
+function Coffee.Ragebot:CheckFOV( Hitboxes )
+	if ( not Coffee.Config[ 'aimbot_fov' ] ) then
+		return true
+	end
+	
+	local Amount = Coffee.Config[ 'aimbot_fov_amount' ]
+	
+	for k, Object in ipairs( Hitboxes ) do	
+		local Delta = Object.Hitbox - self.Client.EyePos
+
+		Delta:Normalize()
+
+		Delta = math.deg(math.acos(self.Silent:Forward():Dot(Delta)))
+
+		if math.abs(Delta) <= Amount then
+			return true
+		end
+	end
+	
+	return false
+end
+
 function Coffee.Ragebot:CheckValid( Target, Best )
     local Team = Target:Team( )
 

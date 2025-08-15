@@ -15,8 +15,6 @@ function Coffee.Miscellaneous:Load( )
 		return
 	end
 	
-	Coffee.Config = { }
-	
 	for Index, Object in pairs( Data ) do 
 		if ( istable( Object ) and Object.r and Object.g and Object.b ) then
 			Data[ Index ] = Color( Object.r, Object.g, Object.b, Object.a or 255 )

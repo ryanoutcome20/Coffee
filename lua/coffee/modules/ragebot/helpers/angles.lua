@@ -11,13 +11,16 @@ function Coffee.Ragebot:SetupMovement( CUserCMD )
     local newForward = CUserCMD:GetForwardMove( ) * -math.cos( Delta ) * Invert + CUserCMD:GetSideMove( ) * math.sin( Delta )
 	local newSide    = CUserCMD:GetForwardMove( ) * math.sin( Delta ) * Invert + CUserCMD:GetSideMove( ) * math.cos( Delta )
 
+	newForward = ClampMovement( newForward )
+	newSide = ClampMovement( newSide )
+
 	CUserCMD:SetForwardMove( newForward )
 	CUserCMD:SetSideMove( newSide )
 end
 
 function Coffee.Ragebot:SetAngles( CUserCMD, Target )
     local Mode = Coffee.Config[ 'aimbot_silent_mode' ]
-    
+	    
     if ( Mode == 'Serverside' ) then 
         self.Require:SetContextVector( CUserCMD, angle_zero )
     else
@@ -26,5 +29,8 @@ function Coffee.Ragebot:SetAngles( CUserCMD, Target )
         end
 
         CUserCMD:SetViewAngles( Target )
+		
+		CUserCMD:SetMouseX( Target.x )
+		CUserCMD:SetMouseY( Target.y )
     end
 end

@@ -97,6 +97,7 @@ function Coffee.Visuals:Update( )
     self:Notifications( )
     self:Wallhack( )
     self:Entities( )
+	self:FOVCircle( )
 end
 
 function Coffee.Visuals:Update3D( ) 

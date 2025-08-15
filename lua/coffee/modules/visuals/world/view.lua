@@ -54,7 +54,7 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
     elseif ( Coffee.Config[ 'world_viewmodel' ] and Coffee.Config[ 'world_viewmodel_recoil' ] ) then 
         View.angles = View.angles - self.Client.Local:GetViewPunchAngles( )
     end
-
+	
     return View
 end
 
