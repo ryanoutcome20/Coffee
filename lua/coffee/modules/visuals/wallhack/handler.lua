@@ -203,6 +203,11 @@ function Coffee.Visuals:Wallhack( )
 			self:RenderText( 'Buildmode', 'esp_build_mode', Coffee.Config[ 'esp_build_mode_good' ] )
 		end
 
+        -- If player is in spawn protection.
+		if (  Target:GetNW2Bool( 'LibbyProtectedSpawn' ) ) then 
+			self:RenderText( 'Babygod', 'esp_spawn_protection', Coffee.Config[ 'esp_spawn_protection_color' ] )
+		end
+
         -- Fix our LOD.
         if ( Coffee.Config[ 'esp_lod' ] ) then 
             Target:SetLOD( Coffee.Config[ 'esp_lod_number' ] )

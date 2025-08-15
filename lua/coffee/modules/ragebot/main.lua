@@ -34,7 +34,7 @@ Coffee.Ragebot = {
     Real   = angle_zero,
     Silent = angle_zero
 }
-
+ 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/resolver/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/aimbot/handler.lua' )

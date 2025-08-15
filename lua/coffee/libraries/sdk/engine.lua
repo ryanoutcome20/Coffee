@@ -1,5 +1,3 @@
-Coffee.Require:SetConVarFlags( 'cl_interpolate', FCVAR_NONE )
-
 local cl_interpolate             = GetConVar( 'cl_interpolate' )
 local cl_interp_ratio            = GetConVar( 'cl_interp_ratio' )
 local cl_interp                  = GetConVar( 'cl_interp' )

@@ -139,6 +139,7 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateLabel( Panel, 'Blacklist' )
     self:GenerateMiniCheckbox( nil, 'Teammates', 'aimbot_avoid_teammates' )
     self:GenerateMiniCheckbox( nil, 'Buildmode', 'aimbot_avoid_buildmode' )
+    self:GenerateMiniCheckbox( nil, 'Spawn Protection', 'aimbot_avoid_spawn_protection' )
     self:GenerateMiniCheckbox( nil, 'Steam Friends', 'aimbot_avoid_steam_friends' )
     self:GenerateMiniCheckbox( nil, 'Noclip', 'aimbot_avoid_noclip' )
     self:GenerateMiniCheckbox( nil, 'Vehicles', 'aimbot_avoid_vehicles' )
@@ -458,10 +459,19 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Bottom'
     }, 80 )
 
-    self:GenerateCheckbox( Panel, 'Buildmode', 'esp_build_mode'  )
+    self:GenerateCheckbox( Panel, 'Build Mode', 'esp_build_mode'  )
     self:GenerateColorpicker( nil, 'esp_build_mode_good', self.Colors.Green )
     self:GenerateColorpicker( nil, 'esp_build_mode_bad', self.Colors.Red )
     self:GenerateDropdown( nil, 2, 'esp_build_mode_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 80 )
+
+    self:GenerateCheckbox( Panel, 'Spawn Protection', 'esp_spawn_protection'  )
+    self:GenerateColorpicker( nil, 'esp_spawn_protection_color', self.Colors.Red )
+    self:GenerateDropdown( nil, 2, 'esp_spawn_protection_dock', {
         'Left',
         'Right',
         'Top',

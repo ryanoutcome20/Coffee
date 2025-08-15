@@ -122,7 +122,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         if ( not self:Valid( Target, Best ) ) then 
             continue
         end
-        
+                
         local First = usingBacktrack and self.Records:GetFront( Target ) or self.Records:Construct( Target )
         
         if ( First ) then 

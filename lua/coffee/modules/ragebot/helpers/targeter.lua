@@ -41,6 +41,12 @@ function Coffee.Ragebot:CheckValid( Target, Best )
 		end
     end
 
+    if ( Coffee.Config[ 'aimbot_avoid_spawn_protection'] ) then
+        if ( Target:GetNW2Bool( 'LibbyProtectedSpawn' ) ) then
+            return false
+        end
+    end
+
     if ( Coffee.Config[ 'aimbot_avoid_steam_friends' ] and Target:GetFriendStatus( ) == 'friend' ) then 
         return false
     end
