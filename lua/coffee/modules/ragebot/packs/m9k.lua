@@ -40,7 +40,7 @@ function Coffee.Ragebot.M9K:RunTrace( Record, Matrix, Autowall, Minimum )
     end
 
     if ( not Autowall ) then 
-        if ( Coffee.Config[ 'aimbot_engine_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
+        if ( Coffee.Config[ 'aimbot_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
             return true
         end
 

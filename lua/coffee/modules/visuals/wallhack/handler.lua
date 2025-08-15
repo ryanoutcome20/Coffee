@@ -195,6 +195,13 @@ function Coffee.Visuals:Wallhack( )
                 self:RenderText( 'Traitor', 'esp_ttt', Coffee.Config[ 'esp_ttt_traitor' ] )
             end
         end
+		
+		-- If player is in build mode.
+		if ( Target.buildmode or Target:GetNWBool( 'BuildMode' ) or Target:GetNWBool( '_Kyle_Buildmode' ) ) then 
+			self:RenderText( 'Buildmode', 'esp_build_mode', Coffee.Config[ 'esp_build_mode_bad' ] )
+		else
+			self:RenderText( 'Buildmode', 'esp_build_mode', Coffee.Config[ 'esp_build_mode_good' ] )
+		end
 
         -- Fix our LOD.
         if ( Coffee.Config[ 'esp_lod' ] ) then 

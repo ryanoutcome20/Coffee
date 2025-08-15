@@ -35,6 +35,10 @@ function Coffee.Ragebot:CheckValid( Target, Best )
         if ( Target:GetNWBool( 'BuildMode' ) ) then 
             return false 
         end
+		
+		if ( Target:GetNWBool( '_Kyle_Buildmode' ) ) then
+			return false
+		end
     end
 
     if ( Coffee.Config[ 'aimbot_avoid_steam_friends' ] and Target:GetFriendStatus( ) == 'friend' ) then 

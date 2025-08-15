@@ -56,6 +56,13 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
         return 
     end
 
+    -- Check for prediction.
+    local usingPrediction = Coffee.Config[ 'aimbot_engine' ] and not Coffee.Config[ 'aimbot_engine_constant' ]
+
+    if ( usingPrediction ) then
+        self.Require:StartPrediction( CUserCMD )
+    end
+
     -- Check if we are using optimizations.
     local noIdeal       = self.Optimizations:Valid( 'aimbot_optimizations_ideal_records' )
     local simpleRecords = self.Optimizations:Valid( 'aimbot_optimizations_records' )
@@ -242,6 +249,10 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
 
     if ( CUserCMD:KeyDown( IN_ATTACK ) ) then 
         self.Shots:PushShot( Best.Record )
+    end
+
+    if ( usingPrediction ) then
+        self.Require:EndPrediction( CUserCMD )
     end
     
     self.currentAngle = Angles

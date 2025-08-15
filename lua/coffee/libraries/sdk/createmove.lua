@@ -10,11 +10,11 @@ function Coffee.CreateMove:CreateMove( CUserCMD )
         return
     end
 
-    local usingPrediction = Coffee.Config[ 'aimbot_engine' ]
+    local usingPrediction = Coffee.Config[ 'aimbot_engine' ] and Coffee.Config[ 'aimbot_engine_constant' ]
 
     for Stage = 0, MOVE_END do 
         if ( usingPrediction and Stage == MOVE_POST_PREDICTED ) then 
-            self.Require:EndPrediction( )
+            self.Require:EndPrediction( CUserCMD )
         end
 
         self.Hooks:Call( 'CreateMoveEx', Stage, CUserCMD )

@@ -30,8 +30,8 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Autowall', 'aimbot_autowall' )
     self:GenerateSlider( nil, 'aimbot_autowall_damage', 1, 100, 50, 0, false, 'hp' )
 
-    self:GenerateCheckbox( Panel, 'Automatic Entity Penetration', 'aimbot_engine_entity' )
-    self:GenerateSlider( nil, 'aimbot_engine_entity_damage', 1, 100, 50, 0, false, 'hp' )
+    self:GenerateCheckbox( Panel, 'Automatic Entity Penetration', 'aimbot_entity' )
+    self:GenerateSlider( nil, 'aimbot_entity_damage', 1, 100, 50, 0, false, 'hp' )
 
     self:GenerateCheckbox( Panel, 'Compensate Recoil', 'aimbot_norecoil' )
 
@@ -44,7 +44,8 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Angle Normalization', 'aimbot_normalize' )
 
     self:GenerateCheckbox( Panel, 'Engine Prediction', 'aimbot_engine' )
-    
+    self:GenerateMiniCheckbox( nil, 'Constant', 'aimbot_engine_constant' )
+
     self:GenerateCheckbox( Panel, 'Autostop', 'aimbot_autostop' )
     self:GenerateKeybind( nil, 'aimbot_autostop_keybind' )
     self:GenerateSlider( nil, 'aimbot_autostop_speed', 1, 250, 125, 0, false, '' )
@@ -451,6 +452,16 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateColorpicker( nil, 'esp_ttt_traitor', self.Colors.Red )
     self:GenerateColorpicker( nil, 'esp_ttt_detective', self.Colors.Cyan )
     self:GenerateDropdown( nil, 2, 'esp_ttt_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 80 )
+
+    self:GenerateCheckbox( Panel, 'Buildmode', 'esp_build_mode'  )
+    self:GenerateColorpicker( nil, 'esp_build_mode_good', self.Colors.Green )
+    self:GenerateColorpicker( nil, 'esp_build_mode_bad', self.Colors.Red )
+    self:GenerateDropdown( nil, 2, 'esp_build_mode_dock', {
         'Left',
         'Right',
         'Top',

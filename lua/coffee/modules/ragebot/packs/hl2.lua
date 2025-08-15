@@ -14,7 +14,7 @@ function Coffee.Ragebot.HL2:RunTrace( Record, Matrix, Autowall, Minimum )
         mask = MASK_SHOT 
     } )
 
-    if ( Coffee.Config[ 'aimbot_engine_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
+    if ( Coffee.Config[ 'aimbot_entity' ] and self:PenetrateEntities( Trace, Record )  ) then
         return true
     end
 

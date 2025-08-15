@@ -51,7 +51,7 @@ function Coffee.Ragebot:PenetrateEntities( Trace, Record )
         return
     end
 
-    if ( Trace.Entity:GetMaxHealth( ) > ( 100 - Coffee.Config[ 'aimbot_engine_entity_damage' ] ) + 1 ) then 
+    if ( Trace.Entity:GetMaxHealth( ) > ( 100 - Coffee.Config[ 'aimbot_entity_damage' ] ) + 1 ) then 
         return
     end
 

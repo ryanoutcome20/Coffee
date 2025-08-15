@@ -1,9 +1,5 @@
 function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width, Callback, useIndex )
     -- Have to generate the dropdowns used in the menu.
-    
-	if useIndex then
-		MsgN(Assignment)
-	end
 	
     Panel = Panel or self.Last
 
@@ -28,10 +24,14 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width,
     end
 	
 	Dropdown.OnConfigLoad = function( self )		
-		Dropdown:SetValue( useIndex and Options[ Coffee.Config[ Assignment ] - 1 ] or Coffee.Config[ Assignment ] )
+		if ( useIndex ) then		
+			Dropdown:SetValue( Options[ Coffee.Config[ Assignment ] + 1 ] )
+		else
+			Dropdown:SetValue( Coffee.Config[ Assignment ] )
+		end
 		
 		if ( Callback ) then 
-            Callback( Coffee.Config[ Assignment ] )
+            Callback( self:GetValue( ) )
         end
 	end
 	
