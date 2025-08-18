@@ -116,6 +116,19 @@ function Coffee.Visuals:Wallhack( )
                 cam.End3D( )
             end
         end
+		
+		-- Run our snapline ESP.
+		if ( Coffee.Config[ 'esp_snapline' ] ) then
+			local Local = self.Client.Position:ToScreen( )
+		
+			Local = {
+				X = Local.x,
+				Y = Local.y
+			}
+		
+			surface.SetDrawColor( Coffee.Config[ 'esp_snapline_color' ] )
+            surface.DrawLine( Local.X, Local.Y, self.Position.X, self.Position.Y )
+		end
 
         -- Run our healthbar ESP.
         local Health = HSVToColor( math.Clamp( Front.Health / Front.maxHealth, 0, 1 ) * 90, 1, 1 )
@@ -204,8 +217,13 @@ function Coffee.Visuals:Wallhack( )
 		end
 
         -- If player is in spawn protection.
-		if (  Target:GetNW2Bool( 'LibbyProtectedSpawn' ) ) then 
+		if ( Target:GetNW2Bool( 'LibbyProtectedSpawn' ) ) then 
 			self:RenderText( 'Babygod', 'esp_spawn_protection', Coffee.Config[ 'esp_spawn_protection_color' ] )
+		end
+		
+		-- If player is highlighted
+		if ( self.Playerlist:Grab( Target, "Highlight" ) ) then 
+			self:RenderText( 'HIGHLIGHTED', 'esp_highlight', Coffee.Config[ 'esp_highlight_color' ] )
 		end
 
         -- Fix our LOD.

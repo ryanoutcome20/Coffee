@@ -95,8 +95,9 @@ function Coffee.Menu:GenerateTab( Name, Width, Height, Single )
     -- Generate our tab.
     local Handler = vgui.Create( 'DPanel', Tab )
     Handler:Dock( FILL )
+	Handler:DockPadding( 4, 4, 4, 4 )
     Handler.Paint = function( self, W, H )
-        surface.SetDrawColor( 20, 20, 20, 120 )
+        surface.SetDrawColor( 20, 20, 20, 255 )
         surface.DrawRect( 0, 0, W, H )
 
         surface.SetDrawColor( Coffee.Menu.Color )

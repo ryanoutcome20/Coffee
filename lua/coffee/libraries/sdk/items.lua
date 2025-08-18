@@ -68,7 +68,17 @@ function Coffee.Items:Update( Panel )
     local New = self:Refresh( )
 
     for k,v in pairs( New ) do 
-        Coffee.Menu:GenerateListElement( Panel, k )
+        local Button = Panel:Add( k )
+
+		Button.Paint = function( self, W, H )
+			if ( Coffee.Items:Valid( k ) ) then 
+				self:SetTextColor( Coffee.Menu.Color )
+			elseif ( self.Depressed or self.m_bSelected ) then 
+				self:SetTextColor( Coffee.Colors[ 'White' ] )
+			else 
+				self:SetTextColor( Coffee.Colors[ 'Light Gray' ] )
+			end
+		end
     end
 end
 

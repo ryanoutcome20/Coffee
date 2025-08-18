@@ -3,6 +3,7 @@ Coffee.Menu = {
     Colors     = Coffee.Colors,
     Config     = Coffee.Config,
     Items      = Coffee.Items,
+	Playerlist = Coffee.Playerlist,
 
     Gradients = {
         Up     = Material( 'vgui/gradient_up' ),
@@ -36,6 +37,7 @@ Coffee:LoadFile( 'lua/coffee/modules/menu/constellation.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/tabs.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/list.lua' )
+Coffee:LoadFile( 'lua/coffee/modules/menu/elements/tree.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/label.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/input.lua' )
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/slider.lua' )
@@ -198,7 +200,9 @@ Coffee.Menu:Init( {
     { Title = 'Players', Height = 500, Single = false },
     { Title = 'World', Height = 500, Single = false },
     { Title = 'Items', Height = 500, Single = false },
+	{ Title = 'Player List', Height = 250, Single = true },
     { Title = 'Miscellaneous', Height = 500, Single = false },
+	{ Title = 'Exploits', Height = 250, Single = false }
 } )
 
 Coffee.Hooks:New( 'Think', Coffee.Menu.Input, Coffee.Menu )

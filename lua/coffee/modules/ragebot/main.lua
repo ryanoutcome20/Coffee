@@ -1,5 +1,6 @@
 Coffee.Ragebot = { 
     Optimizations = Coffee.Optimizations,
+	Playerlist    = Coffee.Playerlist,
     Records       = Coffee.Records,
     Require       = Coffee.Require,
     Overlay       = Coffee.Overlay,
@@ -95,11 +96,11 @@ function Coffee.Ragebot:Predicted( Stage, CUserCMD )
 
     self:AdjustGrenades( CUserCMD )
 
-    self.Hooks:Call( 'CreateMoveEx', MOVE_PRE_MOVEMENT, CUserCMD )
+    self.Hooks:Call( 'CMC', MOVE_PRE_MOVEMENT, CUserCMD )
 
     self:SetupMovement( CUserCMD )
 
-    self.Hooks:Call( 'CreateMoveEx', MOVE_POST_MOVEMENT, CUserCMD )
+    self.Hooks:Call( 'CMC', MOVE_POST_MOVEMENT, CUserCMD )
 
     self:BreakAnimations( CUserCMD )
     
@@ -112,5 +113,5 @@ function Coffee.Ragebot:Predicted( Stage, CUserCMD )
     self.Require:BSendPacket( self.Packet )
 end
 
-Coffee.Hooks:New( 'CreateMoveEx', Coffee.Ragebot.Predicted, Coffee.Ragebot )
-Coffee.Hooks:New( 'CreateMoveEx', Coffee.Ragebot.PrePredicted, Coffee.Ragebot )
+Coffee.Hooks:New( 'CMC', Coffee.Ragebot.Predicted, Coffee.Ragebot )
+Coffee.Hooks:New( 'CMC', Coffee.Ragebot.PrePredicted, Coffee.Ragebot )

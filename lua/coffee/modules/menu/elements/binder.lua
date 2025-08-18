@@ -76,11 +76,11 @@ function Coffee.Menu:GenerateKeybindSubpanel( Panel, Assignment )
     Frame:MakePopup( )
 
     Frame.Paint = function( self, W, H ) 
-        surface.SetDrawColor( 20, 20, 20, 200 )
-        surface.DrawRect( 0, 0, W, H )
-
-        surface.SetDrawColor( Coffee.Menu.Color )
-        surface.DrawOutlinedRect( 0, 0, W, H, 1 )
+		surface.SetDrawColor( 20, 20, 20, 255 )
+		surface.DrawRect( 0, 0, W, H )
+			
+		surface.SetDrawColor( Coffee.Menu.Color )
+		surface.DrawOutlinedRect( 0, 0, W, H, 1 )
     end
 
     Frame.Think = function( self )

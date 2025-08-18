@@ -60,6 +60,14 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
     end
 end
 
+function Coffee.Visuals:PropChams( Target )
+	if ( not Coffee.Config[ 'esp_chams_props' ] ) then
+		return
+	end
+
+	self:RenderChams( Target, 'esp_chams_props', true )
+end
+
 function Coffee.Visuals:PlayerChams( )
     cam.IgnoreZ( true )
 
@@ -67,13 +75,18 @@ function Coffee.Visuals:PlayerChams( )
         if ( not IsValid( Target ) ) then 
             continue
         end
+		
+		if ( Target:IsDormant( ) ) then 
+            continue
+        end
+		
+		if ( Target:GetClass( ) == "prop_physics" ) then
+			self:PropChams( Target )
+			continue
+		end
 
         if ( not Target:IsPlayer( ) and not Target:IsRagdoll( ) ) then
             continue 
-        end
-
-        if ( Target:IsDormant( ) ) then 
-            continue
         end
 
         Target:SetRenderMode( RENDERMODE_NORMAL )

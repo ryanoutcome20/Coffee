@@ -131,7 +131,6 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Flat FOV', 'aimbot_fov' )
     self:GenerateSlider( nil, 'aimbot_fov_amount', 1, 180, 90, 0 )
-    self:GenerateSlider( nil, 'aimbot_fov_amount2', 1, 2, 1, 5 )
 
     self:GenerateCheckbox( Panel, 'Visualize Flat FOV', 'aimbot_fov_visualize' )
 	self:GenerateColorpicker( nil, 'aimbot_fov_visualize_color', self.Colors.White )
@@ -139,6 +138,7 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateLabel( Panel, 'Blacklist' )
     self:GenerateMiniCheckbox( nil, 'Teammates', 'aimbot_avoid_teammates' )
     self:GenerateMiniCheckbox( nil, 'Buildmode', 'aimbot_avoid_buildmode' )
+    self:GenerateMiniCheckbox( nil, 'Highlighted', 'aimbot_avoid_highlighted' )
     self:GenerateMiniCheckbox( nil, 'Spawn Protection', 'aimbot_avoid_spawn_protection' )
     self:GenerateMiniCheckbox( nil, 'Steam Friends', 'aimbot_avoid_steam_friends' )
     self:GenerateMiniCheckbox( nil, 'Noclip', 'aimbot_avoid_noclip' )
@@ -150,6 +150,9 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateMiniCheckbox( nil, 'Deathmatch', 'aimbot_avoid_deathmatch' )
 
     self:GenerateCheckbox( Panel, 'Invert Blacklist', 'aimbot_avoid_invert' )
+	
+	self:GenerateCheckbox( Panel, 'Maximum Health', 'aimbot_maximum_health' )
+    self:GenerateSlider( nil, 'aimbot_maximum_health_amount', 1, 1000, 500, 0 )
 end, true )
 
 -- Anti-Aim Tab
@@ -410,6 +413,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_ping_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Fake', 'esp_fake'  )
     self:GenerateColorpicker( nil, 'esp_fake_color_good', self.Colors.Green )
@@ -419,6 +426,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Right',
         'Top',
         'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_fake_font', {
+        'Main',
+        'Small'
     }, 80 )
 
     self:GenerateCheckbox( Panel, 'Lag Compensation', 'esp_lc'  )
@@ -430,6 +441,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_lc_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Dead', 'esp_dead'  )
     self:GenerateColorpicker( nil, 'esp_dead_color', self.Colors.Red )
@@ -439,6 +454,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_dead_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Dormant', 'esp_dormant'  )
     self:GenerateColorpicker( nil, 'esp_dormant_color', self.Colors.Gray )
@@ -447,6 +466,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Right',
         'Top',
         'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_dormant_font', {
+        'Main',
+        'Small'
     }, 80 )
 
     self:GenerateCheckbox( Panel, 'TTT', 'esp_ttt'  )
@@ -458,6 +481,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_ttt_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Build Mode', 'esp_build_mode'  )
     self:GenerateColorpicker( nil, 'esp_build_mode_good', self.Colors.Green )
@@ -468,6 +495,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_build_mode_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Spawn Protection', 'esp_spawn_protection'  )
     self:GenerateColorpicker( nil, 'esp_spawn_protection_color', self.Colors.Red )
@@ -476,6 +507,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Right',
         'Top',
         'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_spawn_protection_font', {
+        'Main',
+        'Small'
     }, 80 )
 
     self:GenerateCheckbox( Panel, 'Model', 'esp_model'  )
@@ -486,6 +521,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_model_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Usergroup', 'esp_usergroup'  )
     self:GenerateColorpicker( nil, 'esp_usergroup_color', self.Colors.White )
@@ -495,6 +534,10 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Top',
         'Bottom'
     }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_usergroup_font', {
+        'Main',
+        'Small'
+    }, 80 )
 
     self:GenerateCheckbox( Panel, 'Team', 'esp_team_name'  )
     self:GenerateColorpicker( nil, 'esp_team_name_color', self.Colors.White )
@@ -503,6 +546,23 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Right',
         'Top',
         'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_team_name_font', {
+        'Main',
+        'Small'
+    }, 80 )
+	
+    self:GenerateCheckbox( Panel, 'Highlight', 'esp_highlight'  )
+    self:GenerateColorpicker( nil, 'esp_highlight_color', self.Colors.White )
+    self:GenerateDropdown( nil, 4, 'esp_highlight_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 2, 'esp_highlight_font', {
+        'Main',
+        'Small'
     }, 80 )
 
     self:GenerateCheckbox( Panel, 'Glow', 'esp_glow'  )
@@ -560,6 +620,9 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
 
     self:GenerateLabel( Panel, 'Amplitude' )
     self:GenerateSlider( nil, 'esp_ring_amplitude', 1, 100, 50, 0, false, '%' )
+
+    self:GenerateCheckbox( Panel, 'Snapline', 'esp_snapline' )
+    self:GenerateColorpicker( nil, 'esp_snapline_color', self.Colors.White )
 
     self:GenerateCheckbox( Panel, 'Area Light', 'esp_light'  )
     self:GenerateColorpicker( nil, 'esp_light_color', self.Colors.Main )
@@ -914,6 +977,43 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
     self:GenerateColorpicker( nil, 'esp_chams_viewmodel_overlay_color', self.Colors.Main )
     self:GenerateColorpicker( nil, 'esp_chams_viewmodel_overlay_secondary_color', self.Colors.White )
     self:GenerateDropdown( nil, 1, 'esp_chams_viewmodel_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars',
+        'Animated Portal',
+        'Animated Spawn Effect',
+        'Animated Wireframe Dots',
+        'Animated Dots',
+        'Animated Breathing',
+        'Animated Fenceglow',
+        'Animated Teleport'
+    } )
+	
+	
+    self:GenerateCheckbox( Panel, 'Props', 'esp_chams_props'  )
+    self:GenerateColorpicker( nil, 'esp_chams_props_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'esp_chams_props_secondary_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_props_original' )
+    self:GenerateDropdown( nil, 1, 'esp_chams_props_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow',
+        'Pearlescent',
+        'Hue',
+        'Cloud',
+        'Cracked',
+        'Animated Portal',
+        'Animated Water',
+        'Animated Shield'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Props Overlay', 'esp_chams_props_overlay'  )
+    self:GenerateColorpicker( nil, 'esp_chams_props_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'esp_chams_props_overlay_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 1, 'esp_chams_props_overlay_material', {
         'Outline',
         'Wireframe',
         'Animated Wireframe',
@@ -1343,6 +1443,7 @@ Coffee.Menu:Handle( 'World', function( self, Panel )
     
     self:GenerateCheckbox( Panel, 'Override FOV', 'world_fov' )
     self:GenerateSlider( nil, 'world_fov_amount', 0, 150, 75, 0 )
+    self:GenerateMiniCheckbox( nil, 'Proper Scaling', 'world_fov_scaled' )
 
     self:GenerateCheckbox( Panel, 'Override Offsets', 'world_offsets' )
     
@@ -1433,6 +1534,16 @@ Coffee.Menu:Handle( 'Items', function( self, Panel )
     end )
 end, true )
 
+-- Player List Tab
+
+Coffee.Menu:Handle( 'Player List', function( self, Panel )
+	self:GenerateButton( Panel, 'Refresh', function( self ) 
+		Coffee.Playerlist:Refresh( )
+	end )
+
+    self:GenerateTree( Panel, 'Player List' )
+end )
+
 -- Miscellaneous Tab
 
 Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
@@ -1483,7 +1594,9 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Spectator List', 'miscellaneous_spectator_list'  )
 
     self:GenerateCheckbox( Panel, 'Admin List', 'miscellaneous_admin_list'  )
-    
+	
+    self:GenerateCheckbox( Panel, 'Highlight List', 'miscellaneous_highlight_list'  )
+	
     self:GenerateCheckbox( Panel, 'Bunnyhop', 'miscellaneous_bunnyhop'  )
 
     self:GenerateCheckbox( Panel, 'Autostrafe', 'miscellaneous_autostrafe'  )
@@ -1496,6 +1609,15 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Quick Acceleration', 'miscellaneous_quick_acceleration'  )
     self:GenerateMiniCheckbox( nil, 'Always Sprint', 'miscellaneous_quick_acceleration_sprint'  )
+
+    self:GenerateCheckbox( Panel, 'Disconnect Reason', 'miscellaneous_disconnect_reason' )
+    self:GenerateInput( nil, 'Timed Out', 'miscellaneous_disconnect_reason_text' )
+
+    self:GenerateCheckbox( Panel, 'Filter Chatbox', 'miscellaneous_filter' )
+
+	self:GenerateButton( Panel, 'Clear Decals', function( )
+		RunConsoleCommand( "r_cleardecals" )
+	end )
 
 	self:GenerateLabel( Panel, 'Configuration Name' )
 	self:GenerateInput( nil, 'Rage', 'miscellaneous_config' )

@@ -113,7 +113,8 @@ function Coffee.Ragebot.M9K:CalculateSpread( CUserCMD, Spot, Cone, Seed )
     -- https://github.com/ValveSoftware/source-sdk-2013/blob/0d8dceea4310fde5706b3ce1c70609d72a38efdf/mp/src/game/shared/shot_manipulator.h#L59
 
     if ( Coffee.Config[ 'aimbot_nospread_engine' ] ) then 
-        return Spot + ded.PredictSpread( CUserCMD, Spot, Cone ):Angle( )
+        Seed = 33
+		self.Require:SetRandomSeed( CUserCMD, 33 )
     end
 
     if ( Coffee.Config[ 'aimbot_nospread_offset' ] ) then 

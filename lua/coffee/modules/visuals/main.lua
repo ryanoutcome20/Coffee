@@ -6,6 +6,7 @@ Coffee.Visuals = {
     Colors     = Coffee.Colors,
     Notify     = Coffee.Notify,
     Resolution = Coffee.Resolution,
+	Playerlist = Coffee.Playerlist,
     Materials  = Coffee.Materials,
     Ragebot    = Coffee.Ragebot,
     Overlay    = Coffee.Overlay,
@@ -29,6 +30,8 @@ Coffee.Visuals = {
         [ 'Explosion' ]    = 'Explosion',
         [ 'Vortigaunt' ]   = 'VortDispel'
     },
+
+	FOV = GetConVar( 'fov_desired' ),
 
     Fade = { },
     Offsets = { }
@@ -114,4 +117,4 @@ function Coffee.Visuals:Update3D( )
 end
 
 Coffee.Hooks:New( 'RenderScreenspaceEffects', Coffee.Visuals.Update3D, Coffee.Visuals )
-Coffee.Hooks:New( 'DrawOverlay', Coffee.Visuals.Update, Coffee.Visuals )
+Coffee.Hooks:New( 'HUDPaint', Coffee.Visuals.Update, Coffee.Visuals )

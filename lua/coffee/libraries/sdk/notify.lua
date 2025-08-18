@@ -24,7 +24,7 @@ function Coffee.Notify:Add( Text, Decay )
     end
 
     if ( Coffee.Config[ 'miscellaneous_notifications_console' ] ) then 
-        Coffee:Print( false, Text )
+        Coffee:PrintColor( Coffee.Menu.Color, Text )
     end
 end
 
@@ -36,8 +36,16 @@ function Coffee.Notify:Hurt( Data )
         return
     end
 
-    local Damage = Victim:Health( ) - Data.health
-        
+	local Health = Victim:Health( )
+	local Remaining = Data.health
+	
+    local Damage = Health - Remaining
+    
+	-- Fix byte overflow.
+	if Health > 100 then
+		Remaining = ">100"
+	end
+	
     if ( Victim == Inflictor ) then 
         return
     end
@@ -46,7 +54,7 @@ function Coffee.Notify:Hurt( Data )
         local Name = Inflictor == NULL and 'unknown' or Inflictor:Name( ) 
 
         if ( Data.health > 0 ) then 
-            self:Add( string.format( 'Hurt by %s for %s (%s health remaining).', Name, Damage, Data.health ) )
+            self:Add( string.format( 'Hurt by %s for %s (%s health remaining).', Name, Damage, Remaining ) )
         else
             self:Add( string.format( 'Killed by %s.', Name ) )
         end
@@ -54,7 +62,7 @@ function Coffee.Notify:Hurt( Data )
         local Name = Victim == NULL and 'unknown' or Victim:Name( ) 
 
         if ( Data.health > 0 ) then 
-            self:Add( string.format( 'Hurt %s for %s (%s health remaining).', Name, Damage, Data.health ) )
+            self:Add( string.format( 'Hurt %s for %s (%s health remaining).', Name, Damage, Remaining ) )
         else
             self:Add( string.format( 'Killed %s.', Name ) )
         end    

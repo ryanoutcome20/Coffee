@@ -27,17 +27,3 @@ function Coffee.Menu:GenerateList( Panel, Name, Update )
 
     self.Items.DCollapsible = DCollapsible
 end
-
-function Coffee.Menu:GenerateListElement( Panel, Text )
-    local Button = Panel:Add( Text )
-
-    Button.Paint = function( self, W, H )
-        if ( Coffee.Items:Valid( Text ) ) then 
-            self:SetTextColor( Coffee.Menu.Color )
-        elseif ( self.Depressed or self.m_bSelected ) then 
-            self:SetTextColor( Coffee.Colors[ 'White' ] )
-        else 
-            self:SetTextColor( Coffee.Colors[ 'Light Gray' ] )
-        end
-    end
-end

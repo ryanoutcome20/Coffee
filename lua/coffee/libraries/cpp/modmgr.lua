@@ -1,7 +1,117 @@
 Coffee.Require = { 
     Active = '',
+	Choked = false,
     Data = {
-        [ 'zxcmodule' ] = {
+		[ 'proxi' ] = {
+            [ 'PreFrameStageNotify' ] = function( self )
+                return 'PreFrameStageNotify'
+            end,
+
+            [ 'FrameStageNotify' ] = function( self )
+                return 'PostFrameStageNotify'
+            end,
+
+            [ 'Simulation' ] = function( self, ENT )
+                return ENT:GetDTNetVar( 'DT_BaseEntity->m_flSimulationTime', 1 )
+            end,
+
+            [ 'Servertime' ] = function( self, CUserCMD )
+                return TICKS_TO_TIME( LocalPlayer( ):GetInternalVariable( 'm_nTickBase' ) )
+            end,
+
+            [ 'Latency' ] = function( self, Mode )
+                if ( Mode == 0 ) then
+					return proxi.GetFlowOutgoing( )
+				elseif ( Mode == 1 ) then
+					return proxi.GetFlowIncoming( )
+				end
+				
+				return LocalPlayer( ):Ping( )
+            end,
+
+            [ 'StartPrediction' ] = function( self, CUserCMD )                
+                return proxi.StartPrediction( CUserCMD )
+            end,
+
+            [ 'EndPrediction' ] = function( self, CUserCMD )                
+                return proxi.EndPrediction( CUserCMD )
+            end,
+
+            [ 'SetContextVector' ] = function( self, CUserCMD, Angle )
+				CUserCMD:SetInWorldClicker( true )
+				
+                return CUserCMD:SetWorldClickerAngles( Angle:Forward( ) )
+            end,
+
+            [ 'SetConVar' ] = function( self, ConVar, Value )
+                local Object = proxi.GetConVar( ConVar )
+				
+				Object:SendValue( Value )
+				
+				return Object
+            end,
+
+            [ 'SetConVarFlags' ] = function( self, ConVar, Flags )
+                local Object = proxi.GetConVar( ConVar )
+				
+				Object:SetFlags( Flags )
+				
+				return Object
+			end,
+
+            [ 'ForceConVar' ] = function( self, ConVar, Value )
+			    local Object = GetConVar( ConVar )
+
+                if ( isstring( Value ) ) then
+					Object:ForceString( Value )
+				elseif ( isnumber( Value ) ) then
+					Object:ForceFloat( Value )
+				elseif ( isbool( Value ) ) then
+					Object:ForceBool( Value )
+				end
+				
+				return Object
+            end,
+
+            [ 'SetInterpolation' ] = function( self, Time )
+				-- SetDTNetVar?
+            end,
+
+            [ 'SetTickCount' ] = function( self, CUserCMD, Tick )
+                return CUserCMD:SetTickCount( Tick )
+            end,
+
+            [ 'SetOutSequence' ] = function( self, Seq )
+                return proxi.SetSequenceNumber( Seq )
+            end,
+
+            [ 'GetOutSequence' ] = function( self )
+                return proxi.GetSequenceNumber( )
+            end,
+
+            [ 'Slowmotion' ] = function( self, Value )
+                -- ...?
+            end,
+
+            [ 'BSendPacket' ] = function( self, Value )
+                Coffee.Require.Choked = Value
+				return Value
+            end,
+				
+			[ 'SetDisconnectReason' ] = function( self, Reason )
+				return proxi.Disconnect( Reason )
+			end,
+            
+			[ 'SetRandomSeed' ] = function( self, CUserCMD, Seed )
+				return CUserCMD:SetRandomSeed( Seed )
+			end,
+			
+            [ 'GetRandomSeed' ] = function( self, CUserCMD )
+                return CUserCMD:GetRandomSeed( )
+            end
+        },
+	
+        [ 'zxcmodule.' ] = {
             [ 'PreFrameStageNotify' ] = function( self )
                 return 'PreFrameStageNotify'
             end,
@@ -69,6 +179,14 @@ Coffee.Require = {
             [ 'BSendPacket' ] = function( self, Value )
                 return ded.SetBSendPacket( Value )
             end,
+			
+			[ 'SetDisconnectReason' ] = function( self, Reason )
+				return ded.NetDisconnect( Reason )
+			end,
+			
+			[ 'SetRandomSeed' ] = function( self, CUserCMD, Seed )
+				-- ...
+			end,
             
             [ 'GetRandomSeed' ] = function( self, CUserCMD )
                 return ded.GetRandomSeed( CUserCMD )
@@ -83,6 +201,10 @@ function Coffee.Require:PostInit( Index, Data )
     for k,v in pairs( Data ) do 
         self[ k ] = v
     end
+	
+	if ( __G[ Index ] ) then
+		_G[ Index ] = __G[ Index ]
+	end
 end
 
 function Coffee.Require:Init( )

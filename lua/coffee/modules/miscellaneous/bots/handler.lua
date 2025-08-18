@@ -36,4 +36,4 @@ function Coffee.Bots:Update( Stage, CUserCMD )
     self.Point:Handler( CUserCMD )
 end
 
-Coffee.Hooks:New( 'CreateMoveEx', Coffee.Bots.Update, Coffee.Bots )
+Coffee.Hooks:New( 'CMC', Coffee.Bots.Update, Coffee.Bots )

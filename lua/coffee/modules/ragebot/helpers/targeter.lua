@@ -27,6 +27,10 @@ function Coffee.Ragebot:CheckValid( Target, Best )
         return false
     end
 
+	if ( Coffee.Config[ 'aimbot_maximum_health' ] and Target:Health( ) >= Coffee.Config[ 'aimbot_maximum_health_amount' ] ) then
+		return false
+	end
+
     if ( Coffee.Config[ 'aimbot_avoid_buildmode' ] ) then 
         if ( Target.buildmode ) then 
             return false 
@@ -67,7 +71,7 @@ function Coffee.Ragebot:CheckValid( Target, Best )
         return false
     end
 
-    if ( Coffee.Config[ 'aimbot_avoid_hunters' ] and TEAM_HUNTERS != nil and Team == TEAM_HUNTERS ) then 
+    if ( Coffee.Config[ 'aimbot_avoid_hunters' ] and TEAM_HUNTERS != nil and Team == TEAM_HUNTERS ) then
         return false
     end
     
@@ -78,6 +82,14 @@ function Coffee.Ragebot:CheckValid( Target, Best )
     if ( Coffee.Config[ 'aimbot_avoid_deathmatch' ] and Target.InDM and Target:InDM( ) ) then 
         return false
     end
+	
+	if ( Coffee.Config[ 'aimbot_avoid_highlighted' ] and self.Playerlist:Grab( Target, "Highlight" ) ) then
+		return false
+	end
+	
+	if ( self.Playerlist:Grab( Target, "Whitelist" ) ) then
+		return false
+	end
 
     return true 
 end

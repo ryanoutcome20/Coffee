@@ -17,7 +17,7 @@ function Coffee.CreateMove:CreateMove( CUserCMD )
             self.Require:EndPrediction( CUserCMD )
         end
 
-        self.Hooks:Call( 'CreateMoveEx', Stage, CUserCMD )
+        self.Hooks:Call( 'CMC', Stage, CUserCMD )
 
         if ( usingPrediction and Stage == MOVE_PRE_PREDICTED ) then 
             self.Require:StartPrediction( CUserCMD )

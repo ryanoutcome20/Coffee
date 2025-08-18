@@ -44,9 +44,17 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
         self.prevTime     = CurTime( )
         self.prevDistance = 0
     end
-    
+		
     if ( Coffee.Config[ 'world_fov' ] ) then 
         View.fov = Coffee.Config[ 'world_fov_amount' ]
+		
+		if ( Coffee.Config[ 'world_fov_scaled' ] ) then		
+			View.fov = math.Clamp(
+				View.fov - ( self.FOV:GetFloat() - FOV ),
+				1,
+				179
+			)
+		end
     end
 
     if ( self.Ragebot:ShouldSilent( ) ) then 

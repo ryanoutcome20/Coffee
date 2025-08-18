@@ -448,6 +448,7 @@ function Coffee.Materials:Init( )
     for k,v in pairs( self.Disired ) do
         if ( isstring( v ) ) then
             self:CreateMaterial( k, v ) 
+			self:CreateMaterial( k .. 'IgnoreZ', v ) 
             continue
         end 
 

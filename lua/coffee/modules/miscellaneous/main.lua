@@ -1,10 +1,13 @@
 Coffee.Miscellaneous = { 
-    Client = Coffee.Client
+	Require = Coffee.Require,
+    Client  = Coffee.Client
 }
 
 Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/bots/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/movement/handler.lua' )
+
+Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/chat/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/config/handler.lua' )
 
@@ -25,6 +28,10 @@ function Coffee.Miscellaneous:Update( Stage, CUserCMD )
     self:Bunnyhop( CUserCMD )
 
     self:QuickMovement( CUserCMD )
+	
+	if ( Coffee.Config[ 'miscellaneous_disconnect_reason' ] ) then
+		self.Require:SetDisconnectReason( Coffee.Config[ 'miscellaneous_disconnect_reason_text' ] )
+	end
 end
 
-Coffee.Hooks:New( 'CreateMoveEx', Coffee.Miscellaneous.Update, Coffee.Miscellaneous )
+Coffee.Hooks:New( 'CMC', Coffee.Miscellaneous.Update, Coffee.Miscellaneous )
