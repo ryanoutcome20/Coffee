@@ -33,6 +33,8 @@ Coffee.Menu = {
     Held = false
 }
 
+Coffee:LoadFile( 'lua/coffee/modules/menu/sound_effects.lua' )
+
 Coffee:LoadFile( 'lua/coffee/modules/menu/constellation.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/menu/elements/tabs.lua' )
@@ -53,6 +55,14 @@ function Coffee.Menu:Scale( Size )
     return math.max( Size * ( self.Resolution.Height / 1080 ), 1 )
 end
 
+function Coffee.Menu:Default( Name, Value )
+	Coffee.Config[ Name ] = Value
+end
+
+function Coffee.Menu:Play( ID )
+	return Coffee.Menu.SFX:Play( ID )
+end
+
 function Coffee.Menu:Init( Tabs )
     if ( not istable( Tabs ) ) then 
         return Coffee:Print( true, 'Invalid tab layout passed to menu initializer "%s"!', type( Tabs ) )
@@ -69,7 +79,7 @@ function Coffee.Menu:Init( Tabs )
     Background:SetMouseInputEnabled( true )
     Background:SetKeyboardInputEnabled( true )
     Background.Paint = function( self, W, H )
-        surface.SetDrawColor( 0, 0, 0, 180 )
+        surface.SetDrawColor( Coffee.Config[ 'miscellaneous_background' ] )
         surface.DrawRect( 0, 0, W, H )
 
         Coffee.Menu:RenderConstellation( )

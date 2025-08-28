@@ -21,6 +21,8 @@ function Coffee.Menu:GenerateDropdown( Panel, Index, Assignment, Options, Width,
         if ( Callback ) then 
             Callback( Value )
         end
+		
+		Coffee.Menu:Play( 'Button' )
     end
 	
 	Dropdown.OnConfigLoad = function( self )		
@@ -67,6 +69,8 @@ function Coffee.Menu:GenerateFixedDropdown( Dropdown )
 
     -- Fix the entire dropdown menu and every color within the many sub panels.
     Dropdown.OnMenuOpened = function( self, Menu )
+		Coffee.Menu:Play( 'Button' )
+		
         -- Horrific code below. VGUI has forced my hand.
 
         local Children = self:GetChildren( )

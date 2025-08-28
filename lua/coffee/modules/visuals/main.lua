@@ -37,6 +37,10 @@ Coffee.Visuals = {
     Offsets = { }
 }
 
+if _SCF then
+	surface.CreateFont = _SCF
+end
+
 surface.CreateFont( 'coffee-main', {
    font = 'Verdana',
    extended = false,

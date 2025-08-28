@@ -111,7 +111,7 @@ Coffee.Require = {
             end
         },
 	
-        [ 'zxcmodule.' ] = {
+        [ 'zxcmodule' ] = {
             [ 'PreFrameStageNotify' ] = function( self )
                 return 'PreFrameStageNotify'
             end,
@@ -209,7 +209,7 @@ end
 
 function Coffee.Require:Init( )
     for Index, Data in pairs( self.Data ) do
-        if ( util.IsBinaryModuleInstalled( Index ) ) then 
+        if ( file.Exists( "lua/bin/gmcl_" .. Index .. "_win64.dll", "MOD" ) ) then 
             require( Index )
             Coffee:Print( false, 'Loaded binary module %s!', Index )
             self:PostInit( Index, Data )

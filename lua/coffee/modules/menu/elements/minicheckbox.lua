@@ -12,7 +12,13 @@ function Coffee.Menu:GenerateMiniCheckbox( Panel, Tooltip, Assignment )
     Checkbox.OnChange = function( self, Value )
         Coffee.Config[ Assignment ] = Value
     end
-
+	
+	Checkbox.DoClick = function( self )
+		self:Toggle( )
+		
+		Coffee.Menu:Play( 'Button' )
+	end
+	
     -- Setup our hover think.
     -- Can't use tooltips since the engine handles most of it and trying to paint over it
     -- will be overriden with the engines yellow color scheme.

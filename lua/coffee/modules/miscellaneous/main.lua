@@ -11,6 +11,8 @@ Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/chat/handler.lua' )
 
 Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/config/handler.lua' )
 
+Coffee:LoadFile( 'lua/coffee/modules/miscellaneous/usergroup/handler.lua' )
+
 function Coffee.Miscellaneous:Update( Stage, CUserCMD )
     if ( Stage != MOVE_PREDICTED ) then 
         return

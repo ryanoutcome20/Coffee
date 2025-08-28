@@ -1553,6 +1553,9 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     end )
     self:GenerateMiniCheckbox( nil, 'Affect Labels', 'miscellaneous_menu_labels' )
 
+    self:GenerateLabel( Panel, 'Menu Background' )
+    self:GenerateColorpicker( nil, 'miscellaneous_background', Color( 0, 0, 0, 120 ) )
+
     self:GenerateLabel( Panel, 'Menu Fade Speed' )
     self:GenerateSlider( nil, 'miscellaneous_menu_fade', 0, 0.5, 0.25, 2 )
 
@@ -1566,6 +1569,18 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
 
     self:GenerateCheckbox( Panel, 'Equalized Constellation', 'miscellaneous_constellation_equalized' )
     self:GenerateMiniCheckbox( nil, 'Invert', 'miscellaneous_constellation_equalized_invert' )
+
+	self:Default( 'miscellaneous_sfx', true )
+    self:GenerateCheckbox( Panel, 'Menu Sound Effects', 'miscellaneous_sfx' )
+    
+	self:GenerateLabel( Panel, 'Startup' )
+	self:GenerateInput( nil, "coffee/startup.mp3", 'miscellaneous_sfx_startup' )
+	
+    self:GenerateLabel( Panel, 'Shutdown' )
+	self:GenerateInput( nil, "coffee/shutdown.mp3", 'miscellaneous_sfx_shutdown' )
+
+	self:GenerateLabel( Panel, 'Buttons' )
+	self:GenerateInput( nil, "coffee/click.mp3", 'miscellaneous_sfx_buttons' )
 
     self:GenerateCheckbox( Panel, 'Watermark', 'miscellaneous_watermark'  )
     self:GenerateColorpicker( nil, 'miscellaneous_watermark_color', self.Colors.Main )
@@ -1613,10 +1628,17 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Disconnect Reason', 'miscellaneous_disconnect_reason' )
     self:GenerateInput( nil, 'Timed Out', 'miscellaneous_disconnect_reason_text' )
 
+    self:GenerateCheckbox( Panel, 'Spoof User Group', 'miscellaneous_spoof_usergroup' )
+    self:GenerateInput( nil, 'user', 'miscellaneous_spoof_usergroup_group' )
+
     self:GenerateCheckbox( Panel, 'Filter Chatbox', 'miscellaneous_filter' )
 
 	self:GenerateButton( Panel, 'Clear Decals', function( )
-		RunConsoleCommand( "r_cleardecals" )
+		RunConsoleCommand( 'r_cleardecals' )
+	end )
+
+	self:GenerateButton( Panel, 'Force Disconnect', function( )
+		RunConsoleCommand( 'disconnect' )
 	end )
 
 	self:GenerateLabel( Panel, 'Configuration Name' )

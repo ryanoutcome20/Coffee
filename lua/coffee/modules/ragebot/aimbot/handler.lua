@@ -159,7 +159,7 @@ function Coffee.Ragebot:Aimbot( CUserCMD )
             end
         end
     end
-
+	
     if ( not Best ) then 
         return
     end

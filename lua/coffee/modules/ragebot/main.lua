@@ -31,9 +31,9 @@ Coffee.Ragebot = {
     Yaw = GetConVar( 'm_yaw' ),
     Pitch = GetConVar( 'm_pitch' ),
 
-    Fake   = angle_zero,
-    Real   = angle_zero,
-    Silent = angle_zero
+    Fake   = Angle( 0, 0, 0 ),
+    Real   = Angle( 0, 0, 0 ),
+    Silent = Angle( 0, 0, 0 )
 }
  
 Coffee:LoadFile( 'lua/coffee/modules/ragebot/resolver/handler.lua' )

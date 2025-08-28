@@ -20,7 +20,7 @@ function Coffee.Ragebot:Resolve( Record )
         return
     end
 
-    local Angles = angle_zero
+    local Angles = Angle( 0, 0, 0 )
 
     -- Get our misses.
     local Misses = self.Indexes[ Record.Index ] or 0
@@ -62,7 +62,7 @@ function Coffee.Ragebot:Resolve( Record )
         end
     end
 
-    return angle_zero
+    return Angle( 0, 0, 0 )
 end
 
 function Coffee.Ragebot:UpdateResolver( ENT, Record )

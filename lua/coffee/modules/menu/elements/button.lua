@@ -30,7 +30,13 @@ function Coffee.Menu:GenerateButton( Panel, Text, Callback, marginCallback )
         return Coffee.Menu.Color
     end
 
-    Button.DoClick = Callback or function( self ) end
+    Button.DoClick = function( self ) 
+		if ( Callback ) then
+			Callback( )
+		end
+		
+		Coffee.Menu:Play( 'Button' )
+	end
 
     return Button
 end

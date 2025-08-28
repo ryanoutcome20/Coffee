@@ -112,7 +112,14 @@ function Coffee.Visuals:Wallhack( )
                 end
             else
                 cam.Start3D( )
-                    render.DrawWireframeBox( Front.Position, angle_zero, Front.Mins, Front.Maxs, Coffee.Config[ 'esp_box_color' ], true )
+                    render.DrawWireframeBox( 
+                        Front.Position, 
+                        angle_zero, 
+                        Front.Mins, 
+                        Front.Maxs, 
+                        Coffee.Config[ 'esp_box_color' ], 
+                        true 
+                    )
                 cam.End3D( )
             end
         end

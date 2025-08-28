@@ -16,6 +16,12 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback, avoidL
             Callback( Value )
         end
     end
+	
+	Checkbox.DoClick = function( self )
+		self:Toggle( )
+		
+		Coffee.Menu:Play( 'Button' )
+	end
     
     -- Fix layout and painting on button.
     Checkbox.Button:Dock( LEFT )
@@ -27,6 +33,12 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback, avoidL
         surface.SetDrawColor( Coffee.Menu.Color )
         surface.DrawOutlinedRect( 0, 0, W, H, 1 )
     end
+	
+	Checkbox.Button.DoClick = function( self )
+		Checkbox:Toggle( )
+		
+		Coffee.Menu:Play( 'Button' )
+	end
 
     -- Fix font and layout on label.
     Checkbox.Label:SetFont( 'DefaultSmall' )
@@ -40,6 +52,12 @@ function Coffee.Menu:GenerateCheckbox( Panel, Text, Assignment, Callback, avoidL
             self:SetTextColor( Coffee.Colors[ 'White' ] )
         end
     end
+
+	Checkbox.Label.DoClick = function( self )
+		Checkbox:Toggle( )
+
+		Coffee.Menu:Play( 'Button' )
+	end
 
     -- Set our last for the right docking elements.
     self.Last = Checkbox

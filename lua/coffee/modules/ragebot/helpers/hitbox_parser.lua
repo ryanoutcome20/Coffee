@@ -41,7 +41,9 @@ function Coffee.Ragebot:GetHitboxInfo( Record )
         end 
 
         for k = 1, #Data do 
-            if ( not IgnoreLOS and not self:RunTrace( Record, Data[ k ], Autowall, Damage ) ) then 
+			local Value = Vector( Data[ k ].x, Data[ k ].y, Data[ k ].z )
+			
+            if ( not IgnoreLOS and not self:RunTrace( Record, Value, Autowall, Damage ) ) then 
                 continue
             end
 
@@ -50,7 +52,7 @@ function Coffee.Ragebot:GetHitboxInfo( Record )
             end
 
             table.insert( Info, {
-                Hitbox = Data[ k ],
+                Hitbox = Value,
                 Group  = i
             } )
         end

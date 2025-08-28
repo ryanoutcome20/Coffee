@@ -26,6 +26,8 @@ function Coffee.Menu:GenerateColorpicker( Panel, Assignment, Default, Callback )
 
     Button.DoClick = function( self, W, H )
         Coffee.Menu:GenerateColorpickerWindow( Panel, Assignment, Coffee.Config[ Assignment ], Callback )
+		
+		Coffee.Menu:Play( 'Button' )
     end
 
     Button.DoRightClick = function( self, W, H )
@@ -185,7 +187,7 @@ function Coffee.Menu:GenerateColorpickerSubPanel( Panel, Assignment, Callback )
     -- Get main frame that everything will parent too.
     local Frame = vgui.Create( 'DPanel', Panel )
     Frame:SetPos( gui.MouseX( ), gui.MouseY( ) )
-    Frame:SetSize( self:Scale( 60 ), self:Scale( 50 ) - 1 )
+    Frame:SetSize( self:Scale( 60 ), self:Scale( 50 ) + self:Scale( 1 ) )
     Frame:MakePopup( )
 
     Frame.Paint = function( self, W, H ) 
