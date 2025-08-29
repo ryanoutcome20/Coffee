@@ -1642,7 +1642,7 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
 	end )
 
 	self:GenerateLabel( Panel, 'Configuration Name' )
-	self:GenerateInput( nil, 'Rage', 'miscellaneous_config' )
+	self:GenerateInput( nil, 'Main', 'miscellaneous_config' )
 
 	self:GenerateButton( Panel, 'Save', function( )
 		Coffee.Miscellaneous:Save( )

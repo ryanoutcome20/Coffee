@@ -80,7 +80,7 @@ function Coffee.Ragebot:Predicted( Stage, CUserCMD )
         return
     end
 
-    if ( CUserCMD:CommandNumber( ) == 0 ) then 
+    if ( CUserCMD:CommandNumber( ) == 0 ) then	
         return
     end
 

@@ -236,7 +236,7 @@ function Coffee.Records:Construct( Target, noBones )
 end
 
 function Coffee.Records:Update( Stage )
-    if ( Stage != FRAME_NET_UPDATE_POSTDATAUPDATE_END ) then 
+    if ( Stage != FRAME_NET_UPDATE_END ) then 
         return 
     end
 
