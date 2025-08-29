@@ -44,6 +44,10 @@ function Coffee:Print( isError, Text, ... )
     MsgC( Color, Prefix, ' ', self.Colors[ 'White' ], string.format( Text, ... ), '\n' )
 end
 
+function Coffee:PrintColor( Color, Text, ... )
+    MsgC( Color, '[ COFFEE ]', ' ', self.Colors[ 'White' ], string.format( Text, ... ), '\n' )
+end
+
 -- =============================================================================
 -- Setup environment.
 -- =============================================================================
@@ -61,8 +65,8 @@ Coffee.Environment = setmetatable( {
     __index = Coffee._G
 } )
 
-function Coffee:Load( Code, Environment, ... )
-    local Function = CompileString( Code, 'Coffee' )   
+function Coffee:Load( Code, Environment, Directory, ... )
+    local Function = CompileString( Code, Directory )   
 
     if ( not Function ) then 
         return self:Print( true, 'Failed to compile code! (%s, %s)', string.NiceSize( #Code ), util.CRC( Code ) )
@@ -82,7 +86,7 @@ function Coffee:LoadFile( Directory, Insecure )
         return self:Print( true, 'Failed to open handle to file %s!', string.GetFileFromFilename( Directory ) )
     end
 
-    local Valid, Data = self:Load( Handle:Read( Handle:Size( ) ), not Insecure and self.Environment or nil )
+    local Valid, Data = self:Load( Handle:Read( Handle:Size( ) ), not Insecure and self.Environment or nil, Directory )
 
     if ( Valid ) then 
         Coffee:Print( false, 'Successfully loaded file %s!', Directory )
@@ -122,7 +126,9 @@ Coffee:LoadFile( 'lua/coffee/libraries/sdk/engine.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hitboxes.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/enum.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/hookmgr.lua' )
+
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/items.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/playerlist.lua' )
 
 Coffee:LoadFile( 'lua/coffee/libraries/render/overlay.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/render/hitmarker.lua' )
@@ -134,6 +140,7 @@ Coffee:LoadFile( 'lua/coffee/libraries/sdk/records.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/notify.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/shots.lua' )
 Coffee:LoadFile( 'lua/coffee/libraries/sdk/createmove.lua' )
+Coffee:LoadFile( 'lua/coffee/libraries/sdk/packets.lua' )
 
 Coffee:LoadFile( 'lua/coffee/libraries/render/csent.lua' )
 
