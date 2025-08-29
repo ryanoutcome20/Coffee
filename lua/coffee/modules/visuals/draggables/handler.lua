@@ -102,8 +102,14 @@ function Coffee.Draggables:Update( )
             if ( not Target:IsDormant( ) ) then 
                 Distance = math.Round( self.Client.Position:Distance2D( Target:GetPos( ) ) ) .. 'hu'
             end
-
-            return string.format( '%s (%s)', Target:Name( ), Distance )
+			
+			local Alive = ''
+			
+			if ( Coffee.Config[ 'miscellaneous_admin_list_alive' ] ) then
+				Alive = ' [' .. ( Target:Alive() and 'alive' or 'dead' ) .. ']'
+			end
+			
+			return string.format( '%s%s (%s)', Target:Name( ), Alive, Distance )
         end
     end, Admins )
 

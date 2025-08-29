@@ -1609,7 +1609,8 @@ Coffee.Menu:Handle( 'Miscellaneous', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Spectator List', 'miscellaneous_spectator_list'  )
 
     self:GenerateCheckbox( Panel, 'Admin List', 'miscellaneous_admin_list'  )
-	
+	self:GenerateMiniCheckbox( nil, 'Show Alive/Dead', 'miscellaneous_admin_list_alive' )
+
     self:GenerateCheckbox( Panel, 'Highlight List', 'miscellaneous_highlight_list'  )
 	
     self:GenerateCheckbox( Panel, 'Bunnyhop', 'miscellaneous_bunnyhop'  )
