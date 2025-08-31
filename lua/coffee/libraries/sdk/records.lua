@@ -216,7 +216,7 @@ function Coffee.Records:Construct( Target, noBones )
     Data.Name = Data.Player and Target:Name( ) or Target:GetClass( )
     Data.Speed = Data.Velocity:LengthSqr( )
 
-    if ( Data.Player and self.Require ) then 
+    if ( IsValid( Target ) and istable( self.Require ) ) then 
         Data.Simtime = self.Require:Simulation( Target )
         
         Data.Ping     = Target:Ping( )
@@ -226,6 +226,8 @@ function Coffee.Records:Construct( Target, noBones )
         Data.Fake = Data.Angles.z != 0 or math.abs( Data.Angles.x ) == 180 
 
         Data.Animations = self:GenerateAnimationData( Target )
+    elseif ( not istable( self.Require ) ) then
+        self.Require = Coffee.Require
     end
 
     if ( not noBones ) then 
