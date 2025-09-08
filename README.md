@@ -15,6 +15,8 @@ Coffee is a lightweight and modular trainer for Garry's Mod. It provides useful 
   * Various world effects including weather modulation, world modulation, skybox modulation, and more.
   * Item list with various entities dynamically included.
   * Modular plugin system for extra customization.
+  * Moat.gg & Modern TTT fork support.
+  * Sandbox PVP/Buildmode support.
 
 <details>
   <summary>Images and Screenshots</summary>
@@ -40,12 +42,21 @@ You can install Coffee via the [releases](https://github.com/ryanoutcome20/Coffe
    Steam/steamapps/common/GarrysMod/garrysmod/
    ```
 3. Running via the console command:
-   ```
+   ```lua
    lua_openscript_cl coffee/main.lua
    ```
 
 Note that the server must have **sv_allowcslua** enabled for this command to work. Also note that Coffee relies on external modules to extend its functionality, supported modules include:
   * [zxcmodule](https://github.com/ryanoutcome20/zxcmodule)
+  * [proxi](https://github.com/homonovus)
+
+It is likely you'll crash with zxcmodule due to load order issues. To fix this you must run:
+
+```lua
+lua_run require("zxcmodule")
+```
+
+Do this **before** loading Coffee.
 
 ## Opening
 
