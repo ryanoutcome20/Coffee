@@ -107,6 +107,7 @@ function Coffee.Menu:GenerateDraggable( Panel, Title, X, Y, W, H )
     Draggable.ClearIndexes = function( self )
         for k, Panel in ipairs( self.Indexes ) do 
             Panel:Remove( )
+			Panel:SetVisible(false)
         end
 
         self.Indexes = { }
@@ -119,7 +120,8 @@ function Coffee.Menu:GenerateDraggable( Panel, Title, X, Y, W, H )
 
         for k, Panel in ipairs( self.Indexes ) do 
             if ( Panel:GetText( ) == Name ) then 
-                Panel:Remove( )
+				Panel:Remove( )
+				Panel:SetVisible(false)
             else
                 table.insert( Copy, Panel )
             end

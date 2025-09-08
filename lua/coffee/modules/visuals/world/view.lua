@@ -59,6 +59,15 @@ function Coffee.Visuals:CalcView( ENT, Origin, Angles, FOV )
 
     if ( self.Ragebot:ShouldSilent( ) ) then 
         View.angles = self.Ragebot.Silent
+		
+		if not Coffee.Config[ 'aimbot_norecoil' ] then
+			local Punch = self.Client.Local:GetViewPunchAngles( )
+			
+			Punch.x = math.Clamp( Punch.x, -89, 89 )
+			Punch.z = 0
+		
+			View.angles = View.angles + Punch
+		end
     elseif ( Coffee.Config[ 'world_viewmodel' ] and Coffee.Config[ 'world_viewmodel_recoil' ] ) then 
         View.angles = View.angles - self.Client.Local:GetViewPunchAngles( )
     end

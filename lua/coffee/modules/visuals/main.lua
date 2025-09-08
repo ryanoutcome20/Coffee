@@ -113,8 +113,9 @@ function Coffee.Visuals:Update3D( )
     end
 
     cam.Start3D( )
-        self:PlayerChams( )
+        self:Chams( )
         self:FakeChams( )
+		self:ItemChams( )
     cam.End3D( )
 
     self.Sky:Handler( )

@@ -30,7 +30,9 @@ function Coffee.Ragebot:SetAngles( CUserCMD, Target )
 
         CUserCMD:SetViewAngles( Target )
 		
-		CUserCMD:SetMouseX( Target.x )
-		CUserCMD:SetMouseY( Target.y )
+		if ( Coffee.Config[ 'aimbot_mouse_emulator' ] ) then
+			CUserCMD:SetMouseX( Target.x )
+			CUserCMD:SetMouseY( Target.y )
+		end
     end
 end

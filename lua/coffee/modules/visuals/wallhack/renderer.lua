@@ -10,7 +10,7 @@ function Coffee.Visuals:RenderText( Text, Assignment, colorOverride, fontOverrid
     if ( not Coffee.Config[ Assignment ] ) then 
         return
     end
-
+	
     -- Get config handle.
     local Dock, Font = Coffee.Config[ Assignment .. '_dock' ], fontOverride or Coffee.Config[ Assignment .. '_font' ]
 

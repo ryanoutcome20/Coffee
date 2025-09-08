@@ -92,19 +92,19 @@ function Coffee.Visuals:Watermark( )
 end
 
 function Coffee.Visuals:FOVCircle()
-	if ( not Coffee.Config[ 'aimbot_fov_visualize' ] ) then
+	if ( not Coffee.Config[ 'aimbot_fov' ] or not Coffee.Config[ 'aimbot_fov_visualize' ] ) then
 		return
 	end
 
-	local Amount = Coffee.Config[ 'aimbot_fov_amount' ] * 1.05
+	local Amount = Coffee.Config[ 'aimbot_fov_amount' ] * 1.05	
 	local FOV = render.GetViewSetup().fov_unscaled
-		
+	
 	local Focal = self.Resolution.Width / ( 2 * math.tan( math.rad( FOV / 2 ) ) )
 	
 	surface.DrawCircle( 
 		self.Resolution.Width / 2, 
 		self.Resolution.Height / 2,
-		Focal * math.tan( Amount * ( math.pi / 180 ) ), 
+		Focal * math.tan( math.min( Amount, 90 ) * ( math.pi / 180 ) ), 
 		Coffee.Config[ 'aimbot_fov_visualize_color' ]
 	)
 end

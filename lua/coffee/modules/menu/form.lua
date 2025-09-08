@@ -41,6 +41,8 @@ Coffee.Menu:Handle( 'Aimbot', function( self, Panel )
     self:GenerateCheckbox( Panel, 'Seed Offset', 'aimbot_nospread_offset' )
     self:GenerateSlider( nil, 'aimbot_nospread_offset_seed', -255, 255, 0, 0 )
 
+    self:GenerateCheckbox( Panel, 'Mouse Emulation', 'aimbot_mouse_emulator' )
+
     self:GenerateCheckbox( Panel, 'Angle Normalization', 'aimbot_normalize' )
 
     self:GenerateCheckbox( Panel, 'Engine Prediction', 'aimbot_engine' )
@@ -991,12 +993,12 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Teleport'
     } )
 	
-	
-    self:GenerateCheckbox( Panel, 'Props', 'esp_chams_props'  )
-    self:GenerateColorpicker( nil, 'esp_chams_props_color', self.Colors.White )
-    self:GenerateColorpicker( nil, 'esp_chams_props_secondary_color', self.Colors.White )
-    self:GenerateMiniCheckbox( nil, 'Draw Original', 'esp_chams_props_original' )
-    self:GenerateDropdown( nil, 1, 'esp_chams_props_material', {
+
+	self:GenerateCheckbox( Panel, 'Prop Visible', 'props_chams_visible'  )
+    self:GenerateColorpicker( nil, 'props_chams_visible_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'props_chams_visible_secondary_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'props_chams_visible_original' )
+    self:GenerateDropdown( nil, 1, 'props_chams_visible_material', {
         'Normal',
         'Flat',
         'Metal',
@@ -1010,10 +1012,45 @@ Coffee.Menu:Handle( 'Players', function( self, Panel )
         'Animated Shield'
     } )
 
-    self:GenerateCheckbox( Panel, 'Props Overlay', 'esp_chams_props_overlay'  )
-    self:GenerateColorpicker( nil, 'esp_chams_props_overlay_color', self.Colors.Main )
-    self:GenerateColorpicker( nil, 'esp_chams_props_overlay_secondary_color', self.Colors.White )
-    self:GenerateDropdown( nil, 1, 'esp_chams_props_overlay_material', {
+    self:GenerateCheckbox( Panel, 'Prop Visible Overlay', 'props_chams_visible_overlay'  )
+    self:GenerateColorpicker( nil, 'props_chams_visible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'props_chams_visible_overlay_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 1, 'props_chams_visible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars',
+        'Animated Portal',
+        'Animated Spawn Effect',
+        'Animated Wireframe Dots',
+        'Animated Dots',
+        'Animated Breathing',
+        'Animated Fenceglow',
+        'Animated Teleport'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Prop Invisible', 'props_chams_invisible'  )
+    self:GenerateColorpicker( nil, 'props_chams_invisible_color', self.Colors.Black )
+    self:GenerateColorpicker( nil, 'props_chams_invisible_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 2, 'props_chams_invisible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow',
+        'Pearlescent',
+        'Hue',
+        'Cloud',
+        'Cracked',
+        'Animated Portal',
+        'Animated Water',
+        'Animated Shield'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Prop Invisible Overlay', 'props_chams_invisible_overlay'  )
+    self:GenerateColorpicker( nil, 'props_chams_invisible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'props_chams_invisible_overlay_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 1, 'props_chams_invisible_overlay_material', {
         'Outline',
         'Wireframe',
         'Animated Wireframe',
@@ -1492,19 +1529,110 @@ end, true )
 -- Items Tab
 
 Coffee.Menu:Handle( 'Items', function( self, Panel )
-    self:GenerateCheckbox( Panel, 'Render Items', 'items_render' )
-    self:GenerateColorpicker( nil, 'items_render_color', self.Colors.White )
-    self:GenerateDropdown( nil, 1, 'items_render_font', {
+    self:GenerateCheckbox( Panel, 'Visualize', 'items_render' )
+
+    self:GenerateCheckbox( Panel, 'Box', 'items_box' )
+    self:GenerateColorpicker( nil, 'items_box_color', self.Colors.White )
+    
+    self:GenerateCheckbox( Panel, 'Name', 'items_name' )
+    self:GenerateColorpicker( nil, 'items_name_color', self.Colors.White )
+    self:GenerateDropdown( nil, 3, 'items_name_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 1, 'items_name_font', {
         'Main',
         'Small'
-    }, 50 )
-    self:GenerateMiniCheckbox( nil, 'Show Distance', 'items_render_distance' )
-
-    self:GenerateCheckbox( Panel, 'Visualize Dormancy', 'items_visualize_dormant' )
-    self:GenerateColorpicker( nil, 'items_visualize_dormant_color', self.Colors.Gray )
-
+    }, 80 )
+	
+	self:GenerateCheckbox( Panel, 'Distance', 'items_distance' )
+    self:GenerateColorpicker( nil, 'items_distance_color', self.Colors.White )
+    self:GenerateDropdown( nil, 3, 'items_distance_dock', {
+        'Left',
+        'Right',
+        'Top',
+        'Bottom'
+    }, 80 )
+    self:GenerateDropdown( nil, 1, 'items_distance_font', {
+        'Main',
+        'Small'
+    }, 80 )
+	
     self:GenerateCheckbox( Panel, 'Limit Distance', 'items_limit_distance'  )
     self:GenerateSlider( nil, 'items_limit_distance_distance', 1, 10000, 5000, 0 )
+
+	self:GenerateCheckbox( Panel, 'Item Visible', 'items_chams_visible'  )
+    self:GenerateColorpicker( nil, 'items_chams_visible_color', self.Colors.White )
+    self:GenerateColorpicker( nil, 'items_chams_visible_secondary_color', self.Colors.White )
+    self:GenerateMiniCheckbox( nil, 'Draw Original', 'items_chams_visible_original' )
+    self:GenerateDropdown( nil, 1, 'items_chams_visible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow',
+        'Pearlescent',
+        'Hue',
+        'Cloud',
+        'Cracked',
+        'Animated Portal',
+        'Animated Water',
+        'Animated Shield'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Item Visible Overlay', 'items_chams_visible_overlay'  )
+    self:GenerateColorpicker( nil, 'items_chams_visible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'items_chams_visible_overlay_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 1, 'items_chams_visible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars',
+        'Animated Portal',
+        'Animated Spawn Effect',
+        'Animated Wireframe Dots',
+        'Animated Dots',
+        'Animated Breathing',
+        'Animated Fenceglow',
+        'Animated Teleport'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Item Invisible', 'items_chams_invisible'  )
+    self:GenerateColorpicker( nil, 'items_chams_invisible_color', self.Colors.Black )
+    self:GenerateColorpicker( nil, 'items_chams_invisible_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 2, 'items_chams_invisible_material', {
+        'Normal',
+        'Flat',
+        'Metal',
+        'Glow',
+        'Pearlescent',
+        'Hue',
+        'Cloud',
+        'Cracked',
+        'Animated Portal',
+        'Animated Water',
+        'Animated Shield'
+    } )
+
+    self:GenerateCheckbox( Panel, 'Item Invisible Overlay', 'items_chams_invisible_overlay'  )
+    self:GenerateColorpicker( nil, 'items_chams_invisible_overlay_color', self.Colors.Main )
+    self:GenerateColorpicker( nil, 'items_chams_invisible_overlay_secondary_color', self.Colors.White )
+    self:GenerateDropdown( nil, 1, 'items_chams_invisible_overlay_material', {
+        'Outline',
+        'Wireframe',
+        'Animated Wireframe',
+        'Animated Plasma',
+        'Stars',
+        'Animated Portal',
+        'Animated Spawn Effect',
+        'Animated Wireframe Dots',
+        'Animated Dots',
+        'Animated Breathing',
+        'Animated Fenceglow',
+        'Animated Teleport'
+    } )
 
     -- I wanted to make this more dynamic and kinda just made it
     -- really fat. Maybe recode? This can be used in other projects

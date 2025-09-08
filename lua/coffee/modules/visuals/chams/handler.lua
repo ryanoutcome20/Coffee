@@ -61,14 +61,36 @@ function Coffee.Visuals:RenderChams( ENT, Assignment, Occluded, isOverlay )
 end
 
 function Coffee.Visuals:PropChams( Target )
-	if ( not Coffee.Config[ 'esp_chams_props' ] ) then
-		return
-	end
+	if ( Coffee.Config[ 'props_chams_visible' ] ) then  
+		if ( Coffee.Config[ 'props_chams_invisible' ] ) then 
+			self:RenderChams( Target, 'props_chams_invisible', true )
+		end
 
-	self:RenderChams( Target, 'esp_chams_props', true )
+		self:RenderChams( Target, 'props_chams_visible', false )
+	end
 end
 
-function Coffee.Visuals:PlayerChams( )
+function Coffee.Visuals:ItemChams( )
+    cam.IgnoreZ( true )
+
+    for k, Data in pairs( self.Items:Get( ) ) do 
+        local Target = Data.Target
+        
+        if ( not Target ) then 
+            continue
+        end
+		
+		if ( Coffee.Config[ 'items_chams_visible' ] ) then  
+			if ( Coffee.Config[ 'items_chams_invisible' ] ) then 
+				self:RenderChams( Target, 'items_chams_invisible', true )
+			end
+
+			self:RenderChams( Target, 'items_chams_visible', false )
+		end
+	end
+end
+
+function Coffee.Visuals:Chams( )
     cam.IgnoreZ( true )
 
     for k, Target in pairs( self.Records.Entities ) do 
@@ -84,7 +106,7 @@ function Coffee.Visuals:PlayerChams( )
 			self:PropChams( Target )
 			continue
 		end
-
+		
         if ( not Target:IsPlayer( ) and not Target:IsRagdoll( ) ) then
             continue 
         end

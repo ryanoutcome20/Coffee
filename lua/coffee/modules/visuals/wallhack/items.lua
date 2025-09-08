@@ -18,25 +18,52 @@ function Coffee.Visuals:Entities( )
 
         local isDormant = Target:IsDormant( )
 
-        if ( not Coffee.Config[ 'items_visualize_dormant' ] and isDormant ) then 
+        if ( isDormant ) then 
             continue 
         end
 
-        local Color = isDormant and Coffee.Config[ 'items_visualize_dormant_color' ] or Coffee.Config[ 'items_render_color' ]
+		-- Get positions. 
+		local Position = Target:GetPos( )
+		local Mins, Maxs = Target:OBBMins( ), Target:OBBMaxs( )
 
-        local Position = Target:GetPos( ) + Target:OBBCenter( )
-        local Data     = Position:ToScreen( )
+        local Screen = Position:ToScreen( )
 
-        surface.SetFont( self:HandleFont( Coffee.Config[ 'items_render_font' ] ) )
-        surface.SetTextColor( Color )
-        surface.SetTextPos( Data.x, Data.y ) 
-        surface.DrawText( Class )
+        self.Position = {
+            X = Screen.x,
+            Y = Screen.y
+        }
 
-        if ( Coffee.Config[ 'items_render_distance' ] ) then             
-            local W, H = surface.GetTextSize( Class )
+        self.Position.H = Screen.y - ( Position + Vector( 0, 0, Maxs.z ) ):ToScreen( ).y
+        self.Position.W = self.Position.H / 2
 
-            surface.SetTextPos( Data.x, Data.y + H ) 
-            surface.DrawText( math.Round( Distance ) .. 'hu' )
+		-- Reset offsets.
+		self.Offsets = { 
+            [ 'Top' ] = 12,
+            [ 'Bottom' ] = 4,
+            [ 'Right' ] = 0,
+            [ 'Left' ] = 0,
+            
+            [ 'Right Intrinsic' ] = 6,
+            [ 'Left Intrinsic' ] = 6
+        }
+		
+		-- Run our box ESP.
+        if ( Coffee.Config[ 'items_box' ] ) then 
+			cam.Start3D( )
+				render.DrawWireframeBox( 
+					Position, 
+					Target:GetAngles(), 
+					Mins, 
+					Maxs, 
+					Coffee.Config[ 'items_box_color' ], 
+					true 
+				)
+			cam.End3D( )
         end
+
+		-- Text.
+        self:RenderText( Class, 'items_name' )
+        self:RenderText( math.Round( Distance ) .. 'hu', 'items_distance' )		
+		
     end
 end
