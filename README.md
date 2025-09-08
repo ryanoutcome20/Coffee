@@ -53,7 +53,7 @@ Note that the server must have **sv_allowcslua** enabled for this command to wor
 It is likely you'll crash with zxcmodule due to load order issues. To fix this you must run:
 
 ```lua
-lua_run require("zxcmodule")
+lua_run_cl require("zxcmodule")
 ```
 
 Do this **before** loading Coffee.
